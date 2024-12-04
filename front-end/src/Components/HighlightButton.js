@@ -42,50 +42,29 @@ const HighlightButton = ({ highlight, highlightedText, onUpdateHighlight, onDele
     };
 
     const onLongPress = () => {
-        // const currentColorIndex = colors.indexOf(highlight.color);
-        // const nextColorIndex = (currentColorIndex + 1) % colors.length;
-
-        // // Pass the updated highlight back to the parent
-        // onUpdateHighlight({ ...highlight, color: colors[nextColorIndex] });
+        // Pass the updated highlight back to the parent
+        onUpdateHighlight({ ...highlight, priority: highlight.priority === 'Normal' ? 'High' : 'Normal' });
         alert("Long press detected");
     };
 
     const onDoubleClick = () => {
         alert("Double click detected");
-        // onDeleteHighlight(highlight);
+        onDeleteHighlight(highlight);
     };
 
     const onSingleClick = () => {
         alert("Single click detected");
-        // onClickHighlight(highlight);
+        onClickHighlight(highlight);
     }
     console.log(highlight)
 
     return (
-        // <Button
-        //           key={highlight.id}
-        //           onClick={() => handleHighlightClick(highlight)}
-        //           style={{
-        //             backgroundColor:  highlightColors[0],
-        //             color: "#FFFFFF",
-        //             padding: "0 5px",
-        //             margin: "0 2px",
-        //             borderRadius: "4px",
-        //             fontSize: "inherit",
-        //             textTransform: "none",
-        //             cursor: "pointer",
-        //           }}
-        //           variant="contained"
-        //           size="small"
-        //         >
-        //           {highlightedText}
-        // </Button>
         <Button
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onClick={handleClick}
             style={{
-                backgroundColor: highlight.priority === 1 ? highlightColors[0] : highlightColors[1],
+                backgroundColor: highlight.priority === 'Normal' ? highlightColors[0] : highlightColors[1],
                 color: "#FFFFFF",
                 padding: "0 5px",
                 margin: "0 2px",

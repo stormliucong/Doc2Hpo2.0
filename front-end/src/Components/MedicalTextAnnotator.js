@@ -96,12 +96,15 @@ const MedicalTextAnnotator = () => {
     }
   };
 
-  const handleHighlightClick = (highlight) => {
-    setSelectedHighlight(highlight);
+  const handleClickHighlight = (selectedHighlight) => {
+    setSelectedHighlight(selectedHighlight);
     setDialogOpen(true);
   };
 
-  const handleDeleteHighlight = () => {
+  const handleDeleteHighlight = (selectedHighlight) => {
+    console.log('handleDeleteHighlight')
+    console.log(selectedHighlight)
+
     setHighlights(highlights.filter((h) => h.id !== selectedHighlight.id));
     setDialogOpen(false);
   };
@@ -116,25 +119,18 @@ const MedicalTextAnnotator = () => {
     setSuggestions([]);
   };
 
+  const handleUpdateHighlight = (updatedHighlight) => {
+    setHighlights((prevHighlights) =>
+      prevHighlights.map((h) =>
+        h.id === updatedHighlight.id ? updatedHighlight : h
+      )
+    );
+  };
+
   const renderHighlightedText = () => {
     if (!fileText) return "Text will appear here...";
   
     let offset = 0;
-  
-    const handleUpdateHighlight = (updatedHighlight) => {
-      setHighlights((prevHighlights) =>
-        prevHighlights.map((h) =>
-          h.id === updatedHighlight.id ? updatedHighlight : h
-        )
-      );
-    };
-  
-    const handleDeleteHighlight = (highlightToDelete) => {
-      setHighlights((prevHighlights) =>
-        prevHighlights.filter((h) => h.id !== highlightToDelete.id)
-      );
-    };
-  
     return (
       <>
         {highlights
@@ -153,7 +149,7 @@ const MedicalTextAnnotator = () => {
                 highlightedText={highlightedText}
                 onUpdateHighlight={handleUpdateHighlight}
                 onDeleteHighlight={handleDeleteHighlight}
-                onClickHighlight={handleHighlightClick}
+                onClickHighlight={handleClickHighlight}
               />
             );
   
