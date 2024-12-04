@@ -44,20 +44,16 @@ const HighlightButton = ({ highlight, highlightedText, onUpdateHighlight, onDele
     const onLongPress = () => {
         // Pass the updated highlight back to the parent
         onUpdateHighlight({ ...highlight, priority: highlight.priority === 'Normal' ? 'High' : 'Normal' });
-        alert("Long press detected");
     };
 
     const onDoubleClick = () => {
-        alert("Double click detected");
         onDeleteHighlight(highlight);
     };
 
     const onSingleClick = () => {
-        alert("Single click detected");
         onClickHighlight(highlight);
-    }
-    console.log(highlight)
-
+    };
+    
     return (
         <Button
             onMouseDown={handleMouseDown}

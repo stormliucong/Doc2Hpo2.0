@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import HighlightTable from "./HighlightTable";
 import HighlightButton from "./HighlightButton";
+import SearchDialog from "./SearchDialog";
 
 const MedicalTextAnnotator = () => {
   const [inputText, setInputText] = useState("");
@@ -24,8 +25,7 @@ const MedicalTextAnnotator = () => {
   const [highlights, setHighlights] = useState([]);
   const [selectedHighlight, setSelectedHighlight] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [searchText, setSearchText] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
+
 
   const resetState = () => {
     setInputText("");
@@ -34,9 +34,7 @@ const MedicalTextAnnotator = () => {
     setHighlights([]);
     setSelectedHighlight(null);
     setDialogOpen(false);
-    setSearchText("");
-    setSuggestions([]);
-  }
+  };
   
   const handleTextSubmit = () => {
     resetState();
@@ -109,16 +107,6 @@ const MedicalTextAnnotator = () => {
     
   };
 
-  const handleSearchText = async () => {
-    setSearchText(selectedHighlight.text);
-    setSuggestions(["Suggestion 1", "Suggestion 2", "Suggestion 3"]); // Simulate API call
-  };
-
-  const handleSuggestionClick = (suggestion) => {
-    setSearchText(suggestion);
-    setSuggestions([]);
-  };
-
   const handleUpdateHighlight = (updatedHighlight) => {
     setHighlights((prevHighlights) =>
       prevHighlights.map((h) =>
@@ -158,7 +146,21 @@ const MedicalTextAnnotator = () => {
         <span>{fileText.slice(offset)}</span>
       </>
     );
-  };  
+  }; 
+  
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
+
+  const handleConfirm = (hpo) => {
+    const updatedHighlight = { ...selectedHighlight, hpoAttributes: hpo };
+    handleUpdateHighlight(updatedHighlight);
+    setDialogOpen(false);
+  };
 
   return (
     <Box p={2}>
@@ -218,37 +220,8 @@ const MedicalTextAnnotator = () => {
         <Button variant="contained" style={{ backgroundColor: "#FF5722", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">High</Button>
       </Box>
 
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogTitle>Edit Selected</DialogTitle>
-        <DialogContent>
-          <Typography>{selectedHighlight?.text}</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSearchText}>Search</Button>
-        </DialogActions>
-      </Dialog>
-
-      {searchText && (
-        <Box mt={2}>
-          <TextField
-            fullWidth
-            label="Search"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-          />
-          <List>
-            {suggestions.map((suggestion, index) => (
-              <ListItem
-                key={index}
-                button
-                onClick={() => handleSuggestionClick(suggestion)}
-              >
-                {suggestion}
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      )}
+      <SearchDialog open={dialogOpen} onClose={handleCloseDialog} onConfirm={handleConfirm} selectedHighlight={selectedHighlight} />
+      
     </Box>
   );
 };
