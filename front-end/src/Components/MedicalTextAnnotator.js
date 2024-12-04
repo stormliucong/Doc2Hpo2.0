@@ -15,6 +15,7 @@ import {
   FormControlLabel
 } from "@mui/material";
 import HighlightTable from "./HighlightTable";
+import HighlightButton from "./HighlightButton";
 
 const MedicalTextAnnotator = () => {
   const [inputText, setInputText] = useState("");
@@ -84,9 +85,12 @@ const MedicalTextAnnotator = () => {
         return;
       }
 
+      const hpoAttributes = {};
+      const priority = 'Normal'; 
+
       setHighlights([
         ...highlights,
-        { id: Date.now(), selectedText, start, end },
+        { id: Date.now(), selectedText, start, end, hpoAttributes, priority},
       ]);
       selection.removeAllRanges(); // Clear selection after highlighting
     }
@@ -115,42 +119,42 @@ const MedicalTextAnnotator = () => {
   const renderHighlightedText = () => {
     if (!fileText) return "Text will appear here...";
   
-    const highlightColors = ["#FFC107", "#FF5722", "#03A9F4", "#8BC34A", "#E91E63"]; // Modern color palette
-  
     let offset = 0;
+  
+    const handleUpdateHighlight = (updatedHighlight) => {
+      setHighlights((prevHighlights) =>
+        prevHighlights.map((h) =>
+          h.id === updatedHighlight.id ? updatedHighlight : h
+        )
+      );
+    };
+  
+    const handleDeleteHighlight = (highlightToDelete) => {
+      setHighlights((prevHighlights) =>
+        prevHighlights.filter((h) => h.id !== highlightToDelete.id)
+      );
+    };
   
     return (
       <>
         {highlights
           .sort((a, b) => a.start - b.start)
-          .reduce((acc, highlight, index) => {
+          .reduce((acc, highlight) => {
             const beforeHighlight = fileText.slice(offset, highlight.start);
             const highlightedText = fileText.slice(highlight.start, highlight.end);
             offset = highlight.end;
   
-            acc.push(
-              <span key={`before-${highlight.id}`}>{beforeHighlight}</span>
-            );
+            acc.push(<span key={`before-${highlight.id}`}>{beforeHighlight}</span>);
   
             acc.push(
-              <Button
+              <HighlightButton
                 key={highlight.id}
-                onClick={() => handleHighlightClick(highlight)}
-                style={{
-                  backgroundColor: highlightColors[index % highlightColors.length],
-                  color: "#FFFFFF",
-                  padding: "0 2px",
-                  margin: "0 1px",
-                  borderRadius: "4px",
-                  fontSize: "inherit",
-                  textTransform: "none",
-                  cursor: "pointer",
-                }}
-                variant="contained"
-                size="small"
-              >
-                {highlightedText}
-              </Button>
+                highlight={highlight}
+                highlightedText={highlightedText}
+                onUpdateHighlight={handleUpdateHighlight}
+                onDeleteHighlight={handleDeleteHighlight}
+                onClickHighlight={handleHighlightClick}
+              />
             );
   
             return acc;
@@ -158,7 +162,7 @@ const MedicalTextAnnotator = () => {
         <span>{fileText.slice(offset)}</span>
       </>
     );
-  };
+  };  
 
   return (
     <Box p={2}>
@@ -211,13 +215,14 @@ const MedicalTextAnnotator = () => {
       </Box>
 
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogTitle>Highlighted Text Options</DialogTitle>
+        <DialogTitle>Edit Selected</DialogTitle>
         <DialogContent>
           <Typography>{selectedHighlight?.text}</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDeleteHighlight}>Delete</Button>
           <Button onClick={handleSearchText}>Search</Button>
+          
         </DialogActions>
       </Dialog>
 
