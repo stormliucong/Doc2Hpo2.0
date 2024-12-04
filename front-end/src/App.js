@@ -1,13 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
-import MedicalTextAnnotator from './MedicalTextAnnotator';
+import MedicalTextAnnotator from './Components/MedicalTextAnnotator';
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <MedicalTextAnnotator />
-      </header>
+      React Test App
+      <MedicalTextAnnotator />    
     </div>
   );
 }
