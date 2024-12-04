@@ -106,7 +106,7 @@ const MedicalTextAnnotator = () => {
     console.log(selectedHighlight)
 
     setHighlights(highlights.filter((h) => h.id !== selectedHighlight.id));
-    setDialogOpen(false);
+    
   };
 
   const handleSearchText = async () => {
@@ -182,7 +182,7 @@ const MedicalTextAnnotator = () => {
       </Box>
       <HighlightTable highlights={highlights} />
 
-
+      {/* Annotation region */}
       <Box
         id="text-container"
         p={2}
@@ -193,6 +193,7 @@ const MedicalTextAnnotator = () => {
         {renderHighlightedText()}
       </Box>
 
+      {/* Configuration and explanation */}
       <Box mt={2}>
         {/* Toggle Switch */}
         <FormGroup>
@@ -210,15 +211,20 @@ const MedicalTextAnnotator = () => {
         
       </Box>
 
+      {/* Add a color legend for Priority and Normal Not clickable button*/}
+      <Box mt={2}>
+        <Typography>Priority:</Typography>
+        <Button variant="contained" style={{ backgroundColor: "#FFC107", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">Normal</Button>
+        <Button variant="contained" style={{ backgroundColor: "#FF5722", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">High</Button>
+      </Box>
+
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>Edit Selected</DialogTitle>
         <DialogContent>
           <Typography>{selectedHighlight?.text}</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteHighlight}>Delete</Button>
           <Button onClick={handleSearchText}>Search</Button>
-          
         </DialogActions>
       </Dialog>
 
