@@ -24,18 +24,20 @@ const SearchDialog = ({ open, onClose, onConfirm, selectedHighlight }) => {
 
     useEffect(() => {
         if (selectedHighlight) {
-            console.log('in searchdialog\n', selectedHighlight.selectedText);
             setSearchQuery(selectedHighlight.selectedText); // Populate search box with the selected highlight text
         }
     }, [selectedHighlight]);
 
     useEffect(() => {
         if (searchQuery) {
-            // Placeholder: Replace this with your actual API call.
-            fetch(`https://jsonplaceholder.typicode.com/users?q=${searchQuery}`)
+            // https://clinicaltables.nlm.nih.gov/apidoc/hpo/v3/doc.html
+            fetch(`https://clinicaltables.nlm.nih.gov/api/hpo/v3/search?terms=${searchQuery}`)
                 .then((res) => res.json())
                 .then((data) => {
-                    setSuggestions(data);
+                    // reformating the data to match the expected format
+                    const hpoIdNameList = data[3]
+                    const hpoIdNameFormatList = hpoIdNameList.map((hpoIdName, index) => ({ id: hpoIdName[0], name: hpoIdName[1] }));
+                    setSuggestions(hpoIdNameFormatList);
                 })
                 .catch((err) => {
                     console.error('Error fetching suggestions:', err);
@@ -77,7 +79,7 @@ const SearchDialog = ({ open, onClose, onConfirm, selectedHighlight }) => {
                                 selected={selectedItem?.id === item.id}
                                 onClick={() => handleSelect(item)}
                             >
-                                <ListItemText primary={item.name} secondary={item.email} />
+                                <ListItemText primary={item.id} secondary={item.name} />
                             </ListItem>
                         ))}
                     </List> 
@@ -90,9 +92,8 @@ const SearchDialog = ({ open, onClose, onConfirm, selectedHighlight }) => {
                         <Card sx={{ mt: 3 }}>
                             <CardContent>
                                 <Typography variant="h6">Selected Item</Typography>
-                                <Typography>Name: {selectedItem.name}</Typography>
-                                <Typography>Email: {selectedItem.email}</Typography>
-                                <Typography>Username: {selectedItem.username}</Typography>
+                                <Typography variant="body1">HPO ID: {selectedItem.id}</Typography>
+                                <Typography variant="body1">HPO Name: {selectedItem.name}</Typography>
                             </CardContent>
                         </Card>
                     )}

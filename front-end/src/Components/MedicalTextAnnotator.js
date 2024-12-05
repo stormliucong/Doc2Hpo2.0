@@ -175,6 +175,7 @@ const MedicalTextAnnotator = () => {
   };
 
   const handleConfirm = (hpo) => {
+    console.log('handleConfirm', hpo)
     const updatedHighlight = { ...selectedHighlight, hpoAttributes: hpo };
     handleUpdateHighlight(updatedHighlight);
     setDialogOpen(false);

@@ -22,13 +22,13 @@ const HighlightTable = ({ highlights }) => {
                 <TableCell>{highlight.start}</TableCell>
                 <TableCell>{highlight.end}</TableCell>
                 <TableCell>{highlight.priority}</TableCell>
-                {highlight.hpoAttributes.hpoName && highlight.hpoAttributes.Id ? (
+                {highlight.hpoAttributes.name && highlight.hpoAttributes.id ? (
                   <>
                   <TableCell>
-                    {highlight.hpoAttributes.hpoName}
+                    {highlight.hpoAttributes.name}
                   </TableCell>
                   <TableCell>
-                    {highlight.hpoAttributes.hpoId}
+                    {highlight.hpoAttributes.id}
                   </TableCell>
                   </>
                 ) : (
