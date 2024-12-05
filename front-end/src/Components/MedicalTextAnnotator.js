@@ -208,9 +208,9 @@ const MedicalTextAnnotator = () => {
       // push res into highlights
       console.log('flask res', res)
       const highlights = res.map((r) => {
-        const selectedText = r[0];
-        const start = r[1];
-        const end = r[2];
+        const selectedText = r[2];
+        const start = r[0];
+        const end = r[1];
         console.log(selectedText, start, end)
         const hpoAttributes = {};
         const priority = 'Normal';
