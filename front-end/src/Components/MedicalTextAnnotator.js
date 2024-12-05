@@ -49,6 +49,24 @@ const MedicalTextAnnotator = () => {
     reader.readAsText(file);
   };
 
+  const loadPatientTxt = async (file) => {
+    // Load the patient text from the public folder using require
+    resetState();
+    console.log(file)
+    try {
+
+      const response = await fetch(file);
+      if (!response.ok) throw new Error("Failed to fetch file");
+      const text = await response.text();
+      setFileText(text);
+    } catch (error) {
+      console.error(error);
+      setFileText("");
+    }
+  }
+    
+    
+
   const handleHighlight = () => {
     const selection = window.getSelection();
     if (selection && selection.toString().trim() && highlightMode) {
@@ -171,6 +189,7 @@ const MedicalTextAnnotator = () => {
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
         />
+
         <Button variant="contained" onClick={handleTextSubmit} sx={{ mt: 1 }}>
           Submit
         </Button>
@@ -182,6 +201,14 @@ const MedicalTextAnnotator = () => {
           <input type="file" hidden onChange={handleFileUpload} />
         </Button>
       </Box>
+
+      <Box mb={2}>
+        <Button variant="outlined" component="label" onClick={() => loadPatientTxt('./demo_patient_1.txt')}>  
+          Load Demo Patient 1
+        </Button>
+      </Box>
+
+
       <HighlightTable highlights={highlights} />
 
       {/* Annotation region */}
