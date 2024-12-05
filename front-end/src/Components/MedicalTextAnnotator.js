@@ -181,6 +181,18 @@ const MedicalTextAnnotator = () => {
     setDialogOpen(false);
   };
 
+  const testFlask = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/hello');
+      if (!response.ok) throw new Error("Failed to fetch file");
+      const res = await response.text();
+      alert(res);
+    }
+    catch (error) {
+      alert(error);
+    }
+  }
+
   return (
     <Box p={2}>
       <Box mb={2}>
@@ -208,6 +220,14 @@ const MedicalTextAnnotator = () => {
           Load Demo Patient 1
         </Button>
       </Box>
+
+      {/* A button to test backend */}
+      <Box mb={2}>
+        <Button variant="outlined" component="label" onClick={() => testFlask()}>
+          Test Backend
+        </Button>
+      </Box>
+
 
 
       <HighlightTable highlights={highlights} />
