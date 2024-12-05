@@ -17,6 +17,7 @@ import {
 import HighlightTable from "./HighlightTable";
 import HighlightButton from "./HighlightButton";
 import SearchDialog from "./SearchDialog";
+import { v4 as uuidv4 } from 'uuid';
 
 const MedicalTextAnnotator = () => {
   const [inputText, setInputText] = useState("");
@@ -29,7 +30,6 @@ const MedicalTextAnnotator = () => {
 
   const resetState = () => {
     setInputText("");
-    setFileText("");
     setHighlightMode(false);
     setHighlights([]);
     setSelectedHighlight(null);
@@ -64,8 +64,6 @@ const MedicalTextAnnotator = () => {
       setFileText("");
     }
   }
-
-
 
   const handleHighlight = () => {
     const selection = window.getSelection();
@@ -138,6 +136,7 @@ const MedicalTextAnnotator = () => {
 
     let offset = 0;
     console.log('renderHighlightedText', highlights)
+    // clear the text container
     return (
       <>
         {highlights
@@ -151,7 +150,7 @@ const MedicalTextAnnotator = () => {
 
             acc.push(
               <HighlightButton
-                key={highlight.id}
+                key={uuidv4()}
                 highlight={highlight}
                 highlightedText={highlightedText}
                 onUpdateHighlight={handleUpdateHighlight}
@@ -215,7 +214,7 @@ const MedicalTextAnnotator = () => {
         console.log(selectedText, start, end)
         const hpoAttributes = {};
         const priority = 'Normal';
-        return { id: Date.now(), selectedText, start, end, hpoAttributes, priority }
+        return { id: uuidv4(), selectedText, start, end, hpoAttributes, priority }
       });
       setHighlights(highlights);
     }

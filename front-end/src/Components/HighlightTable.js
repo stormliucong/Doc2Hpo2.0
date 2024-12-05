@@ -1,6 +1,8 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { v4 as uuidv4 } from 'uuid';
 
 const HighlightTable = ({ highlights }) => {
+  console.log('highlight table', highlights)
     return (
       <TableContainer component={Paper} sx={{ mt: 2 }}>
         <Table>
@@ -17,7 +19,7 @@ const HighlightTable = ({ highlights }) => {
           <TableBody>
             {highlights.map((highlight) => (
               
-              <TableRow key={highlight.id}>
+              <TableRow key={uuidv4()}>
                 <TableCell>{highlight.selectedText}</TableCell>
                 <TableCell>{highlight.start}</TableCell>
                 <TableCell>{highlight.end}</TableCell>

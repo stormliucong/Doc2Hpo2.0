@@ -15,6 +15,7 @@ import {
     Typography
 
 } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
 
 const SearchDialog = ({ open, onClose, onConfirm, selectedHighlight }) => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -74,7 +75,7 @@ const SearchDialog = ({ open, onClose, onConfirm, selectedHighlight }) => {
                 {suggestions &&    <List>
                         {suggestions.map((item) => (
                             <ListItem
-                                key={item.id}
+                                key={uuidv4()}
                                 button
                                 selected={selectedItem?.id === item.id}
                                 onClick={() => handleSelect(item)}
