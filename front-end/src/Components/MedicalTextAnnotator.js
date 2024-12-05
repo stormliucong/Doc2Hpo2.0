@@ -35,7 +35,7 @@ const MedicalTextAnnotator = () => {
     setSelectedHighlight(null);
     setDialogOpen(false);
   };
-  
+
   const handleTextSubmit = () => {
     resetState();
     setFileText(inputText);
@@ -64,8 +64,8 @@ const MedicalTextAnnotator = () => {
       setFileText("");
     }
   }
-    
-    
+
+
 
   const handleHighlight = () => {
     const selection = window.getSelection();
@@ -102,11 +102,11 @@ const MedicalTextAnnotator = () => {
       }
 
       const hpoAttributes = {};
-      const priority = 'Normal'; 
+      const priority = 'Normal';
 
       setHighlights([
         ...highlights,
-        { id: Date.now(), selectedText, start, end, hpoAttributes, priority},
+        { id: Date.now(), selectedText, start, end, hpoAttributes, priority },
       ]);
       selection.removeAllRanges(); // Clear selection after highlighting
     }
@@ -122,7 +122,7 @@ const MedicalTextAnnotator = () => {
     console.log(selectedHighlight)
 
     setHighlights(highlights.filter((h) => h.id !== selectedHighlight.id));
-    
+
   };
 
   const handleUpdateHighlight = (updatedHighlight) => {
@@ -135,8 +135,9 @@ const MedicalTextAnnotator = () => {
 
   const renderHighlightedText = () => {
     if (!fileText) return "Text will appear here...";
-  
+
     let offset = 0;
+    console.log('renderHighlightedText', highlights)
     return (
       <>
         {highlights
@@ -145,9 +146,9 @@ const MedicalTextAnnotator = () => {
             const beforeHighlight = fileText.slice(offset, highlight.start);
             const highlightedText = fileText.slice(highlight.start, highlight.end);
             offset = highlight.end;
-  
+
             acc.push(<span key={`before-${highlight.id}`}>{beforeHighlight}</span>);
-  
+
             acc.push(
               <HighlightButton
                 key={highlight.id}
@@ -158,14 +159,14 @@ const MedicalTextAnnotator = () => {
                 onClickHighlight={handleClickHighlight}
               />
             );
-  
+
             return acc;
           }, [])}
         <span>{fileText.slice(offset)}</span>
       </>
     );
-  }; 
-  
+  };
+
   const handleOpenDialog = () => {
     setDialogOpen(true);
   };
@@ -193,6 +194,39 @@ const MedicalTextAnnotator = () => {
     }
   }
 
+  const AcTreeFlask = async () => {
+    // Post request with {text: fileText}
+    try {
+      const response = await fetch('http://localhost:5000/api/search/actree', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: fileText })
+      });
+      if (!response.ok) throw new Error("Failed to fetch file");
+      const res = await response.json();
+      // push res into highlights
+      console.log('flask res', res)
+      const highlights = res.map((r) => {
+        const selectedText = r[0];
+        const start = r[1];
+        const end = r[2];
+        console.log(selectedText, start, end)
+        const hpoAttributes = {};
+        const priority = 'Normal';
+        return { id: Date.now(), selectedText, start, end, hpoAttributes, priority }
+      });
+      setHighlights(highlights);
+    }
+    catch (error) {
+      alert(error);
+    }
+  }
+
+
+
+
   return (
     <Box p={2}>
       <Box mb={2}>
@@ -216,18 +250,10 @@ const MedicalTextAnnotator = () => {
       </Box>
 
       <Box mb={2}>
-        <Button variant="outlined" component="label" onClick={() => loadPatientTxt('./demo_patient_1.txt')}>  
+        <Button variant="outlined" component="label" onClick={() => loadPatientTxt('./demo_patient_1.txt')}>
           Load Demo Patient 1
         </Button>
       </Box>
-
-      {/* A button to test backend */}
-      <Box mb={2}>
-        <Button variant="outlined" component="label" onClick={() => testFlask()}>
-          Test Backend
-        </Button>
-      </Box>
-
 
 
       <HighlightTable highlights={highlights} />
@@ -247,29 +273,40 @@ const MedicalTextAnnotator = () => {
       <Box mt={2}>
         {/* Toggle Switch */}
         <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={highlightMode}
-              onChange={(e) => setHighlightMode(e.target.checked)}
-            />
-          }
-          label="Highlight Mode"    
-        />
-          
+          <FormControlLabel
+            control={
+              <Switch
+                checked={highlightMode}
+                onChange={(e) => setHighlightMode(e.target.checked)}
+              />
+            }
+            label="Highlight Mode"
+          />
+
         </FormGroup>
-        
-      </Box>
+        {/* A button to test backend */}
+        <Box mb={2}>
+          <Button variant="outlined" component="label" onClick={() => testFlask()}>
+            Test Backend
+          </Button>
+        </Box>
 
-      {/* Add a color legend for Priority and Normal Not clickable button*/}
-      <Box mt={2}>
-        <Typography>Priority:</Typography>
-        <Button variant="contained" style={{ backgroundColor: "#FFC107", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">Normal</Button>
-        <Button variant="contained" style={{ backgroundColor: "#FF5722", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">High</Button>
-      </Box>
+        {/* Call Flask ACtree */}
+        <Box mb={2}>
+          <Button variant="outlined" component="label" onClick={() => AcTreeFlask()}>
+            ACtree Parse
+          </Button>
 
+        </Box>
+
+        {/* Add a color legend for Priority and Normal Not clickable button*/}
+        <Box mt={2}>
+          <Typography>Priority:</Typography>
+          <Button variant="contained" style={{ backgroundColor: "#FFC107", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">Normal</Button>
+          <Button variant="contained" style={{ backgroundColor: "#FF5722", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">High</Button>
+        </Box>
+      </Box>
       <SearchDialog open={dialogOpen} onClose={handleCloseDialog} onConfirm={handleConfirm} selectedHighlight={selectedHighlight} />
-      
     </Box>
   );
 };
