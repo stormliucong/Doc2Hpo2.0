@@ -43,7 +43,7 @@ const HighlightButton = ({ highlight, highlightedText, onUpdateHighlight, onDele
 
     const onLongPress = () => {
         // Pass the updated highlight back to the parent
-        onUpdateHighlight({ ...highlight, priority: highlight.priority === 'Normal' ? 'High' : 'Normal' });
+        onClickHighlight(highlight);
     };
 
     const onDoubleClick = () => {
@@ -51,7 +51,8 @@ const HighlightButton = ({ highlight, highlightedText, onUpdateHighlight, onDele
     };
 
     const onSingleClick = () => {
-        onClickHighlight(highlight);
+        onUpdateHighlight({ ...highlight, priority: highlight.priority === 'Normal' ? 'High' : 'Normal' });
+
     };
     
     return (
