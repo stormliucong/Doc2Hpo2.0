@@ -1,18 +1,3 @@
-from collections import deque, defaultdict 
-
-
-class HpoDict:
-    def __init__(self, hpo_file):
-        self.hpo_file = hpo_file
-    
-    def build_hpo_dict(self):
-        hpo_dict = defaultdict(str)
-        with open(self.hpo_file, "r") as f:
-            for line in f:
-                hpo_name, hpo_code = line.strip().split("|")
-                hpo_dict[hpo_name] = hpo_code
-        return hpo_dict
-
 class AhoCorasick:
     def __init__(self, hpo_dict):
         self.trie = {"children": {}, "fail": None, "output": []}
@@ -89,6 +74,7 @@ class AhoCorasick:
 # Example Usage:
 if __name__ == "__main__":
     print("Aho-Corasick String Matching")
+    from HpoDict import HpoDict
     hpo_dict = HpoDict("hpo_file.txt").build_hpo_dict()
     ac = AhoCorasick(hpo_dict)
     text = "ushers"

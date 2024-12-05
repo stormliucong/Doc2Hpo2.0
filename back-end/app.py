@@ -1,10 +1,10 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from AhoCorasickSearch import AhoCorasick, HpoDict
+from AhoCorasickSearch import AhoCorasick
 from NegationDetector import NegationDetector
 from LongestSeqSearch import LongestNonOverlappingIntervals
-
+from HpoDict import HpoDict
 
 
 app = Flask(__name__)
