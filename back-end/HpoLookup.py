@@ -30,30 +30,55 @@ class HpoLookup():
     @staticmethod
     def get_lowest_hpo(hpo_id_name_format_list, hpo_levels):
         # get the lowest level hpo id from hpo_id_name_format_list using hpo_levels
-        lowest_hpo = max(hpo_id_name_format_list, key=lambda hpo: hpo_levels[hpo["id"]])
+        lowest_hpo = [max(hpo_id_name_format_list, key=lambda hpo: hpo_levels[hpo["id"]])]
         return lowest_hpo
     
     @staticmethod
-    def add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels):
+    def add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, gpt_response_hpo_terms=None):
         '''
         Add HPO attributes to the matched intervals
         '''
-        matched_hpo = []    
-        for start, end in intervals:
-            if text[start:end] in hpo_dict:
-                hpo_id = hpo_dict[text[start:end]]
+        matched_hpo = []
+        if gpt_response_hpo_terms:
+            assert len(intervals) == len(gpt_response_hpo_terms), "Length of intervals and gpt_response_hpo_terms should be the same."
+        
+        for i in range(len(intervals)):
+            start, end = intervals[i]
+            query = text[start:end]
+            print(f'query + start + end: {query} + {start} + {end}')
+            if query in hpo_dict:  
+                hpo_id = hpo_dict[query]
                 hpo_name = hpo_name_dict[hpo_id]
             else:
-                hpo_id_name_format_list = HpoLookup.search_hpo_in_ncbi(text[start:end])
+                hpo_id_name_format_list = HpoLookup.search_hpo_in_ncbi(query)
                 if len(hpo_id_name_format_list) > 1:
                     hpo_id_name_format_list = HpoLookup.get_lowest_hpo(hpo_id_name_format_list, hpo_levels)
-                if hpo_id_name_format_list:
-                    hpo_id = hpo_id_name_format_list["id"]
-                    hpo_name = hpo_id_name_format_list["name"]
+                if len(hpo_id_name_format_list) > 0:
+                    print(hpo_id_name_format_list)
+                    hpo_id = hpo_id_name_format_list[0]["id"]
+                    hpo_name = hpo_id_name_format_list[0]["name"]   
                 else:
                     hpo_id = None
                     hpo_name = None
-            matched_hpo.append((start, end, text[start:end], {"id": hpo_id, "name": hpo_name}))
+            
+            if hpo_id is None:
+                # use GPT term as back up
+                query = gpt_response_hpo_terms[i]
+                if query in hpo_dict:  
+                    hpo_id = hpo_dict[query]
+                    hpo_name = hpo_name_dict[hpo_id]
+                else:
+                    hpo_id_name_format_list = HpoLookup.search_hpo_in_ncbi(query)
+                    print(hpo_id_name_format_list)
+                    if len(hpo_id_name_format_list) > 1:
+                        hpo_id_name_format_list = HpoLookup.get_lowest_hpo(hpo_id_name_format_list, hpo_levels)
+                    if len(hpo_id_name_format_list) > 0:
+                        hpo_id = hpo_id_name_format_list[0]["id"]
+                        hpo_name = hpo_id_name_format_list[0]["name"]   
+                    else:
+                        hpo_id = None
+                        hpo_name = None       
+            matched_hpo.append((start, end, query, {"id": hpo_id, "name": hpo_name}))
         return matched_hpo
             
         
