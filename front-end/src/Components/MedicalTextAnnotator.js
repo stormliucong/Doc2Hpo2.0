@@ -111,19 +111,19 @@ const MedicalTextAnnotator = () => {
   };
 
   const handleClickHighlight = (selectedHighlight) => {
+    if (!highlightMode) return;
     setSelectedHighlight(selectedHighlight);
     setDialogOpen(true);
   };
 
   const handleDeleteHighlight = (selectedHighlight) => {
-    console.log('handleDeleteHighlight')
-    console.log(selectedHighlight)
-
+    if (!highlightMode) return;
     setHighlights(highlights.filter((h) => h.id !== selectedHighlight.id));
 
   };
 
   const handleUpdateHighlight = (updatedHighlight) => {
+    if (!highlightMode) return;
     setHighlights((prevHighlights) =>
       prevHighlights.map((h) =>
         h.id === updatedHighlight.id ? updatedHighlight : h
@@ -211,12 +211,12 @@ const MedicalTextAnnotator = () => {
         const selectedText = r[2];
         const start = r[0];
         const end = r[1];
-        console.log(selectedText, start, end)
-        const hpoAttributes = {};
+        const hpoAttributes = r[3];
         const priority = 'Normal';
         return { id: uuidv4(), selectedText, start, end, hpoAttributes, priority }
       });
       setHighlights(highlights);
+      setHighlightMode(true);
     }
     catch (error) {
       alert(error);

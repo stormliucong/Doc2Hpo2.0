@@ -4,7 +4,6 @@ class AhoCorasick:
     def __init__(self, hpo_dict):
         self.trie = {"children": {}, "fail": None, "output": []}
         terms = hpo_dict.keys()
-        print('number of terms:', len(terms))
         self.build_trie(terms)
         self.build_failure_links()
 
@@ -64,11 +63,11 @@ class AhoCorasick:
                 results.append((start, end))
         return results
     
-    def add_hpo_attributes(self, text, intervals, hpo_dict):
+    def add_hpo_attributes(self, text, intervals, hpo_dict, hpo_name_dict):
         '''
         Add HPO attributes to the matched intervals
         '''
-        matched_hpo = [(start, end, text[start:end], hpo_dict[text[start:end]] ) for start, end in intervals]
+        matched_hpo = [(start, end, text[start:end], {"id": hpo_dict[text[start:end]], "name": hpo_name_dict[hpo_dict[text[start:end]]]} ) for start, end in intervals]
         return matched_hpo        
         
         
@@ -81,7 +80,7 @@ if __name__ == "__main__":
     hpo_F = HpoFactory()
     hpo_tree = hpo_F.build_hpo_tree()
     hpo_ancestors = hpo_F.get_hpo_ancestors(hpo_tree)
-    hpo_dict = hpo_F.build_hpo_dict(hpo_ancestors)
+    hpo_dict, hpo_name_dict = hpo_F.build_hpo_dict(hpo_ancestors)
     hpo_dict = hpo_F.expand_hpo_dict(hpo_dict)
     with open('demo_patient_1.txt', 'r') as f:
         text = f.read()
@@ -89,5 +88,5 @@ if __name__ == "__main__":
     ac = AhoCorasick(hpo_dict) 
     matches = ac.search(text)
     print("Matches:", matches)
-    matched_hpo = ac.add_hpo_attributes(text, matches, hpo_dict)
+    matched_hpo = ac.add_hpo_attributes(text, matches, hpo_dict, hpo_name_dict)
     print("Matched HPO:", matched_hpo)

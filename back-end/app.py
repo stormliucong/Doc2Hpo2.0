@@ -4,7 +4,7 @@ from flask_cors import CORS
 from AhoCorasickSearch import AhoCorasick
 from NegationDetector import NegationDetector
 from LongestSeqSearch import LongestNonOverlappingIntervals
-from HpoDict import HpoDict
+from HpoFactory import HpoFactory
 
 
 app = Flask(__name__)
@@ -12,10 +12,15 @@ app = Flask(__name__)
 # Allow CORS
 CORS(app)
 
-# Initialize Aho-Corasick
-hpo_dict = HpoDict("hpo_file.txt").build_hpo_dict()
-ac = AhoCorasick(hpo_dict)
+# Initialize HPO Factory
+hpoF = HpoFactory()
+hpo_tree = hpoF.build_hpo_tree()
+hpo_ancestors = hpoF.get_hpo_ancestors(hpo_tree)
+hpo_dict, hpo_name_dict = hpoF.build_hpo_dict(hpo_ancestors)
+hpo_dict = hpoF.expand_hpo_dict(hpo_dict)
 
+# Initialize Aho-Corasick
+ac = AhoCorasick(hpo_dict)
 
 @app.route('/api/hello', methods=['GET'])
 def hello_world():
@@ -37,7 +42,7 @@ def search():
     selector = LongestNonOverlappingIntervals(intervals)
     intervals = selector.get_longest_intervals()
     # add hpo atrributes
-    matches = ac.add_hpo_attributes(text, intervals,hpo_dict)
+    matches = ac.add_hpo_attributes(text, intervals,hpo_dict, hpo_name_dict)
     print(matches)
     return jsonify(matches)
 

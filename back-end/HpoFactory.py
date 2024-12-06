@@ -36,6 +36,7 @@ class HpoFactory:
     
     def build_hpo_dict(self, hpo_ancestors):
         hpo_dict = {}
+        hpo_name_dict = {}
         current_id = None
         with open(self.hpo_file, 'r') as file:
             for line in file:
@@ -51,6 +52,8 @@ class HpoFactory:
                     current_name = line.split("name: ")[1]
                     if current_name not in hpo_dict:
                         hpo_dict[current_name] = current_id
+                    if current_id not in hpo_dict:
+                        hpo_name_dict[current_id] = current_name
                         
                 elif line.startswith("synonym: ") and current_id:
                     synonym = line.split("synonym: ")[1].split(" EXACT")[0].strip('"')  # Extract synonym text
@@ -60,7 +63,7 @@ class HpoFactory:
                 # Reset current_id and current_name when reaching a new stanza
                 elif line == "[Term]" or line == "[Typedef]":
                     current_id = None
-        return hpo_dict
+        return hpo_dict, hpo_name_dict
     
     def expand_hpo_dict(self, hpo_dict):
         '''
@@ -87,10 +90,11 @@ if __name__ == "__main__":
     hpoF = HpoFactory()
     hpo_tree = hpoF.build_hpo_tree()
     hpo_ancestors = hpoF.get_hpo_ancestors(hpo_tree)
-    hpo_dict = hpoF.build_hpo_dict(hpo_ancestors)
+    hpo_dict, hpo_name_dict = hpoF.build_hpo_dict(hpo_ancestors)
     hpo_dict = hpoF.expand_hpo_dict(hpo_dict)
     print(hpo_tree["HP:0000011"])
-    print(hpo_ancestors["HP:0000011"])        
+    print(hpo_ancestors["HP:0000011"])     
+    print(hpo_name_dict['HP:0000011'])   
     assert hpo_dict['Lack of bladder control due to nervous system injury'] == 'HP:0000011'
     assert 'Autosomal dominant inheritance' not in hpo_dict
     assert 'HP:0000057' not in hpo_ancestors

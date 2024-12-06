@@ -89,14 +89,15 @@ class NegationDetector:
 
 
 # Example usage:
-text = ("The patient is not good today. He is showing any signs of improvement! "
-        "However, the earlier reports did not suggest any worsening either?")
-term_span = (19, 23)  # Indices for "good"
-detector = NegationDetector(negation_window=10, sentence_delimiters=None)
-is_negated = detector.is_negated(text, term_span)
-print(f"The term 'good' is negated: {is_negated}")
+if __name__ == "__main__":
+    text = ("The patient is not good today. He is showing any signs of improvement! "
+            "However, the earlier reports did not suggest any worsening either?")
+    term_span = (19, 23)  # Indices for "good"
+    detector = NegationDetector(negation_window=10, sentence_delimiters=None)
+    is_negated = detector.is_negated(text, term_span)
+    print(f"The term 'good' is negated: {is_negated}")
 
-term_span = (37, 44)  # Indices for "showing"
-detector = NegationDetector(negation_window=10, sentence_delimiters=None)
-is_negated = detector.is_negated(text, term_span)
-print(f"The term 'showing' is negated: {is_negated}")
+    term_span = (37, 44)  # Indices for "showing"
+    detector = NegationDetector(negation_window=10, sentence_delimiters=None)
+    is_negated = detector.is_negated(text, term_span)
+    print(f"The term 'showing' is negated: {is_negated}")
