@@ -61,6 +61,26 @@ class HpoFactory:
                 elif line == "[Term]" or line == "[Typedef]":
                     current_id = None
         return hpo_dict
+    
+    def expand_hpo_dict(self, hpo_dict):
+        '''
+        for each key in hpo_dict, add a new key by remove capitalization. But don't lower acronyms.
+        '''
+        expanded_hpo_dict = {}
+        for k, v in hpo_dict.items():
+            expanded_hpo_dict[k] = v
+            # tokenize the key
+            tokens = k.split()
+            # don't lower acronyms
+            tokens = [token.lower() if not token.isupper() else token for token in tokens]
+            # remove special characters
+            tokens = [token.strip('(),') for token in tokens]
+            new_key = ' '.join(tokens)
+            if new_key != '':
+                expanded_hpo_dict[new_key] = v
+        return expanded_hpo_dict
+            
+            
 
 # Example usage
 if __name__ == "__main__":
@@ -68,8 +88,13 @@ if __name__ == "__main__":
     hpo_tree = hpoF.build_hpo_tree()
     hpo_ancestors = hpoF.get_hpo_ancestors(hpo_tree)
     hpo_dict = hpoF.build_hpo_dict(hpo_ancestors)
+    hpo_dict = hpoF.expand_hpo_dict(hpo_dict)
     print(hpo_tree["HP:0000011"])
     print(hpo_ancestors["HP:0000011"])        
     assert hpo_dict['Lack of bladder control due to nervous system injury'] == 'HP:0000011'
     assert 'Autosomal dominant inheritance' not in hpo_dict
+    assert 'HP:0000057' not in hpo_ancestors
+    assert 'orofacial cleft' in hpo_dict
+    assert '' not in hpo_dict
+    assert 'abnormal' not in hpo_dict
 

@@ -1,7 +1,10 @@
+from collections import deque 
+
 class AhoCorasick:
     def __init__(self, hpo_dict):
         self.trie = {"children": {}, "fail": None, "output": []}
         terms = hpo_dict.keys()
+        print('number of terms:', len(terms))
         self.build_trie(terms)
         self.build_failure_links()
 
@@ -76,12 +79,14 @@ if __name__ == "__main__":
     print("Aho-Corasick String Matching")
     from HpoFactory import HpoFactory
     hpo_F = HpoFactory()
-    hpo_dict = hpo_F.build_hpo_dict()
+    hpo_tree = hpo_F.build_hpo_tree()
+    hpo_ancestors = hpo_F.get_hpo_ancestors(hpo_tree)
+    hpo_dict = hpo_F.build_hpo_dict(hpo_ancestors)
+    hpo_dict = hpo_F.expand_hpo_dict(hpo_dict)
     with open('demo_patient_1.txt', 'r') as f:
         text = f.read()
-    
-    ac = AhoCorasick(hpo_dict)
-    
+    print(text)
+    ac = AhoCorasick(hpo_dict) 
     matches = ac.search(text)
     print("Matches:", matches)
     matched_hpo = ac.add_hpo_attributes(text, matches, hpo_dict)
