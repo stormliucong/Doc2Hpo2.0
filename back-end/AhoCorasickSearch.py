@@ -74,10 +74,14 @@ class AhoCorasick:
 # Example Usage:
 if __name__ == "__main__":
     print("Aho-Corasick String Matching")
-    from HpoDict import HpoDict
-    hpo_dict = HpoDict("hpo_file.txt").build_hpo_dict()
+    from HpoFactory import HpoFactory
+    hpo_F = HpoFactory()
+    hpo_dict = hpo_F.build_hpo_dict()
+    with open('demo_patient_1.txt', 'r') as f:
+        text = f.read()
+    
     ac = AhoCorasick(hpo_dict)
-    text = "ushers"
+    
     matches = ac.search(text)
     print("Matches:", matches)
     matched_hpo = ac.add_hpo_attributes(text, matches, hpo_dict)
