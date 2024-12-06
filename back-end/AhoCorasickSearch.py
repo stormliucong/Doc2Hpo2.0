@@ -61,14 +61,7 @@ class AhoCorasick:
                 start = i - len(term) + 1
                 end = i + 1
                 results.append((start, end))
-        return results
-    
-    def add_hpo_attributes(self, text, intervals, hpo_dict, hpo_name_dict):
-        '''
-        Add HPO attributes to the matched intervals
-        '''
-        matched_hpo = [(start, end, text[start:end], {"id": hpo_dict[text[start:end]], "name": hpo_name_dict[hpo_dict[text[start:end]]]} ) for start, end in intervals]
-        return matched_hpo        
+        return results   
         
         
         
@@ -77,9 +70,11 @@ class AhoCorasick:
 if __name__ == "__main__":
     print("Aho-Corasick String Matching")
     from HpoFactory import HpoFactory
+    from HpoLookup import HpoLookup
     hpo_F = HpoFactory()
     hpo_tree = hpo_F.build_hpo_tree()
     hpo_ancestors = hpo_F.get_hpo_ancestors(hpo_tree)
+    hpo_levels = hpo_F.get_hpo_levels(hpo_tree)
     hpo_dict, hpo_name_dict = hpo_F.build_hpo_dict(hpo_ancestors)
     hpo_dict = hpo_F.expand_hpo_dict(hpo_dict)
     with open('demo_patient_1.txt', 'r') as f:
@@ -88,5 +83,5 @@ if __name__ == "__main__":
     ac = AhoCorasick(hpo_dict) 
     matches = ac.search(text)
     print("Matches:", matches)
-    matched_hpo = ac.add_hpo_attributes(text, matches, hpo_dict, hpo_name_dict)
+    matched_hpo = HpoLookup.add_hpo_attributes(text, matches, hpo_dict, hpo_name_dict, hpo_levels)
     print("Matched HPO:", matched_hpo)

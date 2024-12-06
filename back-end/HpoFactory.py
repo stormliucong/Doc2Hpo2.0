@@ -1,6 +1,7 @@
 from collections import deque, defaultdict 
 import os
 import json
+import requests
 
 class HpoFactory:
     def __init__(self):
@@ -33,6 +34,51 @@ class HpoFactory:
                         hpo_ancestors[hpo_id].append(parent_id)
                         queue.append(parent_id)
         return hpo_ancestors
+    
+    def get_hpo_levels(self, hpo_tree):
+        hpo_levels = defaultdict(list)
+        # loop over all nodes in the tree and calculate minimum distance to root "HP:0000118"
+        for node in hpo_tree:
+            hpo_levels[node] = self.__min_distance_to_target(hpo_tree, node, "HP:0000118")
+        return hpo_levels
+    
+    def __min_distance_to_target(self, graph, start, target):
+        """
+        Calculate the minimum distance from start node to target node in a graph.
+        
+        Args:
+        graph (dict): A dictionary where the key is a child node and the value is a list of parent nodes.
+        start (str): The starting node (A).
+        target (str): The target node (B).
+        
+        Returns:
+        int: The minimum distance from start to target, or -1 if no path exists.
+        """
+        if start == target:
+            return 0
+
+        # Initialize a queue for BFS
+        queue = deque([(start, 0)])  # (current_node, current_distance)
+        visited = set()
+
+        while queue:
+            current, distance = queue.popleft()
+            
+            # Mark the current node as visited
+            visited.add(current)
+            
+            # Get all parent nodes of the current node
+            parents = graph.get(current, [])
+            
+            for parent in parents:
+                if parent not in visited:
+                    if parent == target:
+                        return distance + 1
+                    queue.append((parent, distance + 1))
+                    visited.add(parent)
+        
+        # If the loop ends without finding the target
+        return -1
     
     def build_hpo_dict(self, hpo_ancestors):
         hpo_dict = {}
@@ -90,11 +136,13 @@ if __name__ == "__main__":
     hpoF = HpoFactory()
     hpo_tree = hpoF.build_hpo_tree()
     hpo_ancestors = hpoF.get_hpo_ancestors(hpo_tree)
+    hpo_levels = hpoF.get_hpo_levels(hpo_tree)
     hpo_dict, hpo_name_dict = hpoF.build_hpo_dict(hpo_ancestors)
     hpo_dict = hpoF.expand_hpo_dict(hpo_dict)
     print(hpo_tree["HP:0000011"])
     print(hpo_ancestors["HP:0000011"])     
-    print(hpo_name_dict['HP:0000011'])   
+    print(hpo_name_dict['HP:0000011'])  
+    print(hpo_levels['HP:0000011'])
     assert hpo_dict['Lack of bladder control due to nervous system injury'] == 'HP:0000011'
     assert 'Autosomal dominant inheritance' not in hpo_dict
     assert 'HP:0000057' not in hpo_ancestors
