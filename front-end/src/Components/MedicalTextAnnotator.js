@@ -26,7 +26,8 @@ const MedicalTextAnnotator = () => {
   const [highlights, setHighlights] = useState([]);
   const [selectedHighlight, setSelectedHighlight] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-
+  const [gptDialogOpen, setGptDialogOpen] = useState(false);
+  const [openaiKey, setOpenaiKey] = useState("");
 
   const resetState = () => {
     setInputText("");
@@ -223,6 +224,35 @@ const MedicalTextAnnotator = () => {
     }
   }
 
+  const GptFlask = async () => {
+    // Post request with {text: fileText}
+    try {
+      const response = await fetch('http://localhost:5000/api/search/gpt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: fileText, openaiKey: openaiKey, test: false })
+      });
+      if (!response.ok) throw new Error("Failed to fetch file");
+      const res = await response.json();
+      // push res into highlights
+      console.log('flask res', res)
+      const highlights = res.map((r) => {
+        const selectedText = r[2];
+        const start = r[0];
+        const end = r[1];
+        const hpoAttributes = r[3];
+        const priority = 'Normal';
+        return { id: uuidv4(), selectedText, start, end, hpoAttributes, priority }
+      });
+      setHighlights(highlights);
+      setHighlightMode(true);
+    }
+    catch (error) {
+      alert(error);
+    }
+  }
 
 
 
@@ -296,7 +326,30 @@ const MedicalTextAnnotator = () => {
             ACtree Parse
           </Button>
 
+          <Button variant="outlined" component="label" onClick={() => setGptDialogOpen(true)}>
+            GPT Parse
+          </Button>
+
+          <Dialog open={gptDialogOpen} onClose={() => {setGptDialogOpen(false); setOpenaiKey('')}} onConfirm={() => GptFlask()} >
+            <DialogTitle>
+              GPT Parse Configuration
+            </DialogTitle>
+            <DialogContent>
+              <TextField
+                fullWidth
+                label="Input OpenAI Key"
+                value={openaiKey}
+                onChange={(e) => setOpenaiKey(e.target.value)}
+              />    
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => {setGptDialogOpen(false); setOpenaiKey('')}}>Cancel</Button>
+              <Button onClick={() => GptFlask()}>Confirm</Button>
+            </DialogActions>
+          </Dialog>
+  
         </Box>
+        
 
         {/* Add a color legend for Priority and Normal Not clickable button*/}
         <Box mt={2}>
@@ -306,6 +359,8 @@ const MedicalTextAnnotator = () => {
         </Box>
       </Box>
       <SearchDialog open={dialogOpen} onClose={handleCloseDialog} onConfirm={handleConfirm} selectedHighlight={selectedHighlight} />
+
+
     </Box>
   );
 };

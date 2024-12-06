@@ -5,6 +5,8 @@ from AhoCorasickSearch import AhoCorasick
 from NegationDetector import NegationDetector
 from LongestSeqSearch import LongestNonOverlappingIntervals
 from HpoFactory import HpoFactory
+from HpoLookup import HpoLookup
+from GptSearch import GptSearch
 
 
 app = Flask(__name__)
@@ -13,11 +15,12 @@ app = Flask(__name__)
 CORS(app)
 
 # Initialize HPO Factory
-hpoF = HpoFactory()
-hpo_tree = hpoF.build_hpo_tree()
-hpo_ancestors = hpoF.get_hpo_ancestors(hpo_tree)
-hpo_dict, hpo_name_dict = hpoF.build_hpo_dict(hpo_ancestors)
-hpo_dict = hpoF.expand_hpo_dict(hpo_dict)
+hpo_F = HpoFactory()
+hpo_tree = hpo_F.build_hpo_tree()
+hpo_ancestors = hpo_F.get_hpo_ancestors(hpo_tree)
+hpo_levels = hpo_F.get_hpo_levels(hpo_tree)
+hpo_dict, hpo_name_dict = hpo_F.build_hpo_dict(hpo_ancestors)
+hpo_dict = hpo_F.expand_hpo_dict(hpo_dict)
 
 # Initialize Aho-Corasick
 ac = AhoCorasick(hpo_dict)
@@ -31,7 +34,7 @@ def hello_world():
     return jsonify(response)
 
 @app.route('/api/search/actree', methods=['POST'])
-def search():
+def search_actree():
     request_data = request.get_json()
     text = request_data.get("text")
     intervals = ac.search(text) # Example: [(1, 4), (2, 4), (2, 6)]
@@ -42,9 +45,21 @@ def search():
     selector = LongestNonOverlappingIntervals(intervals)
     intervals = selector.get_longest_intervals()
     # add hpo atrributes
-    matches = ac.add_hpo_attributes(text, intervals,hpo_dict, hpo_name_dict)
+    matches = HpoLookup.add_hpo_attributes(text, intervals,hpo_dict, hpo_name_dict,hpo_levels)
     print(matches)
     return jsonify(matches)
+
+@app.route('/api/search/gpt', methods=['POST'])
+def search_gpt():
+    request_data = request.get_json()
+    text = request_data.get("text")
+    api_key = request_data.get("openaiKey")
+    test = request_data.get("test")
+    gpt = GptSearch(openai_api_key = api_key)
+    gpt_response = gpt.search_hpo_terms(text, test=test)
+    intervals, gpt_response_hpo_terms = gpt.post_process_gpts(gpt_response)
+    matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, gpt_response_hpo_terms)    
+    return jsonify(matched_hpo)
 
 if __name__ == "__main__":
     app.run(debug=True)
