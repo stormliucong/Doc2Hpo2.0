@@ -12,7 +12,8 @@ import {
   ListItem,
   Typography,
   FormGroup,
-  FormControlLabel
+  FormControlLabel,
+  Checkbox
 } from "@mui/material";
 import HighlightTable from "./HighlightTable";
 import HighlightButton from "./HighlightButton";
@@ -28,6 +29,9 @@ const MedicalTextAnnotator = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [gptDialogOpen, setGptDialogOpen] = useState(false);
   const [openaiKey, setOpenaiKey] = useState("");
+  const [scispacyDialogOpen, setScispacyDialogOpen] = useState(false);
+  const [actreeDialogOpen, setActreeDialogOpen] = useState(false);
+
 
   const resetState = () => {
     setInputText("");
@@ -254,6 +258,35 @@ const MedicalTextAnnotator = () => {
     }
   }
 
+  const ScispacyFlask = async () => {
+    // Post request with {text: fileText}
+    try {
+      const response = await fetch('http://localhost:5000/api/search/scispacy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: fileText })
+      });
+      if (!response.ok) throw new Error("Failed to fetch file");
+      const res = await response.json();
+      // push res into highlights
+      console.log('flask res', res)
+      const highlights = res.map((r) => {
+        const selectedText = r[2];
+        const start = r[0];
+        const end = r[1];
+        const hpoAttributes = r[3];
+        const priority = 'Normal';
+        return { id: uuidv4(), selectedText, start, end, hpoAttributes, priority }
+      });
+      setHighlights(highlights);
+      setHighlightMode(true);
+    }
+    catch (error) {
+      alert(error);
+    }
+  } 
 
 
   return (
@@ -322,14 +355,22 @@ const MedicalTextAnnotator = () => {
 
         {/* Call Flask ACtree */}
         <Box mb={2}>
-          <Button variant="outlined" component="label" onClick={() => AcTreeFlask()}>
+          <Button variant="outlined" component="label" onClick={() => setActreeDialogOpen(true)}> 
             ACtree Parse
           </Button>
+          <Dialog open={actreeDialogOpen} onClose={() => {setActreeDialogOpen(false)}} onConfirm={() => AcTreeFlask()} >
+            <DialogTitle>
+              ACtree Parse Configuration
+            </DialogTitle>
+            <DialogActions>
+              <Button onClick={() => {setActreeDialogOpen(false)}}>Cancel</Button>
+              <Button onClick={() => AcTreeFlask()}>Confirm</Button>
+            </DialogActions>
+          </Dialog>
 
           <Button variant="outlined" component="label" onClick={() => setGptDialogOpen(true)}>
             GPT Parse
           </Button>
-
           <Dialog open={gptDialogOpen} onClose={() => {setGptDialogOpen(false); setOpenaiKey('')}} onConfirm={() => GptFlask()} >
             <DialogTitle>
               GPT Parse Configuration
@@ -347,7 +388,19 @@ const MedicalTextAnnotator = () => {
               <Button onClick={() => GptFlask()}>Confirm</Button>
             </DialogActions>
           </Dialog>
-  
+
+          <Button variant="outlined" component="label" onClick={() => setScispacyDialogOpen(true)}>
+            Scispacy Parse
+          </Button>
+          <Dialog open={scispacyDialogOpen} onClose={() => {setScispacyDialogOpen(false)}} onConfirm={() => ScispacyFlask()} >
+            <DialogTitle>
+              Scispacy Parse Configuration
+            </DialogTitle>
+            <DialogActions>
+              <Button onClick={() => {setScispacyDialogOpen(false)}}>Cancel</Button>
+              <Button onClick={() => ScispacyFlask()}>Confirm</Button>
+            </DialogActions>
+          </Dialog>
         </Box>
         
 
