@@ -7,6 +7,8 @@ from LongestSeqSearch import LongestNonOverlappingIntervals
 from HpoFactory import HpoFactory
 from HpoLookup import HpoLookup
 from GptSearch import GptSearch
+from ScispacySearch import ScispacySearch
+
 
 
 app = Flask(__name__)
@@ -24,6 +26,9 @@ hpo_dict = hpo_F.expand_hpo_dict(hpo_dict)
 
 # Initialize Aho-Corasick
 ac = AhoCorasick(hpo_dict)
+
+# Initialize Scispacy
+ss = ScispacySearch()
 
 @app.route('/api/hello', methods=['GET'])
 def hello_world():
@@ -59,6 +64,14 @@ def search_gpt():
     gpt_response = gpt.search_hpo_terms(text, test=test)
     intervals, gpt_response_hpo_terms = gpt.post_process_gpts(gpt_response)
     matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, gpt_response_hpo_terms)    
+    return jsonify(matched_hpo)
+
+@app.route('/api/search/scispacy', methods=['POST'])
+def search_scispacy():
+    request_data = request.get_json()
+    text = request_data.get("text")
+    intervals, linked_hpo_names = ss.search(text)
+    matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, linked_hpo_names)
     return jsonify(matched_hpo)
 
 if __name__ == "__main__":

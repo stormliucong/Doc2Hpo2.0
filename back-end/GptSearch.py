@@ -1,7 +1,4 @@
 from openai import OpenAI
-from HpoFactory import HpoFactory
-from HpoLookup import HpoLookup
-import json
 
 class GptSearch:
     def __init__(self, model="gpt-3.5-turbo",openai_api_key=None):
@@ -92,6 +89,7 @@ class GptSearch:
 if __name__ == "__main__":
     print("GPT-4 Search")
     from HpoFactory import HpoFactory
+    from HpoLookup import HpoLookup
     hpo_F = HpoFactory()
     hpo_tree = hpo_F.build_hpo_tree()
     hpo_ancestors = hpo_F.get_hpo_ancestors(hpo_tree)
