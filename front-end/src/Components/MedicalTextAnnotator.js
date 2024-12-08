@@ -8,12 +8,13 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  List,
-  ListItem,
   Typography,
   FormGroup,
   FormControlLabel,
-  Checkbox
+  Backdrop,
+  CircularProgress,
+  Snackbar,
+  Alert
 } from "@mui/material";
 import HighlightTable from "./HighlightTable";
 import HighlightButton from "./HighlightButton";
@@ -31,7 +32,8 @@ const MedicalTextAnnotator = () => {
   const [openaiKey, setOpenaiKey] = useState("");
   const [scispacyDialogOpen, setScispacyDialogOpen] = useState(false);
   const [actreeDialogOpen, setActreeDialogOpen] = useState(false);
-
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const resetState = () => {
     setInputText("");
@@ -187,19 +189,56 @@ const MedicalTextAnnotator = () => {
   };
 
   const testFlask = async () => {
+    setLoading(true);
+    setError(null);
+    let isRequestActive = true;
+
+    // Set a timeout to automatically cancel the request
+    const timeoutId = setTimeout(() => {
+      isRequestActive = false;
+      setLoading(false);
+      setError("Request timed out after 5 seconds.");
+      console.log("Request timed out.");
+    }, 5000);
+
     try {
       const response = await fetch('http://localhost:5000/api/hello');
-      if (!response.ok) throw new Error("Failed to fetch file");
+      // If the request is inactive (timed out), stop processing
+      if (!isRequestActive) return;
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
       const res = await response.text();
       alert(res);
     }
+    
     catch (error) {
-      alert(error);
+      if (isRequestActive) {
+        setError(error.message);
+        console.error("Error fetching data:", error.message);
+      }
+    }
+
+    finally {
+      if (isRequestActive) {
+        clearTimeout(timeoutId); // Clear timeout if the request completes on time
+        setLoading(false);
+      }
     }
   }
 
   const AcTreeFlask = async () => {
     // Post request with {text: fileText}
+    setLoading(true);
+    setError(null);
+    let isRequestActive = true;
+
+    // Set a timeout to automatically cancel the request
+    const timeoutId = setTimeout(() => {
+      isRequestActive = false;
+      setLoading(false);
+      setError("Request timed out after 5 seconds.");
+      console.log("Request timed out.");
+    }, 5000);
+
     try {
       const response = await fetch('http://localhost:5000/api/search/actree', {
         method: 'POST',
@@ -208,7 +247,11 @@ const MedicalTextAnnotator = () => {
         },
         body: JSON.stringify({ text: fileText })
       });
-      if (!response.ok) throw new Error("Failed to fetch file");
+      // If the request is inactive (timed out), stop processing
+      if (!isRequestActive) return;
+
+      clearTimeout(timeoutId); // Clear timeout if the request completes on time
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
       const res = await response.json();
       // push res into highlights
       console.log('flask res', res)
@@ -224,12 +267,34 @@ const MedicalTextAnnotator = () => {
       setHighlightMode(true);
     }
     catch (error) {
-      alert(error);
+      if (isRequestActive) {
+        setError(error.message);
+        console.error("Error fetching data:", error.message);
+      }
+    }
+    finally {
+      if (isRequestActive) {
+        clearTimeout(timeoutId); // Clear timeout if the request completes on time
+        setLoading(false);
+      }
     }
   }
 
   const GptFlask = async () => {
     // Post request with {text: fileText}
+    setLoading(true);
+    setError(null);
+    let isRequestActive = true;
+
+    // Set a timeout to automatically cancel the request
+    const timeoutId = setTimeout(() => {
+      isRequestActive = false;
+      setLoading(false);
+      setError("Request timed out after 5 seconds.");
+      console.log("Request timed out.");
+    }, 5000);
+
+
     try {
       const response = await fetch('http://localhost:5000/api/search/gpt', {
         method: 'POST',
@@ -238,7 +303,9 @@ const MedicalTextAnnotator = () => {
         },
         body: JSON.stringify({ text: fileText, openaiKey: openaiKey, test: false })
       });
-      if (!response.ok) throw new Error("Failed to fetch file");
+      // If the request is inactive (timed out), stop processing
+      if (!isRequestActive) return;
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
       const res = await response.json();
       // push res into highlights
       console.log('flask res', res)
@@ -254,12 +321,33 @@ const MedicalTextAnnotator = () => {
       setHighlightMode(true);
     }
     catch (error) {
-      alert(error);
+      if (isRequestActive) {
+        setError(error.message);
+        console.error("Error fetching data:", error.message);
+      }
+    }
+    finally {
+      if (isRequestActive) {
+        clearTimeout(timeoutId); // Clear timeout if the request completes on time
+        setLoading(false);
+      }
     }
   }
 
   const ScispacyFlask = async () => {
     // Post request with {text: fileText}
+    setLoading(true);
+    setError(null);
+    let isRequestActive = true;
+
+    // Set a timeout to automatically cancel the request
+    const timeoutId = setTimeout(() => {
+      isRequestActive = false;
+      setLoading(false);
+      setError("Request timed out after 5 seconds.");
+      console.log("Request timed out.");
+    }, 5000);
+
     try {
       const response = await fetch('http://localhost:5000/api/search/scispacy', {
         method: 'POST',
@@ -268,7 +356,9 @@ const MedicalTextAnnotator = () => {
         },
         body: JSON.stringify({ text: fileText })
       });
-      if (!response.ok) throw new Error("Failed to fetch file");
+      // If the request is inactive (timed out), stop processing
+      if (!isRequestActive) return;
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
       const res = await response.json();
       // push res into highlights
       console.log('flask res', res)
@@ -284,13 +374,49 @@ const MedicalTextAnnotator = () => {
       setHighlightMode(true);
     }
     catch (error) {
-      alert(error);
+      if (isRequestActive) {
+        
+        setError(error.message);
+        console.error("Error fetching data:", error.message);
+      }
+    }
+    finally {
+      if (isRequestActive) {
+        clearTimeout(timeoutId); // Clear timeout if the request completes on time
+        setLoading(false);
+      }
     }
   } 
 
-
   return (
+    
     <Box p={2}>
+      {/* Error banner using Snackbar and Alert */}
+      <Snackbar
+        open={Boolean(error)}
+        autoHideDuration={60000}
+        onClose={() => setError(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={() => setError(null)} severity="error" sx={{ width: "100%" }}>
+          {error}
+        </Alert>
+      </Snackbar>
+      {/* Full-page backdrop to disable all interactions */}
+      <Backdrop
+        open={loading}
+        style={{
+          color: "#fff",
+          zIndex: 2000,
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Box mb={2}>
         <TextField
           fullWidth
@@ -358,20 +484,20 @@ const MedicalTextAnnotator = () => {
           <Button variant="outlined" component="label" onClick={() => setActreeDialogOpen(true)}> 
             ACtree Parse
           </Button>
-          <Dialog open={actreeDialogOpen} onClose={() => {setActreeDialogOpen(false)}} onConfirm={() => AcTreeFlask()} >
+          <Dialog open={actreeDialogOpen} onClose={() => {setActreeDialogOpen(false)}} >
             <DialogTitle>
               ACtree Parse Configuration
             </DialogTitle>
             <DialogActions>
               <Button onClick={() => {setActreeDialogOpen(false)}}>Cancel</Button>
-              <Button onClick={() => AcTreeFlask()}>Confirm</Button>
+              <Button onClick={() => {setActreeDialogOpen(false); AcTreeFlask()}}>Confirm</Button>
             </DialogActions>
           </Dialog>
 
           <Button variant="outlined" component="label" onClick={() => setGptDialogOpen(true)}>
             GPT Parse
           </Button>
-          <Dialog open={gptDialogOpen} onClose={() => {setGptDialogOpen(false); setOpenaiKey('')}} onConfirm={() => GptFlask()} >
+          <Dialog open={gptDialogOpen} onClose={() => {setGptDialogOpen(false); setOpenaiKey('')}} >
             <DialogTitle>
               GPT Parse Configuration
             </DialogTitle>
@@ -385,20 +511,20 @@ const MedicalTextAnnotator = () => {
             </DialogContent>
             <DialogActions>
               <Button onClick={() => {setGptDialogOpen(false); setOpenaiKey('')}}>Cancel</Button>
-              <Button onClick={() => GptFlask()}>Confirm</Button>
+              <Button onClick={() => {setGptDialogOpen(false); GptFlask()}}>Confirm</Button>
             </DialogActions>
           </Dialog>
 
           <Button variant="outlined" component="label" onClick={() => setScispacyDialogOpen(true)}>
             Scispacy Parse
           </Button>
-          <Dialog open={scispacyDialogOpen} onClose={() => {setScispacyDialogOpen(false)}} onConfirm={() => ScispacyFlask()} >
+          <Dialog open={scispacyDialogOpen} onClose={() => {setScispacyDialogOpen(false)}} >
             <DialogTitle>
               Scispacy Parse Configuration
             </DialogTitle>
             <DialogActions>
               <Button onClick={() => {setScispacyDialogOpen(false)}}>Cancel</Button>
-              <Button onClick={() => ScispacyFlask()}>Confirm</Button>
+              <Button onClick={() => {setScispacyDialogOpen(false); ScispacyFlask()}}>Confirm</Button>
             </DialogActions>
           </Dialog>
         </Box>

@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-
 from AhoCorasickSearch import AhoCorasick
 from NegationDetector import NegationDetector
 from LongestSeqSearch import LongestNonOverlappingIntervals
@@ -32,6 +31,9 @@ ss = ScispacySearch()
 
 @app.route('/api/hello', methods=['GET'])
 def hello_world():
+    # sleep 10 seconds
+    import time
+    time.sleep(10)
     response = {
         "message": "Hello, World!",
         "status": "success"
