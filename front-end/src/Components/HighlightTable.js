@@ -1,50 +1,42 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import { v4 as uuidv4 } from 'uuid';
+import { DataGrid } from '@mui/x-data-grid';
 
 const HighlightTable = ({ highlights }) => {
   console.log('highlight table', highlights)
-    return (
-      <TableContainer component={Paper} sx={{ mt: 2 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Highlighted Text</TableCell>
-              <TableCell>Start</TableCell>
-              <TableCell>End</TableCell>
-              <TableCell>Priority</TableCell>
-              <TableCell>HPO Name</TableCell>
-              <TableCell>HPO ID</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {highlights.map((highlight) => (
-              
-              <TableRow key={uuidv4()}>
-                <TableCell>{highlight.selectedText}</TableCell>
-                <TableCell>{highlight.start}</TableCell>
-                <TableCell>{highlight.end}</TableCell>
-                <TableCell>{highlight.priority}</TableCell>
-                {highlight.hpoAttributes.name && highlight.hpoAttributes.id ? (
-                  <>
-                  <TableCell>
-                    {highlight.hpoAttributes.name}
-                  </TableCell>
-                  <TableCell>
-                    {highlight.hpoAttributes.id}
-                  </TableCell>
-                  </>
-                ) : (
-                  <>
-                  <TableCell>No HPO Name</TableCell>
-                  <TableCell>No HPO ID</TableCell>
-                  </>
-                )}
-                </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    );
-  };
+
+  if (!highlights || highlights.length === 0) {
+    return <p>No highlights available.</p>; // Replace with a suitable message or UI.
+  }
+  const rows = highlights.map((highlight) => ({
+    id: uuidv4(), // Unique identifier for each row
+    selectedText: highlight.selectedText || 'N/A',
+    start: highlight.start || 'N/A',
+    end: highlight.end || 'N/A',
+    priority: highlight.priority || 'N/A',
+    hpoName: highlight.hpoAttributes.name || 'No HPO Name',
+    hpoId: highlight.hpoAttributes.id || 'No HPO ID',
+  }));
+
+  const columns = [
+    { field: 'selectedText', headerName: 'Highlighted Text', flex: 2 },
+    { field: 'start', headerName: 'Start', flex: 1 },
+    { field: 'end', headerName: 'End', flex: 1 },
+    { field: 'priority', headerName: 'Priority', flex: 1 },
+    { field: 'hpoName', headerName: 'HPO Name', flex: 2 },
+    { field: 'hpoId', headerName: 'HPO ID', flex: 2 },
+  ];
+
+  return (
+
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={5}
+        rowsPerPageOptions={[5, 10, 20]}
+        disableSelectionOnClick
+        autoHeight
+      />
+  );
+};
 
   export default HighlightTable;

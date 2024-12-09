@@ -7,14 +7,18 @@
     "@emotion/styled": "^11.13.5",
     "@mui/icons-material": "^6.1.10",
     "@mui/material": "^6.1.10",
+    "@mui/styled-engine-sc": "^6.1.10",
+    "@mui/x-data-grid": "^7.23.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
+    "styled-components": "^6.1.13",
     "uuid": "^11.0.3",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "x-data-grid": "^2.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
