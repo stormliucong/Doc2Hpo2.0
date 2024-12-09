@@ -470,6 +470,19 @@ const MedicalTextAnnotator = () => {
             }
             label="Highlight Mode"
           />
+          {/* a download button to download highlights as a json file */}
+          <Button variant="outlined" onClick={() => {
+            const element = document.createElement("a");
+            const download_json = {text: fileText, highlights: highlights };
+            const file = new Blob([JSON.stringify(download_json)], { type: 'application/json' });
+            element.href = URL.createObjectURL(file);
+            element.download = "highlights.json";
+            document.body.appendChild(element); // Required for this to work in FireFox
+            element.click();
+          }
+          }>
+            Download Highlights
+          </Button>
 
         </FormGroup>
         {/* A button to test backend */}
