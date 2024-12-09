@@ -2,5 +2,5 @@ Age: 45 years
 Gender: Female
 Presentation: The patient reports persistent fatigue over the past six months, accompanied by muscle weakness in the upper arms and thighs. She also experiences morning stiffness lasting more than 30 minutes and difficulty climbing stairs or lifting objects. Skin changes include a purple rash around the eyes (heliotrope rash) and red, scaly patches on the knuckles (Gottron’s papules).
 Family History: Mother diagnosed with rheumatoid arthritis.
-Preliminary Diagnosis: Suspected dermatomyositis, pending muscle enzyme studies and skin biopsy.
+Preliminary Diagnosis: Suspected dermatomyositis, pending muscle enzyme studies and skin biopsy. No muscular dystropy detected
 HPO_terms: Urinary urgency, Functional abnormality of male internal genitalia, Hypospadias, urinary urgency

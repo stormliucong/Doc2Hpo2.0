@@ -16,11 +16,6 @@ class LongestNonOverlappingIntervals:
 
         # Step 1: Sort intervals by start time, and for ties, by descending end time
         self.intervals.sort(key=lambda x: (x[0], -x[1]))
-        
-        # Step 2: check whether there is any overlap
-        for i in range(1, len(self.intervals)):
-            if self.intervals[i][0] < self.intervals[i-1][1]:
-                return self.intervals
 
         # Step 2: Use a greedy algorithm to select the longest non-overlapping intervals
         selected_intervals = []
