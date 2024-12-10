@@ -199,7 +199,7 @@ const MedicalTextAnnotator = () => {
       setLoading(false);
       setError("Request timed out after 5 seconds.");
       console.log("Request timed out.");
-    }, 5000);
+    }, 50000);
 
     try {
       const response = await fetch('http://localhost:5000/api/hello');
@@ -237,7 +237,7 @@ const MedicalTextAnnotator = () => {
       setLoading(false);
       setError("Request timed out after 5 seconds.");
       console.log("Request timed out.");
-    }, 5000);
+    }, 50000);
 
     try {
       const response = await fetch('http://localhost:5000/api/search/actree', {
@@ -260,7 +260,7 @@ const MedicalTextAnnotator = () => {
         const start = r[0];
         const end = r[1];
         const hpoAttributes = r[3];
-        const priority = 'Normal';
+        const priority = hpoAttributes.frequency > 0.05 ? 'Low' : 'Normal';
         return { id: uuidv4(), selectedText, start, end, hpoAttributes, priority }
       });
       setHighlights(highlights);
@@ -292,7 +292,7 @@ const MedicalTextAnnotator = () => {
       setLoading(false);
       setError("Request timed out after 5 seconds.");
       console.log("Request timed out.");
-    }, 5000);
+    }, 50000);
 
 
     try {
@@ -314,7 +314,7 @@ const MedicalTextAnnotator = () => {
         const start = r[0];
         const end = r[1];
         const hpoAttributes = r[3];
-        const priority = 'Normal';
+        const priority = hpoAttributes.frequency > 0.05 ? 'Low' : 'Normal';
         return { id: uuidv4(), selectedText, start, end, hpoAttributes, priority }
       });
       setHighlights(highlights);
@@ -346,7 +346,7 @@ const MedicalTextAnnotator = () => {
       setLoading(false);
       setError("Request timed out after 5 seconds.");
       console.log("Request timed out.");
-    }, 5000);
+    }, 50000);
 
     try {
       const response = await fetch('http://localhost:5000/api/search/scispacy', {
@@ -367,7 +367,7 @@ const MedicalTextAnnotator = () => {
         const start = r[0];
         const end = r[1];
         const hpoAttributes = r[3];
-        const priority = 'Normal';
+        const priority = hpoAttributes.frequency > 0.05 ? 'Low' : 'Normal';
         return { id: uuidv4(), selectedText, start, end, hpoAttributes, priority }
       });
       setHighlights(highlights);

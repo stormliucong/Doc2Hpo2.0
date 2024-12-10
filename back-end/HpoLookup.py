@@ -34,7 +34,7 @@ class HpoLookup():
         return lowest_hpo
     
     @staticmethod
-    def add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, gpt_response_hpo_terms=None):
+    def add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, gpt_response_hpo_terms=None, oard_client=None):
         '''
         Add HPO attributes to the matched intervals
         '''
@@ -45,7 +45,6 @@ class HpoLookup():
         for i in range(len(intervals)):
             start, end = intervals[i]
             query = text[start:end]
-            print(f'query + start + end: {query} + {start} + {end}')
             if query in hpo_dict:  
                 hpo_id = hpo_dict[query]
                 hpo_name = hpo_name_dict[hpo_id]
@@ -54,7 +53,6 @@ class HpoLookup():
                 if len(hpo_id_name_format_list) > 1:
                     hpo_id_name_format_list = HpoLookup.get_lowest_hpo(hpo_id_name_format_list, hpo_levels)
                 if len(hpo_id_name_format_list) > 0:
-                    print(hpo_id_name_format_list)
                     hpo_id = hpo_id_name_format_list[0]["id"]
                     hpo_name = hpo_id_name_format_list[0]["name"]   
                 else:
@@ -69,7 +67,6 @@ class HpoLookup():
                     hpo_name = hpo_name_dict[hpo_id]
                 else:
                     hpo_id_name_format_list = HpoLookup.search_hpo_in_ncbi(query)
-                    print(hpo_id_name_format_list)
                     if len(hpo_id_name_format_list) > 1:
                         hpo_id_name_format_list = HpoLookup.get_lowest_hpo(hpo_id_name_format_list, hpo_levels)
                     if len(hpo_id_name_format_list) > 0:
@@ -77,9 +74,20 @@ class HpoLookup():
                         hpo_name = hpo_id_name_format_list[0]["name"]   
                     else:
                         hpo_id = None
-                        hpo_name = None       
+                        hpo_name = None
             matched_hpo.append((start, end, query, {"id": hpo_id, "name": hpo_name}))
         return matched_hpo
+    
+    @staticmethod
+    def add_hpo_frequency(matched_hpo, oard_client):
+        frequency_dict = oard_client.get_frequencies([hpo[3]["id"] for hpo in matched_hpo])
+        print(frequency_dict)
+        for hpo in matched_hpo:
+            hpo[3]["frequency"] = frequency_dict[hpo[3]["id"]] if hpo[3]["id"] in frequency_dict else None
+        return matched_hpo
+    
+
+    
             
         
         
@@ -96,5 +104,11 @@ if __name__ == "__main__":
     print(hpo_id_name_format_list)
     hpo_id_name_format_list = HpoLookup.get_lowest_hpo(hpo_id_name_format_list, hpo_levels)
     print(hpo_id_name_format_list)
+    
     matched_hpo = HpoLookup.add_hpo_attributes("abnormal gait", [(0, 12)], hpo_dict, hpo_name_dict, hpo_levels)
+    print(matched_hpo)
+    from OardClient import OardClient
+    oard_client = OardClient()
+    matched_hpo = HpoLookup.add_hpo_attributes("fever", [(0, 5)], hpo_dict, hpo_name_dict, hpo_levels)
+    matched_hpo = HpoLookup.add_hpo_frequency(matched_hpo, oard_client)
     print(matched_hpo)

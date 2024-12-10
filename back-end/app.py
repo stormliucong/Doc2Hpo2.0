@@ -7,6 +7,7 @@ from HpoFactory import HpoFactory
 from HpoLookup import HpoLookup
 from GptSearch import GptSearch
 from ScispacySearch import ScispacySearch
+from OardClient import OardClient
 
 
 
@@ -28,6 +29,9 @@ ac = AhoCorasick(hpo_dict)
 
 # Initialize Scispacy
 ss = ScispacySearch()
+
+# Initialize OardClient
+oard_client = OardClient()
 
 @app.route('/api/hello', methods=['GET'])
 def hello_world():
@@ -52,7 +56,8 @@ def search_actree():
     selector = LongestNonOverlappingIntervals(intervals)
     intervals = selector.get_longest_intervals()
     # add hpo atrributes
-    matches = HpoLookup.add_hpo_attributes(text, intervals,hpo_dict, hpo_name_dict,hpo_levels)
+    matched_hpo = HpoLookup.add_hpo_attributes(text, intervals,hpo_dict, hpo_name_dict,hpo_levels, None)
+    matches = HpoLookup.add_hpo_frequency(matched_hpo, oard_client)
     return jsonify(matches)
 
 @app.route('/api/search/gpt', methods=['POST'])
@@ -72,8 +77,9 @@ def search_gpt():
     # Find matching indices
     matching_indices = [i for i, a in enumerate(longest_intervals) if a in intervals]
     gpt_response_hpo_terms = [gpt_response_hpo_terms[i] for i in matching_indices]
-    matched_hpo = HpoLookup.add_hpo_attributes(text, longest_intervals, hpo_dict, hpo_name_dict, hpo_levels, gpt_response_hpo_terms)    
-    return jsonify(matched_hpo)
+    matched_hpo = HpoLookup.add_hpo_attributes(text, longest_intervals, hpo_dict, hpo_name_dict, hpo_levels, gpt_response_hpo_terms)   
+    matches = HpoLookup.add_hpo_frequency(matched_hpo, oard_client)
+    return jsonify(matches)
 
 @app.route('/api/search/scispacy', methods=['POST'])
 def search_scispacy():
@@ -89,7 +95,8 @@ def search_scispacy():
     matching_indices = [i for i, a in enumerate(longest_intervals) if a in intervals]
     linked_hpo_names = [linked_hpo_names[i] for i in matching_indices]
     matched_hpo = HpoLookup.add_hpo_attributes(text, longest_intervals, hpo_dict, hpo_name_dict, hpo_levels, linked_hpo_names)
-    return jsonify(matched_hpo)
+    matches = HpoLookup.add_hpo_frequency(matched_hpo, oard_client)
+    return jsonify(matches)
 
 if __name__ == "__main__":
     app.run(debug=True)
