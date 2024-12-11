@@ -8,6 +8,7 @@ from HpoLookup import HpoLookup
 from GptSearch import GptSearch
 from ScispacySearch import ScispacySearch
 from OardClient import OardClient
+from Phen2geneClient import Phen2geneClient
 
 
 
@@ -32,6 +33,9 @@ ss = ScispacySearch()
 
 # Initialize OardClient
 oard_client = OardClient()
+
+# Initialize Phen2geneClient
+phen2gene_client = Phen2geneClient()
 
 @app.route('/api/hello', methods=['GET'])
 def hello_world():
@@ -97,6 +101,28 @@ def search_scispacy():
     matched_hpo = HpoLookup.add_hpo_attributes(text, longest_intervals, hpo_dict, hpo_name_dict, hpo_levels, linked_hpo_names)
     matches = HpoLookup.add_hpo_frequency(matched_hpo, oard_client)
     return jsonify(matches)
+
+@app.route('/api/predictgene', methods=['POST'])
+def predict_gene():
+    request_data = request.get_json()
+    highlights = request_data.get("highlights")
+    include_low_priority = request_data.get("includeLowPriority")
+    include_predicted_gene = request_data.get("includePredictedGene")
+    rank = request_data.get("rank")
+    threshold = request_data.get("threshold")
+    if include_low_priority:
+        hpo_ids = [h["hpoAttributes"]["id"] for h in highlights if "id" in h["hpoAttributes"]]
+    else:
+        hpo_ids = [h["hpoAttributes"]["id"] for h in highlights if "id" in h["hpoAttributes"] and h["priority"] == "Normal"]
+        # remove None and de-duplicate
+    hpo_ids = list(set([h for h in hpo_ids if h is not None]))
+    genes = phen2gene_client.get_genes(hpo_ids)
+    if include_predicted_gene:
+        status = None
+    else:
+        status = "SeedGene"
+    filtered_genes = phen2gene_client.filter_results(genes, rank=int(rank), score=float(threshold), status=status)
+    return jsonify(filtered_genes)
 
 if __name__ == "__main__":
     app.run(debug=True)

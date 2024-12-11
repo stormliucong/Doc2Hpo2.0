@@ -19,7 +19,11 @@ import {
 import HighlightTable from "./HighlightTable";
 import HighlightButton from "./HighlightButton";
 import SearchDialog from "./SearchDialog";
+import Warnings from "./Warnings";
 import { v4 as uuidv4 } from 'uuid';
+import { AppProvider } from './AppContext';
+
+
 
 const MedicalTextAnnotator = () => {
   const [inputText, setInputText] = useState("");
@@ -209,7 +213,7 @@ const MedicalTextAnnotator = () => {
       const res = await response.text();
       alert(res);
     }
-    
+
     catch (error) {
       if (isRequestActive) {
         setError(error.message);
@@ -375,7 +379,7 @@ const MedicalTextAnnotator = () => {
     }
     catch (error) {
       if (isRequestActive) {
-        
+
         setError(error.message);
         console.error("Error fetching data:", error.message);
       }
@@ -386,174 +390,154 @@ const MedicalTextAnnotator = () => {
         setLoading(false);
       }
     }
-  } 
+  }
 
   return (
-    
-    <Box p={2}>
-      {/* Error banner using Snackbar and Alert */}
-      <Snackbar
-        open={Boolean(error)}
-        autoHideDuration={60000}
-        onClose={() => setError(null)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert onClose={() => setError(null)} severity="error" sx={{ width: "100%" }}>
-          {error}
-        </Alert>
-      </Snackbar>
-      {/* Full-page backdrop to disable all interactions */}
-      <Backdrop
-        open={loading}
-        style={{
-          color: "#fff",
-          zIndex: 2000,
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-      <Box mb={2}>
-        <TextField
-          fullWidth
-          label="Input Text"
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-        />
+    <AppProvider>
+      <Box p={2}>
 
-        <Button variant="contained" onClick={handleTextSubmit} sx={{ mt: 1 }}>
-          Submit
-        </Button>
-      </Box>
+        <Box mb={2}>
+          <Warnings />
+        </Box>
 
-      <Box mb={2}>
-        <Button variant="outlined" component="label">
-          Upload File
-          <input type="file" hidden onChange={handleFileUpload} />
-        </Button>
-      </Box>
-
-      <Box mb={2}>
-        <Button variant="outlined" component="label" onClick={() => loadPatientTxt('./demo_patient_1.txt')}>
-          Load Demo Patient 1
-        </Button>
-      </Box>
-
-
-      <HighlightTable highlights={highlights} />
-
-      {/* Annotation region */}
-      <Box
-        id="text-container"
-        p={2}
-        border={1}
-        onMouseUp={handleHighlight}
-        style={{ cursor: highlightMode ? "text" : "default" }}
-      >
-        {renderHighlightedText()}
-      </Box>
-
-      {/* Configuration and explanation */}
-      <Box mt={2}>
-        {/* Toggle Switch */}
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={highlightMode}
-                onChange={(e) => setHighlightMode(e.target.checked)}
-              />
-            }
-            label="Highlight Mode"
+        <Box mb={2}>
+          <TextField
+            fullWidth
+            label="Input Text"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
           />
-          {/* a download button to download highlights as a json file */}
-          <Button variant="outlined" onClick={() => {
-            const element = document.createElement("a");
-            const download_json = {text: fileText, highlights: highlights };
-            const file = new Blob([JSON.stringify(download_json)], { type: 'application/json' });
-            element.href = URL.createObjectURL(file);
-            element.download = "highlights.json";
-            document.body.appendChild(element); // Required for this to work in FireFox
-            element.click();
-          }
-          }>
-            Download Highlights
-          </Button>
 
-        </FormGroup>
-        {/* A button to test backend */}
-        <Box mb={2}>
-          <Button variant="outlined" component="label" onClick={() => testFlask()}>
-            Test Backend
+          <Button variant="contained" onClick={handleTextSubmit} sx={{ mt: 1 }}>
+            Submit
           </Button>
         </Box>
 
-        {/* Call Flask ACtree */}
         <Box mb={2}>
-          <Button variant="outlined" component="label" onClick={() => setActreeDialogOpen(true)}> 
-            ACtree Parse
+          <Button variant="outlined" component="label">
+            Upload File
+            <input type="file" hidden onChange={handleFileUpload} />
           </Button>
-          <Dialog open={actreeDialogOpen} onClose={() => {setActreeDialogOpen(false)}} >
-            <DialogTitle>
-              ACtree Parse Configuration
-            </DialogTitle>
-            <DialogActions>
-              <Button onClick={() => {setActreeDialogOpen(false)}}>Cancel</Button>
-              <Button onClick={() => {setActreeDialogOpen(false); AcTreeFlask()}}>Confirm</Button>
-            </DialogActions>
-          </Dialog>
-
-          <Button variant="outlined" component="label" onClick={() => setGptDialogOpen(true)}>
-            GPT Parse
-          </Button>
-          <Dialog open={gptDialogOpen} onClose={() => {setGptDialogOpen(false); setOpenaiKey('')}} >
-            <DialogTitle>
-              GPT Parse Configuration
-            </DialogTitle>
-            <DialogContent>
-              <TextField
-                fullWidth
-                label="Input OpenAI Key"
-                value={openaiKey}
-                onChange={(e) => setOpenaiKey(e.target.value)}
-              />    
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => {setGptDialogOpen(false); setOpenaiKey('')}}>Cancel</Button>
-              <Button onClick={() => {setGptDialogOpen(false); GptFlask()}}>Confirm</Button>
-            </DialogActions>
-          </Dialog>
-
-          <Button variant="outlined" component="label" onClick={() => setScispacyDialogOpen(true)}>
-            Scispacy Parse
-          </Button>
-          <Dialog open={scispacyDialogOpen} onClose={() => {setScispacyDialogOpen(false)}} >
-            <DialogTitle>
-              Scispacy Parse Configuration
-            </DialogTitle>
-            <DialogActions>
-              <Button onClick={() => {setScispacyDialogOpen(false)}}>Cancel</Button>
-              <Button onClick={() => {setScispacyDialogOpen(false); ScispacyFlask()}}>Confirm</Button>
-            </DialogActions>
-          </Dialog>
         </Box>
-        
 
-        {/* Add a color legend for Priority and Normal Not clickable button*/}
+        <Box mb={2}>
+          <Button variant="outlined" component="label" onClick={() => loadPatientTxt('./demo_patient_1.txt')}>
+            Load Demo Patient 1
+          </Button>
+        </Box>
+
+
+        <HighlightTable highlights={highlights} />
+
+        {/* Annotation region */}
+        <Box
+          id="text-container"
+          p={2}
+          border={1}
+          onMouseUp={handleHighlight}
+          style={{ cursor: highlightMode ? "text" : "default" }}
+        >
+          {renderHighlightedText()}
+        </Box>
+
+        {/* Configuration and explanation */}
         <Box mt={2}>
-          <Typography>Priority:</Typography>
-          <Button variant="contained" style={{ backgroundColor: "#FFC107", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">Normal</Button>
-          <Button variant="contained" style={{ backgroundColor: "#FF5722", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">High</Button>
+          {/* Toggle Switch */}
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={highlightMode}
+                  onChange={(e) => setHighlightMode(e.target.checked)}
+                />
+              }
+              label="Highlight Mode"
+            />
+            {/* a download button to download highlights as a json file */}
+            <Button variant="outlined" onClick={() => {
+              const element = document.createElement("a");
+              const download_json = { text: fileText, highlights: highlights };
+              const file = new Blob([JSON.stringify(download_json)], { type: 'application/json' });
+              element.href = URL.createObjectURL(file);
+              element.download = "highlights.json";
+              document.body.appendChild(element); // Required for this to work in FireFox
+              element.click();
+            }
+            }>
+              Download Highlights
+            </Button>
+
+          </FormGroup>
+          {/* A button to test backend */}
+          <Box mb={2}>
+            <Button variant="outlined" component="label" onClick={() => testFlask()}>
+              Test Backend
+            </Button>
+          </Box>
+
+          {/* Call Flask ACtree */}
+          <Box mb={2}>
+            <Button variant="outlined" component="label" onClick={() => setActreeDialogOpen(true)}>
+              ACtree Parse
+            </Button>
+            <Dialog open={actreeDialogOpen} onClose={() => { setActreeDialogOpen(false) }} >
+              <DialogTitle>
+                ACtree Parse Configuration
+              </DialogTitle>
+              <DialogActions>
+                <Button onClick={() => { setActreeDialogOpen(false) }}>Cancel</Button>
+                <Button onClick={() => { setActreeDialogOpen(false); AcTreeFlask() }}>Confirm</Button>
+              </DialogActions>
+            </Dialog>
+
+            <Button variant="outlined" component="label" onClick={() => setGptDialogOpen(true)}>
+              GPT Parse
+            </Button>
+            <Dialog open={gptDialogOpen} onClose={() => { setGptDialogOpen(false); setOpenaiKey('') }} >
+              <DialogTitle>
+                GPT Parse Configuration
+              </DialogTitle>
+              <DialogContent>
+                <TextField
+                  fullWidth
+                  label="Input OpenAI Key"
+                  value={openaiKey}
+                  onChange={(e) => setOpenaiKey(e.target.value)}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => { setGptDialogOpen(false); setOpenaiKey('') }}>Cancel</Button>
+                <Button onClick={() => { setGptDialogOpen(false); GptFlask() }}>Confirm</Button>
+              </DialogActions>
+            </Dialog>
+
+            <Button variant="outlined" component="label" onClick={() => setScispacyDialogOpen(true)}>
+              Scispacy Parse
+            </Button>
+            <Dialog open={scispacyDialogOpen} onClose={() => { setScispacyDialogOpen(false) }} >
+              <DialogTitle>
+                Scispacy Parse Configuration
+              </DialogTitle>
+              <DialogActions>
+                <Button onClick={() => { setScispacyDialogOpen(false) }}>Cancel</Button>
+                <Button onClick={() => { setScispacyDialogOpen(false); ScispacyFlask() }}>Confirm</Button>
+              </DialogActions>
+            </Dialog>
+          </Box>
+
+
+          {/* Add a color legend for Priority and Normal Not clickable button*/}
+          <Box mt={2}>
+            <Typography>Priority:</Typography>
+            <Button variant="contained" style={{ backgroundColor: "#FFC107", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">Normal</Button>
+            <Button variant="contained" style={{ backgroundColor: "#FF5722", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">High</Button>
+          </Box>
         </Box>
+        <SearchDialog open={dialogOpen} onClose={handleCloseDialog} onConfirm={handleConfirm} selectedHighlight={selectedHighlight} />
+
+
       </Box>
-      <SearchDialog open={dialogOpen} onClose={handleCloseDialog} onConfirm={handleConfirm} selectedHighlight={selectedHighlight} />
-
-
-    </Box>
+    </AppProvider>
   );
 };
 

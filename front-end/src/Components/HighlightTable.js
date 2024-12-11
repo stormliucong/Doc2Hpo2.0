@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { DataGrid } from '@mui/x-data-grid';
+import PredictGene from './PredictGene';
 
 const HighlightTable = ({ highlights }) => {
   console.log('highlight table', highlights)
@@ -27,7 +28,7 @@ const HighlightTable = ({ highlights }) => {
   ];
 
   return (
-
+    <>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -36,6 +37,8 @@ const HighlightTable = ({ highlights }) => {
         disableSelectionOnClick
         autoHeight
       />
+      <PredictGene highlights={highlights} />
+    </>
   );
 };
 
