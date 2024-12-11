@@ -1,5 +1,11 @@
 import React, { useState, useRef } from "react";
 import { Button } from "@mui/material";
+import Chip from "@mui/material/Chip";
+import Tooltip from "@mui/material/Tooltip";
+import { styled } from "@mui/material/styles";
+import { tooltipClasses } from "@mui/material/Tooltip";
+import { Typography } from "@mui/material";
+
 
 const HighlightButton = ({ highlight, highlightedText, onUpdateHighlight, onDeleteHighlight, onClickHighlight }) => {
     const [clickCount, setClickCount] = useState(0);
@@ -7,6 +13,18 @@ const HighlightButton = ({ highlight, highlightedText, onUpdateHighlight, onDele
     const longPressTimeoutRef = useRef(null);
     const highlightColors = ["#FFC107", "#FF5722"]; // Modern color palette
     const longPressDelay = 1000; // Time in ms to detect long press
+
+    const HtmlTooltip = styled(({ className, ...props }) => (
+        <Tooltip {...props} classes={{ popper: className }} />
+      ))(({ theme }) => ({
+        [`& .${tooltipClasses.tooltip}`]: {
+          backgroundColor: '#f5f5f9',
+          color: 'rgba(0, 0, 0, 0.87)',
+          maxWidth: 220,
+          fontSize: theme.typography.pxToRem(12),
+          border: '1px solid #dadde9',
+        },
+      }));
 
     const handleMouseDown = () => {
         longPressTimeoutRef.current = setTimeout(() => {
@@ -56,6 +74,29 @@ const HighlightButton = ({ highlight, highlightedText, onUpdateHighlight, onDele
     };
     
     return (
+        <HtmlTooltip
+        title={
+          <React.Fragment>
+            
+            {highlight.hpoAttributes.id && (
+                <>
+                <b>{highlight.hpoAttributes.name}</b> <br />
+                <em>{highlight.hpoAttributes.id}</em>  
+                </>
+            )}
+
+            {!highlight.hpoAttributes.id && (
+                <>
+                 <b>No HPO ID found</b> <br />
+                 <em>Long press to search.</em>
+                </>
+            )}
+
+            
+
+          </React.Fragment>
+        }
+      >
         <Button
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
@@ -73,7 +114,9 @@ const HighlightButton = ({ highlight, highlightedText, onUpdateHighlight, onDele
             size="small"
         >
             {highlightedText}
+            
         </Button>
+        </HtmlTooltip>
     );
 };
 
