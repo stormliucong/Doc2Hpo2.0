@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { AppContext } from './AppContext';
 import { Button } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
-import { Box, Dialog, DialogActions, DialogTitle, TextField } from '@mui/material';
+import { Box, Dialog, DialogActions, DialogTitle, TextField, DialogContent } from '@mui/material';
 
 const Parser = () => {
     const { fileText, setHighlights, setHighlightMode, setLoading, setError } = useContext(AppContext);
@@ -215,6 +215,7 @@ const Parser = () => {
 
 
     return (
+        
         <>
             {/* Call Flask ACtree */}
             <Box mb={2}>

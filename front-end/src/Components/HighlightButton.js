@@ -61,17 +61,15 @@ const HighlightButton = ({ highlight, highlightedText, onUpdateHighlight, onDele
             onMouseUp={handleMouseUp}
             onClick={handleClick}
             style={{
-                backgroundColor: highlight.priority === 'Normal' ? highlightColors[0] : highlightColors[1],
-                color: "#FFFFFF",
-                padding: "0 5px",
-                margin: "0 2px",
-                borderRadius: "4px",
+                color: highlight.priority === 'Normal' ? highlightColors[0] : highlightColors[1],
+                padding: "auto",
+                margin: "auto",
                 fontSize: "inherit",
                 textTransform: "none",
                 cursor: "pointer",
                 display: 'inline-block', // Ensures button stays inline
             }}
-            variant="contained"
+            variant="text"
             size="small"
         >
             {highlightedText}
