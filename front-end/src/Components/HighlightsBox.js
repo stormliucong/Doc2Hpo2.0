@@ -9,37 +9,39 @@ import SearchDialog from './SearchDialog';
 
 
 const HighlightsBox = () => {
-    const { selectedHighlight, setSelectedHighlight, highlightMode, setHighlightMode, highlights, setHighlights, fileText } = useContext(AppContext);
+    const { setError, selectedHighlight, setSelectedHighlight, highlightMode, setHighlightMode, highlights, setHighlights, fileText } = useContext(AppContext);
     const [dialogOpen, setDialogOpen] = useState(false);
 
 
     const handleHighlight = () => {
         const selection = window.getSelection();
         if (selection && selection.toString().trim() && highlightMode) {
-            const range = selection.getRangeAt(0);
             const selectedText = selection.toString();
 
             // Ensure we use the specific container for the entire text
-            const container = document.getElementById("text-container");
+            const container = document.getElementById("text-container");    
 
-            if (!container.contains(range.commonAncestorContainer)) {
-                alert("Please select text within the specified container.");
-                selection.removeAllRanges();
-                return;
-            }
+            const range = selection.getRangeAt(0); // Get the selected range
+            const preCaretRange = document.createRange();
 
-            // Calculate absolute start and end indices based on the entire text
-            const textContent = container.textContent;
-            const start = textContent.indexOf(selectedText, range.startOffset);
-            const end = start + selectedText.length;
-            console.log(container.textContent, start, end);
+            // Set the range to include everything up to the selection
+            preCaretRange.setStart(container, 0);
+            preCaretRange.setEnd(range.startContainer, range.startOffset);
+
+            // Calculate start and end offsets based on text only
+            const start = preCaretRange.toString().length; // Length of text before the selection
+            const end = start + range.toString().length; // Add the selected text length
+
+            alert(`Start: ${start}, End: ${end}`);
 
             // Check if this range is already highlighted
             if (
                 highlights.some(
                     (highlight) =>
                         (start >= highlight.start && start < highlight.end) ||
-                        (end > highlight.start && end <= highlight.end)
+                        (end > highlight.start && end <= highlight.end) || 
+                        (highlight.start >= start && highlight.start < end) ||
+                        (highlight.end > start && highlight.end <= end)
                 )
             ) {
                 alert("This text overlaps an existing highlight.");
@@ -83,7 +85,6 @@ const HighlightsBox = () => {
         if (!fileText) return "Text will appear here...";
 
         let offset = 0;
-        console.log('renderHighlightedText', highlights)
         // clear the text container
         return (
             <>
@@ -126,6 +127,7 @@ const HighlightsBox = () => {
         <>
             {/* Annotation region */}
           {/* Toggle Switch */}
+          <Box mb={2}>
           <FormGroup>
             <FormControlLabel
               control={
@@ -149,13 +151,16 @@ const HighlightsBox = () => {
             }>
               Download Highlights
             </Button>
+        
+
+          </FormGroup>
+            </Box>
+            <Box mb={2}>
             {/* Add a color legend for Priority and Normal Not clickable button*/}
             <Typography>Priority:</Typography>
             <Button variant="contained" style={{ backgroundColor: "#FFC107", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">Normal</Button>
             <Button variant="contained" style={{ backgroundColor: "#FF5722", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">High</Button>
-
-          </FormGroup>
-          
+          </Box>
             <Box
                 id="text-container"
                 p={2}

@@ -16,6 +16,7 @@ import {
     Alert
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import { AppContext } from './AppContext';
 
 const PredictGene = ({ highlights }) => {
     const [dialogOpen, setDialogOpen] = useState(false);

@@ -7,7 +7,6 @@ import React, {useContext} from "react";
 
 const HighlightTable = () => {
   const { highlights } = useContext(AppContext);
-  console.log('highlight table', highlights)
 
 
   if (!highlights || highlights.length === 0) {
@@ -42,7 +41,7 @@ const HighlightTable = () => {
         disableSelectionOnClick
         autoHeight
       />
-      <PredictGene highlights={highlights} />
+      {/* <PredictGene highlights={highlights} /> */}
     </>
   );
 };
