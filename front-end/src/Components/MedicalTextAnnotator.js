@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Grid, Paper, Typography } from "@mui/material";
 import AppProvider from "./AppContext";
 import FileUpload from "./FileUpload";
@@ -11,11 +11,27 @@ import { Grid2 } from '@mui/material';
 import Button from '@mui/material/Button';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import PredictGene from "./PredictGeneButton";
+import GeneTable from "./GeneTable";
 
 
 
 const MedicalTextAnnotator = () => {
   const [step, setStep] = useState(1);
+  const [nextStepText, setNextStepText] = useState("Annotate Text");
+  
+  useEffect(() => {
+    if(step === 1) {
+      setNextStepText("Annotate Text");
+    } else if(step === 2) {
+      setNextStepText("Review Annotations");
+    } else if(step === 3) {
+      setNextStepText("View Genes");
+    } else {
+      setNextStepText("Finish");
+    }
+  }, [step]);
+  
 
   // Navigate between steps
   const handleNext = () => setStep((prev) => prev + 1);
@@ -55,7 +71,7 @@ const MedicalTextAnnotator = () => {
 
       { step === 3 && <Grid2 container spacing={2}><HighlightTable /></Grid2> }
 
-      {/* { step === 4 && <PredictGene /> } */}
+      { step === 4 && <GeneTable /> }
 
       {/* Navigation Buttons */}
       <Grid2 container justifyContent="space-between" padding={2}>
@@ -67,13 +83,14 @@ const MedicalTextAnnotator = () => {
         >
           Go Back
         </Button>
+        
         <Button
           variant="contained"
           onClick={handleNext}
           disabled={step === 4}
           endIcon={<ArrowForwardIcon />}
         >
-          Continue
+          {nextStepText}
         </Button>
       </Grid2>  
     </AppProvider>

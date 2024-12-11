@@ -143,11 +143,7 @@ const HighlightsBox = () => {
                     }}
                 >
                     {/* Left-aligned buttons */}
-                    <ButtonGroup variant="outlined" aria-label="Basic button group">
-                        <ParseButton />
-                        <Button variant="contained" endIcon={<SettingsIcon />} onClick={() => setSettingsDialogOpen(true)}>
-                        </Button>
-                    </ButtonGroup>
+                    
                     <ParseSettings open={settingsDialogOpen} onClose={() => setSettingsDialogOpen(false)} />
                     <Box sx={{ display: 'flex', gap: 1 }}>
                         {/* Toggle Switch */}
@@ -165,28 +161,7 @@ const HighlightsBox = () => {
                     </Box>
 
                     {/* Right-aligned button */}
-                    {/* a download button to download highlights as a json file */}
-
-
-                    <Button
-                        component="label"
-                        role={undefined}
-                        variant="contained"
-                        tabIndex={-1}
-                        startIcon={<CloudDownloadIcon />}
-                        onClick={() => {
-                            const element = document.createElement("a");
-                            const download_json = { text: fileText, highlights: highlights };
-                            const file = new Blob([JSON.stringify(download_json)], { type: 'application/json' });
-                            element.href = URL.createObjectURL(file);
-                            element.download = "highlights.json";
-                            document.body.appendChild(element); // Required for this to work in FireFox
-                            element.click();
-                        }
-                        }
-                    >
-                        Download
-                    </Button>
+                    
                 </Box>
 
             </Grid2>
@@ -223,6 +198,45 @@ const HighlightsBox = () => {
                 {/* Add a color legend for Priority and Normal Not clickable button*/}
 
             </Grid2>
+            <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'right',
+        width: '100%',
+        alignItems: 'center',
+        gap: 2,
+        padding: 2,
+      }}
+    >
+            <ButtonGroup variant="outlined" aria-label="Basic button group">
+                        <ParseButton />
+                        <Button variant="contained" endIcon={<SettingsIcon />} onClick={() => setSettingsDialogOpen(true)}>
+                        </Button>
+                    </ButtonGroup>
+                    {/* a download button to download highlights as a json file */}
+
+
+                    <Button
+                        component="label"
+                        role={undefined}
+                        variant="contained"
+                        tabIndex={-1}
+                        startIcon={<CloudDownloadIcon />}
+                        onClick={() => {
+                            const element = document.createElement("a");
+                            const download_json = { text: fileText, highlights: highlights };
+                            const file = new Blob([JSON.stringify(download_json)], { type: 'application/json' });
+                            element.href = URL.createObjectURL(file);
+                            element.download = "highlights.json";
+                            document.body.appendChild(element); // Required for this to work in FireFox
+                            element.click();
+                        }
+                        }
+                    >
+                        Download
+                    </Button>
+            </Box>
+
         </>
     );
 }

@@ -1,17 +1,15 @@
 import { v4 as uuidv4 } from 'uuid';
 import { DataGrid } from '@mui/x-data-grid';
-import PredictGene from './PredictGene';
+import PredictGene from './PredictGeneButton';
 import { AppContext } from './AppContext';
 import React, {useContext} from "react";
-
+import { Box } from "@mui/material";
+import PredictGeneButton from "./PredictGeneButton";
 
 const HighlightTable = () => {
   const { highlights } = useContext(AppContext);
 
 
-  if (!highlights || highlights.length === 0) {
-    return <p>No highlights available.</p>; // Replace with a suitable message or UI.
-  }
   const rows = highlights.map((highlight) => ({
     id: uuidv4(), // Unique identifier for each row
     selectedText: highlight.selectedText || 'N/A',
@@ -42,6 +40,8 @@ const HighlightTable = () => {
         autoHeight
       />
       {/* <PredictGene highlights={highlights} /> */}
+      
+
     </>
   );
 };

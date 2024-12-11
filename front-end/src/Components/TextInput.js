@@ -18,20 +18,29 @@ const TextInput = () => {
 
   return (
     <>
-    <Box
+    
+    <LoadDemoPatient />
+
+      <TextField
+        fullWidth
+        label="Provide your free text, upload a file or load a demo patient"
+        value={inputText}
+        multiline
+        rows={12}
+        onChange={(e) => {setInputText(e.target.value)}}
+      />
+      <Box
       sx={{
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'right',
         width: '100%',
         alignItems: 'center',
+        gap: 2,
         padding: 2,
       }}
     >
       {/* Left-aligned buttons */}
-      <Box sx={{ display: 'flex', gap: 1 }}>
         <FileUpload />  
-        <LoadDemoPatient />
-      </Box>
 
       {/* Right-aligned button */}
       <Button
@@ -44,16 +53,8 @@ const TextInput = () => {
             >
             Reset
         </Button>
+
     </Box>
-    
-      <TextField
-        fullWidth
-        label="Provide your free text, upload a file or load a demo patient"
-        value={inputText}
-        multiline
-        rows={12}
-        onChange={(e) => {setInputText(e.target.value)}}
-      />
     </>
 
   );

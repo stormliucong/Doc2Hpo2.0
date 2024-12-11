@@ -17,6 +17,7 @@ const AppProvider = ({ children }) => {
   const [scispacyDialogOpen, setScispacyDialogOpen] = useState(false);
   const [actreeDialogOpen, setActreeDialogOpen] = useState(false);
   const [parseOption, setParseOption] = useState('AC Tree'); // Default option
+  const [genePredictionResults, setGenePredictionResults] = useState([]);
 
   const resetState = () => {
     setInputText('');
@@ -30,13 +31,14 @@ const AppProvider = ({ children }) => {
     setScispacyDialogOpen(false);
     setActreeDialogOpen(false);
     setParseOption('AC Tree');
+    setGenePredictionResults([]);
   }
 
 
 
 
   return (
-    <AppContext.Provider value={{resetState, fileText, setFileText, loading, setLoading, error, setError, highlights, setHighlights, highlightMode, setHighlightMode, selectedHighlight, setSelectedHighlight, gptDialogOpen, setGptDialogOpen, openaiKey, setOpenaiKey, scispacyDialogOpen, setScispacyDialogOpen, actreeDialogOpen, setActreeDialogOpen, inputText, setInputText, parseOption, setParseOption, flaskUrl, setFlaskUrl }}>
+    <AppContext.Provider value={{resetState, fileText, setFileText, loading, setLoading, error, setError, highlights, setHighlights, highlightMode, setHighlightMode, selectedHighlight, setSelectedHighlight, gptDialogOpen, setGptDialogOpen, openaiKey, setOpenaiKey, scispacyDialogOpen, setScispacyDialogOpen, actreeDialogOpen, setActreeDialogOpen, inputText, setInputText, parseOption, setParseOption, flaskUrl, setFlaskUrl, genePredictionResults, setGenePredictionResults}}>
       {children}
     </AppContext.Provider>
   );

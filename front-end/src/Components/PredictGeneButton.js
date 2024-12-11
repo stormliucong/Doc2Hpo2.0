@@ -17,8 +17,11 @@ import {
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { AppContext } from './AppContext';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { ButtonGroup } from '@mui/material';
 
-const PredictGene = ({ highlights }) => {
+const PredictGeneButton = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [includeLowPriority, setIncludeLowPriority] = useState(false);
     const [includePredictedGene, setIncludePredictedGene] = useState(false);
@@ -26,17 +29,19 @@ const PredictGene = ({ highlights }) => {
     const [sliderValue, setSliderValue] = useState(0.5);
     const [input, setInput] = useState('');
     const [data, setData] = useState([]);
-    const [loading, setLoading, error, setError] = useContext(AppContext);
+    const {highlights, genePredictionResults, setGenePredictionResults, loading, setLoading, error, setError} = useContext(AppContext);
 
 
     useEffect(() => {
         setInput(highlights);
     }, [highlights]);
 
-    const handleDialogOpen = () => setDialogOpen(true);
-    const handleDialogClose = () => setDialogOpen(false);
+    useEffect(() => {
+        setGenePredictionResults(data);
+    }, [data]);
 
-    const handleConfirm = async () => {
+
+    const handlePhen2GeneCall = async () => {
         setLoading(true);
         setError(null);
         let isRequestActive = true;
@@ -98,36 +103,13 @@ const PredictGene = ({ highlights }) => {
 
     return (
         <>
-            <Snackbar
-                open={Boolean(error)}
-                autoHideDuration={60000}
-                onClose={() => setError(null)}
-                anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            >
-                <Alert onClose={() => setError(null)} severity="error" sx={{ width: "100%" }}>
-                    {error}
-                </Alert>
-            </Snackbar>
-            {/* Full-page backdrop to disable all interactions */}
-            <Backdrop
-                open={loading}
-                style={{
-                    color: "#fff",
-                    zIndex: 2000,
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                }}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
-            <Button variant="contained" onClick={handleDialogOpen}>
-                Open Configuration
-            </Button>
-
-            <Dialog open={dialogOpen} onClose={handleDialogClose}>
+            
+            <ButtonGroup variant="outlined" aria-label="Basic button group">
+                        <Button variant="outlined" onClick={handlePhen2GeneCall} startIcon={<TelegramIcon />} >Call Phen2Gene API</Button>
+                        <Button variant="contained" endIcon={<SettingsIcon />} onClick={() => setDialogOpen(true)}>
+                        </Button>
+                    </ButtonGroup>
+            <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
                 <DialogTitle>Configuration</DialogTitle>
                 <DialogContent>
                     <FormControlLabel
@@ -167,20 +149,12 @@ const PredictGene = ({ highlights }) => {
                         />
                     </div>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleDialogClose}>Cancel</Button>
-                    <Button onClick={handleConfirm} variant="contained">
-                        Confirm
-                    </Button>
-                </DialogActions>
             </Dialog>
-        {data.length > 0 && 
-            <div style={{ marginTop: 20, height: 400 }}>
-                <DataGrid rows={data} columns={columns} getRowId={(row) => uuidv4()} loading={loading} />
-            </div>
-        }
+        
+            
+        
         </>
     );
 };
 
-export default PredictGene;
+export default PredictGeneButton;
