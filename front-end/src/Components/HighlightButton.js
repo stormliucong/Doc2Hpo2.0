@@ -91,9 +91,6 @@ const HighlightButton = ({ highlight, highlightedText, onUpdateHighlight, onDele
                  <em>Long press to search.</em>
                 </>
             )}
-
-            
-
           </React.Fragment>
         }
       >

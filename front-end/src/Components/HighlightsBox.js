@@ -18,9 +18,6 @@ const HighlightsBox = () => {
 
     useEffect(() => {
         if (inputText) {
-            setHighlightMode(true);
-            setHighlights([]);
-            setSelectedHighlight(null);
             setFileText(inputText);
         }
     }, [inputText]);

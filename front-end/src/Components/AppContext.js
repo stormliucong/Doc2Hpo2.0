@@ -18,11 +18,25 @@ const AppProvider = ({ children }) => {
   const [actreeDialogOpen, setActreeDialogOpen] = useState(false);
   const [parseOption, setParseOption] = useState('AC Tree'); // Default option
 
+  const resetState = () => {
+    setInputText('');
+    setFileText('');
+    setHighlights([]);
+    setHighlightMode(true);
+    setSelectedHighlight(null);
+    setGptDialogOpen(false);
+    setOpenaiKey("");
+    setFlaskUrl("http://localhost:5000");
+    setScispacyDialogOpen(false);
+    setActreeDialogOpen(false);
+    setParseOption('AC Tree');
+  }
+
 
 
 
   return (
-    <AppContext.Provider value={{ fileText, setFileText, loading, setLoading, error, setError, highlights, setHighlights, highlightMode, setHighlightMode, selectedHighlight, setSelectedHighlight, gptDialogOpen, setGptDialogOpen, openaiKey, setOpenaiKey, scispacyDialogOpen, setScispacyDialogOpen, actreeDialogOpen, setActreeDialogOpen, inputText, setInputText, parseOption, setParseOption, flaskUrl, setFlaskUrl }}>
+    <AppContext.Provider value={{resetState, fileText, setFileText, loading, setLoading, error, setError, highlights, setHighlights, highlightMode, setHighlightMode, selectedHighlight, setSelectedHighlight, gptDialogOpen, setGptDialogOpen, openaiKey, setOpenaiKey, scispacyDialogOpen, setScispacyDialogOpen, actreeDialogOpen, setActreeDialogOpen, inputText, setInputText, parseOption, setParseOption, flaskUrl, setFlaskUrl }}>
       {children}
     </AppContext.Provider>
   );

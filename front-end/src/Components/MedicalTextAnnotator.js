@@ -9,6 +9,8 @@ import TextInput from "./TextInput";
 import Warnings from "./Warnings";
 import { Grid2 } from '@mui/material';
 import Button from '@mui/material/Button';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 
 
@@ -61,6 +63,7 @@ const MedicalTextAnnotator = () => {
           variant="outlined"
           onClick={handleBack}
           disabled={step === 1}
+          startIcon={<ArrowBackIcon />}
         >
           Go Back
         </Button>
@@ -68,6 +71,7 @@ const MedicalTextAnnotator = () => {
           variant="contained"
           onClick={handleNext}
           disabled={step === 4}
+          endIcon={<ArrowForwardIcon />}
         >
           Continue
         </Button>

@@ -9,7 +9,11 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 
 const TextInput = () => {
-  const { inputText, setInputText, setFileText } = useContext(AppContext);
+  const { inputText, setInputText, resetState } = useContext(AppContext);
+
+  const handleReset = () => {
+    resetState();
+  }
 
 
   return (
@@ -36,7 +40,7 @@ const TextInput = () => {
             variant="contained"
             tabIndex={-1}
             startIcon={<RestartAltIcon />}
-            onClick={() => setInputText("")}
+            onClick={() => handleReset()}
             >
             Reset
         </Button>
@@ -48,7 +52,7 @@ const TextInput = () => {
         value={inputText}
         multiline
         rows={12}
-        onChange={(e) => setInputText(e.target.value)}
+        onChange={(e) => {setInputText(e.target.value)}}
       />
     </>
 
