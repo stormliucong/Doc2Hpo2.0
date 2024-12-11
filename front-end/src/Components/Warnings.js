@@ -3,7 +3,7 @@ import { AppContext } from './AppContext';
 import { Backdrop, CircularProgress, Snackbar, Alert } from '@mui/material';
 
 const Warnings = () => {
-    const { error, handleUpdateError, loading, handleUpdateLoading } = useContext(AppContext);
+    const { error, setError, loading } = useContext(AppContext);
 
 
 
@@ -15,10 +15,10 @@ const Warnings = () => {
       <Snackbar
         open={Boolean(error)}
         autoHideDuration={60000}
-        onClose={() => handleUpdateError(null)}
+        onClose={() => setError(null)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert onClose={() => handleUpdateError(null)} severity="error" sx={{ width: "100%" }}>
+        <Alert onClose={() => setError(null)} severity="error" sx={{ width: "100%" }}>
           {error}
         </Alert>
       </Snackbar>

@@ -1,9 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
 import { DataGrid } from '@mui/x-data-grid';
 import PredictGene from './PredictGene';
+import { AppContext } from './AppContext';
+import React, {useContext} from "react";
 
-const HighlightTable = ({ highlights }) => {
+
+const HighlightTable = () => {
+  const { highlights } = useContext(AppContext);
   console.log('highlight table', highlights)
+
 
   if (!highlights || highlights.length === 0) {
     return <p>No highlights available.</p>; // Replace with a suitable message or UI.

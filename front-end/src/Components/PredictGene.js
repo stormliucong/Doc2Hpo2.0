@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import {
     Button,
@@ -25,8 +25,7 @@ const PredictGene = ({ highlights }) => {
     const [sliderValue, setSliderValue] = useState(0.5);
     const [input, setInput] = useState('');
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [loading, setLoading, error, setError] = useContext(AppContext);
 
 
     useEffect(() => {

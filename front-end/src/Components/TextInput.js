@@ -1,8 +1,14 @@
-import React from "react";
+import React, {useContext} from "react";
+import { AppContext } from './AppContext';
+import { TextField, Button } from '@mui/material';
+import { useState } from 'react';
 
-const TextInput = ({ label, value, setValue }) => {
-    const [inputText, setInputText] = useState("");
 
+
+const TextInput = () => {
+    const { setFileText } = useContext(AppContext);
+    const [inputText, setInputText] = useState('');
+    
     return (
         <>
         <TextField
@@ -12,9 +18,11 @@ const TextInput = ({ label, value, setValue }) => {
           onChange={(e) => setInputText(e.target.value)}
         />
 
-        <Button variant="contained" onClick={handleTextSubmit} sx={{ mt: 1 }}>
+        <Button variant="contained" sx={{ mt: 1 }} onClick={() => setFileText(inputText)}>
           Submit
         </Button>
         </>
     );
 }
+
+export default TextInput;

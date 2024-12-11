@@ -1,29 +1,31 @@
 import React, { createContext, useState } from 'react';
 
-export const AppContext = createContext();
+const AppContext = createContext();
 
-export const AppProvider = ({ children }) => {
+const AppProvider = ({ children }) => {
   // Multiple state variables
   const [fileText, setFileText] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [highlights, setHighlights] = useState([]);
+  const [highlightMode, setHighlightMode] = useState(false);
+  const [selectedHighlight, setSelectedHighlight] = useState(null);
+  const [gptDialogOpen, setGptDialogOpen] = useState(false);
+  const [openaiKey, setOpenaiKey] = useState("");
+  const [scispacyDialogOpen, setScispacyDialogOpen] = useState(false);
+  const [actreeDialogOpen, setActreeDialogOpen] = useState(false);
 
-  const handleUpdateFileText = (text) => {
-    setFileText(text);
-  }
 
-  const handleUpdateLoading = (isLoading) => {
-    setLoading(isLoading);
-  }
-
-  const handleUpdateError = (errorMessage) => {
-    setError(errorMessage);
-  }
 
 
   return (
-    <AppContext.Provider value={{ fileText, loading, error, handleUpdateFileText, handleUpdateLoading, handleUpdateError }}>
+    <AppContext.Provider value={{ fileText, setFileText, loading, setLoading, error, setError, highlights, setHighlights, highlightMode, setHighlightMode, selectedHighlight, setSelectedHighlight, gptDialogOpen, setGptDialogOpen, openaiKey, setOpenaiKey, scispacyDialogOpen, setScispacyDialogOpen, actreeDialogOpen, setActreeDialogOpen }}>
       {children}
     </AppContext.Provider>
   );
 };
+
+export { AppContext }; // Export AppContext if needed
+
+export default AppProvider; // Default export
+
