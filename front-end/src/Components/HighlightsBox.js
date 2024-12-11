@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from './AppContext';
 import { v4 as uuidv4 } from 'uuid';
-import { Box, Button, FormGroup, FormControlLabel, Switch, Typography } from '@mui/material';
+import { Box, Button, FormGroup, FormControlLabel, Switch, Typography, Grid2 } from '@mui/material';
 import HighlightButton from './HighlightButton';
 import SearchDialog from './SearchDialog';
 
@@ -9,9 +9,17 @@ import SearchDialog from './SearchDialog';
 
 
 const HighlightsBox = () => {
-    const { setError, selectedHighlight, setSelectedHighlight, highlightMode, setHighlightMode, highlights, setHighlights, fileText } = useContext(AppContext);
+    const { setError, setFileText, selectedHighlight, setSelectedHighlight, highlightMode, setHighlightMode, highlights, setHighlights, fileText, inputText } = useContext(AppContext);
     const [dialogOpen, setDialogOpen] = useState(false);
 
+    useEffect(() => {
+        if (inputText) {
+            setHighlightMode(false);
+            setHighlights([]);
+            setSelectedHighlight(null);
+            setFileText(inputText);
+        }
+    }, [inputText]);
 
     const handleHighlight = () => {
         const selection = window.getSelection();
@@ -127,7 +135,7 @@ const HighlightsBox = () => {
         <>
             {/* Annotation region */}
           {/* Toggle Switch */}
-          <Box mb={2}>
+          <Grid2 container spacing={2} size={12}>
           <FormGroup>
             <FormControlLabel
               control={
@@ -154,24 +162,36 @@ const HighlightsBox = () => {
         
 
           </FormGroup>
-            </Box>
-            <Box mb={2}>
+            
+            
             {/* Add a color legend for Priority and Normal Not clickable button*/}
             <Typography>Priority:</Typography>
             <Button variant="contained" style={{ backgroundColor: "#FFC107", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">Normal</Button>
             <Button variant="contained" style={{ backgroundColor: "#FF5722", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "4px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">High</Button>
-          </Box>
+        </Grid2>
+        <Grid2 container spacing={2} size={12}>
             <Box
+            sx={{width: '100%',         // Matches the `fullWidth` of the TextField
+                height: 12 * 24 + 16,  // 12 rows of text with a line height of 24px, plus padding
+                padding: 2,            // Padding similar to the TextField's spacing
+                border: '1px solid gray',
+                borderRadius: 1,       // Border radius for styling
+                overflow: 'auto',      // Add scroll for large content
+                backgroundColor: 'white',
+                textAlign: 'left',       // Aligns text to the left
+                whiteSpace: 'pre-wrap', // Preserve line breaks and spaces
+                fontFamily: "Merriweather Georgia serif", // Matches TextField font
+                fontSize: '1rem',      // Matches TextField text size
+                lineHeight: '1.5',     // Matches TextField line spacing
+              }}
                 id="text-container"
-                p={2}
-                border={1}
                 onMouseUp={handleHighlight}
                 style={{ cursor: highlightMode ? "text" : "default" }}
             >
                 {renderHighlightedText()}
             </Box>
             <SearchDialog open={dialogOpen} onClose={()=>{setDialogOpen(false)}} onConfirm={handleSearchConfirm} selectedHighlight={selectedHighlight} />
-
+        </Grid2>
         </>
     );
 }

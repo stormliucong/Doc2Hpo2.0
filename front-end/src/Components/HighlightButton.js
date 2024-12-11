@@ -69,6 +69,7 @@ const HighlightButton = ({ highlight, highlightedText, onUpdateHighlight, onDele
                 fontSize: "inherit",
                 textTransform: "none",
                 cursor: "pointer",
+                display: 'inline-block', // Ensures button stays inline
             }}
             variant="contained"
             size="small"
