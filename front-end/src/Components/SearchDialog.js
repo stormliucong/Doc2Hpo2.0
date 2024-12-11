@@ -86,10 +86,6 @@ const SearchDialog = ({ open, onClose, onConfirm, selectedHighlight }) => {
         return () => clearTimeout(debounceTimeout); // Cleanup the timeout
     }, [searchQuery]);
 
-    const handleSelect = (item) => {
-        setSelectedItem(item);
-    };
-
     const handleConfirm = () => {
         if (selectedItem) {
             onConfirm(selectedItem);

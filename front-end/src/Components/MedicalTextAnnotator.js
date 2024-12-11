@@ -66,12 +66,11 @@ const MedicalTextAnnotator = () => {
       
       { step === 1 && <Grid2 container spacing={2}><TextInput /></Grid2> }
       
-      
       { step === 2 && <Grid2 container spacing={2}><HighlightsBox /></Grid2> }
 
       { step === 3 && <Grid2 container spacing={2}><HighlightTable /></Grid2> }
 
-      { step === 4 && <GeneTable /> }
+      { step === 4 && <Grid2 container spacing={2}><GeneTable /></Grid2> }
 
       {/* Navigation Buttons */}
       <Grid2 container justifyContent="space-between" padding={2}>
