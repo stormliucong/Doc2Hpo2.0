@@ -19,8 +19,19 @@ const TextInput = () => {
   return (
     <>
     
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        width: '100%',
+        alignItems: 'center',
+        gap: 2,
+        padding: 2,
+      }}
+    >
     <LoadDemoPatient />
-
+    <FileUpload />  
+    </Box>
       <TextField
         fullWidth
         label="Provide your free text, upload a file or load a demo patient"
@@ -29,32 +40,8 @@ const TextInput = () => {
         rows={12}
         onChange={(e) => {setInputText(e.target.value)}}
       />
-      <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'right',
-        width: '100%',
-        alignItems: 'center',
-        gap: 2,
-        padding: 2,
-      }}
-    >
-      {/* Left-aligned buttons */}
-        <FileUpload />  
-
-      {/* Right-aligned button */}
-      <Button
-            color="error"
-
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<RestartAltIcon />}
-            onClick={() => handleReset()}
-            >
-            Reset
-        </Button>
-
-    </Box>
+      
+    
     </>
 
   );

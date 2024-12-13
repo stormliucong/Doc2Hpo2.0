@@ -13,25 +13,27 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import PredictGene from "./PredictGeneButton";
 import GeneTable from "./GeneTable";
+import { Global } from "@emotion/react";
+import GlobalSpeedDial from "./GlobalSpeedDial";
 
 
 
 const MedicalTextAnnotator = () => {
   const [step, setStep] = useState(1);
   const [nextStepText, setNextStepText] = useState("Annotate Text");
-  
+
   useEffect(() => {
-    if(step === 1) {
+    if (step === 1) {
       setNextStepText("Annotate Text");
-    } else if(step === 2) {
+    } else if (step === 2) {
       setNextStepText("Review Annotations");
-    } else if(step === 3) {
+    } else if (step === 3) {
       setNextStepText("View Genes");
     } else {
       setNextStepText("Finish");
     }
   }, [step]);
-  
+
 
   // Navigate between steps
   const handleNext = () => setStep((prev) => prev + 1);
@@ -42,56 +44,62 @@ const MedicalTextAnnotator = () => {
       {/* Warning Banner */}
       <Grid2 container spacing={2}>
         <Grid2 size={12}>
-        <Warnings />
+          <Warnings />
         </Grid2>
       </Grid2>
 
       {/* Main Components */}
       <Grid2 container spacing={20} padding={5} justifyContent="center">
         {/* Step Header */}
-      <Typography variant="h5" gutterBottom>
-        {`Step ${step}: ${
-          step === 1
-            ? 'Input Text'
-            : step === 2
-            ? 'Annotate Text'
-            : step === 3
-            ? 'Review Annotations'
-            : 'Gene Prediction'
-        }`}
-      </Typography>
+        <Typography variant="h5" gutterBottom>
+          {`Step ${step}: ${step === 1
+              ? 'Input Text'
+              : step === 2
+                ? 'Annotate Text'
+                : step === 3
+                  ? 'Review Annotations'
+                  : 'Gene Prediction'
+            }`}
+        </Typography>
       </Grid2>
 
       {/* Step Content */}
-      
-      { step === 1 && <Grid2 container spacing={2}><TextInput /></Grid2> }
-      
-      { step === 2 && <Grid2 container spacing={2}><HighlightsBox /></Grid2> }
 
-      { step === 3 && <Grid2 container spacing={2}><HighlightTable /></Grid2> }
 
-      { step === 4 && <Grid2 container spacing={2}><GeneTable /></Grid2> }
+      {step === 1 && <TextInput />}
+
+      {step === 2 && <HighlightsBox />}
+
+      {step === 3 && <HighlightTable />}
+
+      {step === 4 && <GeneTable />}
 
       {/* Navigation Buttons */}
-      <Grid2 container justifyContent="space-between" padding={2}>
-        <Button
-          variant="outlined"
-          onClick={handleBack}
-          disabled={step === 1}
-          startIcon={<ArrowBackIcon />}
-        >
-          Go Back
-        </Button>
-        
-        <Button
-          variant="contained"
-          onClick={handleNext}
-          disabled={step === 4}
-          endIcon={<ArrowForwardIcon />}
-        >
-          {nextStepText}
-        </Button>
-      </Grid2>  
+      <Grid2 container alignItems="center" justifyContent="space-between" padding={2}>
+        <Grid2 item>
+          <GlobalSpeedDial />
+        </Grid2>
+
+
+        <Grid2 container spacing={2} justifyContent="flex-end">
+          <Grid2 item><Button
+            variant="outlined"
+            onClick={handleBack}
+            disabled={step === 1}
+            startIcon={<ArrowBackIcon />}
+          >
+            Go Back
+          </Button></Grid2>
+          <Grid2 item><Button
+            variant="contained"
+            onClick={handleNext}
+            disabled={step === 4}
+            endIcon={<ArrowForwardIcon />}
+          >
+            {nextStepText}
+          </Button></Grid2>
+        </Grid2>
+      </Grid2>
     </AppProvider>
   );
 };

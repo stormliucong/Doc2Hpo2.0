@@ -135,90 +135,77 @@ const HighlightsBox = () => {
 
     return (
         <>
-            <Grid2 container spacing={2} size={12} alignContent={"center"}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        width: '100%',
-                        alignItems: 'center',
-                        padding: 2,
-                    }}
-                >
-                    {/* Left-aligned buttons */}
-                    
-                    <ParseSettings open={settingsDialogOpen} onClose={() => setSettingsDialogOpen(false)} />
-                    <Box sx={{ display: 'flex', gap: 1 }}>
-                        {/* Toggle Switch */}
-                        <FormGroup>
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={highlightMode}
-                                        onChange={(e) => setHighlightMode(e.target.checked)}
-                                    />
-                                }
-                                label="Highlight Mode"
-                            />
-                        </FormGroup>
-                    </Box>
-
-                    {/* Right-aligned button */}
-                    
-                </Box>
-
-            </Grid2>
-
-            <Grid2 container spacing={2} size={12} alignContent={"center"}>
-                <Box
-                    sx={{
-                        width: '100%',         // Matches the `fullWidth` of the TextField
-                        height: 12 * 24 + 16,  // 12 rows of text with a line height of 24px, plus padding
-                        padding: 2,            // Padding similar to the TextField's spacing
-                        border: '1px solid gray',
-                        borderRadius: 1,       // Border radius for styling
-                        overflow: 'auto',      // Add scroll for large content
-                        backgroundColor: 'white',
-                        textAlign: 'left',       // Aligns text to the left
-                        whiteSpace: 'pre-wrap', // Preserve line breaks and spaces
-                        fontFamily: "Merriweather Georgia serif", // Matches TextField font
-                        fontSize: '1rem',      // Matches TextField text size
-                        lineHeight: '1.5',     // Matches TextField line spacing
-                    }}
-
-                    onMouseUp={handleHighlight}
-                    style={{ cursor: highlightMode ? "text" : "default" }}
-                >
-                    <div id="text-container">
-                        {renderHighlightedText()}
-                    </div>
+            <ParseSettings open={settingsDialogOpen} onClose={() => setSettingsDialogOpen(false)} />
+            <SearchDialog open={searchDialogOpen} onClose={() => { setSearchDialogOpen(false) }} onConfirm={handleSearchConfirm} selectedHighlight={selectedHighlight} />
 
 
-                </Box>
-                {/* <Button variant="contained" style={{ backgroundColor: "#FFC107", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "2px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">Normal</Button>
-            <Button variant="contained" style={{ backgroundColor: "#FF5722", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "2px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">High</Button> */}
-                <SearchDialog open={searchDialogOpen} onClose={() => { setSearchDialogOpen(false) }} onConfirm={handleSearchConfirm} selectedHighlight={selectedHighlight} />
-                {/* Add a color legend for Priority and Normal Not clickable button*/}
-
-            </Grid2>
             <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'right',
-        width: '100%',
-        alignItems: 'center',
-        gap: 2,
-        padding: 2,
-      }}
-    >
-            <ButtonGroup variant="outlined" aria-label="Basic button group">
-                        <ParseButton />
-                        <Button variant="contained" endIcon={<SettingsIcon />} onClick={() => setSettingsDialogOpen(true)}>
-                        </Button>
-                    </ButtonGroup>
-                    {/* a download button to download highlights as a json file */}
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: '100%',
+                    alignItems: 'center',
+                    gap: 2,
+                    padding: 2,
+                }}
+            >
+                {/* Toggle Switch */}
+                <FormGroup>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={highlightMode}
+                                onChange={(e) => setHighlightMode(e.target.checked)}
+                            />
+                        }
+                        label="Highlight Mode"
+                    />
+                </FormGroup>
+                <ButtonGroup variant="outlined" aria-label="Basic button group">
+                    <ParseButton />
+                    <Button variant="contained" endIcon={<SettingsIcon />} onClick={() => setSettingsDialogOpen(true)}>
+                    </Button>
+                </ButtonGroup>
+            </Box>
+
+
+
+
+
+
+            <Box
+                sx={{
+                    width: '100%',         // Matches the `fullWidth` of the TextField
+                    height: 12 * 24 + 16,  // 12 rows of text with a line height of 24px, plus padding
+                    padding: 2,            // Padding similar to the TextField's spacing
+                    border: '1px solid gray',
+                    borderRadius: 1,       // Border radius for styling
+                    overflow: 'auto',      // Add scroll for large content
+                    backgroundColor: 'white',
+                    textAlign: 'left',       // Aligns text to the left
+                    whiteSpace: 'pre-wrap', // Preserve line breaks and spaces
+                    fontFamily: "Merriweather Georgia serif", // Matches TextField font
+                    fontSize: '1rem',      // Matches TextField text size
+                    lineHeight: '1.5',     // Matches TextField line spacing
+                    boxSizing: 'border-box', // Include padding and border in width/height
+                    margin: 0, // Prevent additional margins
+                }}
+
+                onMouseUp={handleHighlight}
+                style={{ cursor: highlightMode ? "text" : "default" }}
+            >
+                <div id="text-container">
+                    {renderHighlightedText()}
+                </div>
+
 
             </Box>
+            {/* <Button variant="contained" style={{ backgroundColor: "#FFC107", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "2px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">Normal</Button>
+            <Button variant="contained" style={{ backgroundColor: "#FF5722", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "2px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">High</Button> */}
+            {/* Add a color legend for Priority and Normal Not clickable button*/}
+
+            
+
 
         </>
     );

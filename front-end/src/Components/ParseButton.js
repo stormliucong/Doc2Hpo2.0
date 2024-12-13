@@ -121,7 +121,7 @@ const ParseButton = () => {
 
   return (
     
-    <Button endIcon={<TelegramIcon />} onClick={handleParse}>{parseOption}</Button>
+    <Button Icon={<TelegramIcon />} onClick={handleParse}>{parseOption}</Button>
   );
 }
 

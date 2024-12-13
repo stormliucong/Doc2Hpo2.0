@@ -5,7 +5,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
-
+import Chip from '@mui/material/Chip';
 
 
 
@@ -43,20 +43,16 @@ const FileUpload = () => {
     }
     return (
         
-        <Button
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-            >
-            Upload files
-            <VisuallyHiddenInput
-                type="file"
-                onChange={(e) => handleFileUpload(e)}
-                multiple
-            />
-        </Button>
+        <>
+        <Chip label="Upload a file" icon={<CloudUploadIcon /> } variant="outlined" onClick={() => {document.getElementById('fileInput').click()}} />
+        <VisuallyHiddenInput
+            id="fileInput"
+            type="file"
+            onChange={(e) => handleFileUpload(e)}
+            multiple
+        />
+        </>
+       
     );
 }
 

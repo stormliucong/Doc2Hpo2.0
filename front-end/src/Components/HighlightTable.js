@@ -16,7 +16,7 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import SearchDialog from './SearchDialog';
 import Button from '@mui/material/Button';
 import DeleteForeverSharpIcon from '@mui/icons-material/DeleteForeverSharp';
-import { Grid2 } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 const HighlightTable = () => {
   const { highlights, fileText, setHighlights } = useContext(AppContext);
@@ -41,7 +41,7 @@ const HighlightTable = () => {
     { field: 'hpoName', headerName: 'HPO Name', flex: 2 },
     { field: 'hpoId', headerName: 'HPO ID', flex: 2 },
     {
-      field: "actions",
+      field: "delete",
       headerName: "Delete",
       renderCell: (params) => (
         <DeleteForeverSharpIcon cursor="pointer"
@@ -58,27 +58,6 @@ const HighlightTable = () => {
 
 
 
-  const actions = [
-    { icon: <FileCopyIcon onClick = {() => {navigator.clipboard.writeText(JSON.stringify(highlights))}} >
-
-    </FileCopyIcon>, name: 'Copy' },
-    { icon: <SaveIcon onClick = {() => {
-      const element = document.createElement("a");
-      const download_json = { text: fileText, highlights: highlights };
-      const file = new Blob([JSON.stringify(download_json)], { type: 'application/json' });
-      element.href = URL.createObjectURL(file);
-      element.download = "highlights.json";
-      document.body.appendChild(element); // Required for this to work in FireFox
-      element.click()}}>
-
-      </SaveIcon>, name: 'Save' },
-    { icon: <PostAddIcon onClick = {() => {setSearchDialogOpen(true)}}>
-    </PostAddIcon>, name: 'Add Hpo' },
-      
-  ];
-
-
-
   const handleSearchConfirm = (selectedItem) => {
     // add selected selected HPO into highlights
     setHighlights([
@@ -87,11 +66,29 @@ const HighlightTable = () => {
   ]);
     setSearchDialogOpen(false);
   }
+
+  
     
 
   return (
     <>
-     
+     <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: '100%',
+                    alignItems: 'center',
+                    gap: 2,
+                    padding: 2,
+                }}
+            >
+              <Button startIcon={<AddIcon />} variant = "outlined" onClick={()=> setSearchDialogOpen(true)}>
+          Add a row
+        </Button>
+
+            </Box>
+   
+
       <DataGrid
         rows={rows}
         columns={columns}
@@ -99,19 +96,9 @@ const HighlightTable = () => {
         rowsPerPageOptions={[5, 10, 20]}
         disableSelectionOnClick
         autoHeight
+
       />
-      <SpeedDial
-        ariaLabel="SpeedDial basic example"
-        icon={<SpeedDialIcon />}
-      >
-        {actions.map((action) => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-          />
-        ))}
-      </SpeedDial> 
+
       <SearchDialog open={searchDialogOpen} onClose={() => { setSearchDialogOpen(false) }} onConfirm={handleSearchConfirm} selectedHighlight={selectedHighlight} />   
      
       
