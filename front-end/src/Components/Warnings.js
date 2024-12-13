@@ -1,30 +1,30 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { AppContext } from './AppContext';
 import { Backdrop, CircularProgress, Snackbar, Alert } from '@mui/material';
 
 const Warnings = () => {
-    const { error, setError, loading } = useContext(AppContext);
+  const { error, setError, loading } = useContext(AppContext);
 
 
 
-    return (
+  return (
     <>
-    {/* Error banner using Snackbar and Alert */}
+      {/* Error banner using Snackbar and Alert */}
 
-    {error && (
-      <Snackbar
-        open={Boolean(error)}
-        autoHideDuration={60000}
-        onClose={() => setError(null)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert onClose={() => setError(null)} severity="error" sx={{ width: "100%" }}>
-          {error}
-        </Alert>
-      </Snackbar>
-    )}
-    
-    {/* Full-page backdrop to disable all interactions */}
+      {error && (
+        <Snackbar
+          open={Boolean(error)}
+          autoHideDuration={60000}
+          onClose={() => setError(null)}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert onClose={() => setError(null)} severity="error" sx={{ width: "100%" }}>
+            {error}
+          </Alert>
+        </Snackbar>
+      )}
+
+      {/* Full-page backdrop to disable all interactions */}
       <Backdrop
         open={loading}
         style={{
@@ -40,7 +40,7 @@ const Warnings = () => {
         <CircularProgress color="inherit" />
       </Backdrop>
     </>
-    );
+  );
 }
 
 export default Warnings;

@@ -1,18 +1,7 @@
-import { v4 as uuidv4 } from 'uuid';
 import { DataGrid } from '@mui/x-data-grid';
-import PredictGene from './PredictGeneButton';
 import { AppContext } from './AppContext';
-import React, {useContext} from "react";
-import { Box, Grid } from "@mui/material";
-import PredictGeneButton from "./PredictGeneButton";
-import SpeedDial from '@mui/material/SpeedDial';
-import SpeedDialAction from '@mui/material/SpeedDialAction';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import SaveIcon from '@mui/icons-material/Save';
-import PrintIcon from '@mui/icons-material/Print';
-import ShareIcon from '@mui/icons-material/Share';
-import PostAddIcon from '@mui/icons-material/PostAdd';
+import React, { useContext } from "react";
+import { Box } from "@mui/material";
 import SearchDialog from './SearchDialog';
 import Button from '@mui/material/Button';
 import DeleteForeverSharpIcon from '@mui/icons-material/DeleteForeverSharp';
@@ -62,32 +51,32 @@ const HighlightTable = () => {
     // add selected selected HPO into highlights
     setHighlights([
       ...highlights,
-      { id: Date.now(), selectedText: "manual input", start: -1, end: -1, hpoAttributes: selectedItem, priority: "Normal"}
-  ]);
+      { id: Date.now(), selectedText: "manual input", start: -1, end: -1, hpoAttributes: selectedItem, priority: "Normal" }
+    ]);
     setSearchDialogOpen(false);
   }
 
-  
-    
+
+
 
   return (
     <>
-     <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    width: '100%',
-                    alignItems: 'center',
-                    gap: 2,
-                    padding: 2,
-                }}
-            >
-              <Button startIcon={<AddIcon />} variant = "outlined" onClick={()=> setSearchDialogOpen(true)}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          width: '100%',
+          alignItems: 'center',
+          gap: 2,
+          padding: 2,
+        }}
+      >
+        <Button startIcon={<AddIcon />} variant="outlined" onClick={() => setSearchDialogOpen(true)}>
           Add a row
         </Button>
 
-            </Box>
-   
+      </Box>
+
 
       <DataGrid
         rows={rows}
@@ -99,10 +88,10 @@ const HighlightTable = () => {
 
       />
 
-      <SearchDialog open={searchDialogOpen} onClose={() => { setSearchDialogOpen(false) }} onConfirm={handleSearchConfirm} selectedHighlight={selectedHighlight} />   
-     
-      
-           
+      <SearchDialog open={searchDialogOpen} onClose={() => { setSearchDialogOpen(false) }} onConfirm={handleSearchConfirm} selectedHighlight={selectedHighlight} />
+
+
+
     </>
   );
 };

@@ -1,9 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { DataGrid } from '@mui/x-data-grid';
+import React, { useContext } from 'react';
 import { AppContext } from './AppContext';
-import PredictGeneButton from './PredictGeneButton';
-import { Box } from '@mui/material';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
@@ -35,7 +31,7 @@ const GlobalSpeedDial = () => {
 
             </SaveIcon>, name: 'Save'
         },
-        { icon: <RestartAltIcon onClick={() => resetState()}/>, name: 'Reset' },
+        { icon: <RestartAltIcon onClick={() => resetState()} />, name: 'Reset' },
     ];
 
     return (
@@ -48,7 +44,7 @@ const GlobalSpeedDial = () => {
             >
                 {actions.map((action) => (
                     <SpeedDialAction
-                        
+
                         key={action.name}
                         icon={action.icon}
                         tooltipTitle={action.name}

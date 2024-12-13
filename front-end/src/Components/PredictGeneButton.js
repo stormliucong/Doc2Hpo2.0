@@ -1,21 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import {
     Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
+    Dialog, DialogContent,
     DialogTitle,
     FormControlLabel,
     Switch,
     TextField,
-    Slider,
-    Backdrop,
-    CircularProgress,
-    Snackbar,
-    Alert
+    Slider
 } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
 import { AppContext } from './AppContext';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -29,7 +21,7 @@ const PredictGeneButton = () => {
     const [sliderValue, setSliderValue] = useState(0.5);
     const [input, setInput] = useState('');
     const [data, setData] = useState([]);
-    const {highlights, genePredictionResults, setGenePredictionResults, loading, setLoading, error, setError} = useContext(AppContext);
+    const { highlights, genePredictionResults, setGenePredictionResults, loading, setLoading, error, setError } = useContext(AppContext);
 
 
     useEffect(() => {
@@ -111,12 +103,12 @@ const PredictGeneButton = () => {
 
     return (
         <>
-            
+
             <ButtonGroup variant="outlined" aria-label="Basic button group">
-                        <Button variant="outlined" onClick={handlePhen2GeneCall} startIcon={<TelegramIcon />} >Call Phen2Gene API</Button>
-                        <Button variant="contained" endIcon={<SettingsIcon />} onClick={() => setDialogOpen(true)}>
-                        </Button>
-                    </ButtonGroup>
+                <Button variant="outlined" onClick={handlePhen2GeneCall} startIcon={<TelegramIcon />} >Call Phen2Gene API</Button>
+                <Button variant="contained" endIcon={<SettingsIcon />} onClick={() => setDialogOpen(true)}>
+                </Button>
+            </ButtonGroup>
             <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
                 <DialogTitle>Configuration</DialogTitle>
                 <DialogContent>
@@ -158,9 +150,9 @@ const PredictGeneButton = () => {
                     </div>
                 </DialogContent>
             </Dialog>
-        
-            
-        
+
+
+
         </>
     );
 };

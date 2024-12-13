@@ -1,27 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { AppContext } from './AppContext';
 
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Box,
-  Button,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Checkbox,
-  FormControlLabel,
+    Button
 } from '@mui/material';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import { v4 as uuidv4 } from 'uuid';
 
 
 const ParseButton = () => {
-    
+
     const { parseOption, fileText, openaiKey, flaskUrl, setLoading, setError, setHighlights } = useContext(AppContext);
 
     const handleParse = async () => {
@@ -39,7 +27,7 @@ const ParseButton = () => {
 
         try {
             let response;
-            if(parseOption === 'Test') {
+            if (parseOption === 'Test') {
                 response = await fetch(flaskUrl + "/api/hello");
             }
             if (parseOption === 'AC Tree') {
@@ -72,7 +60,7 @@ const ParseButton = () => {
             // If the request is inactive (timed out), stop processing
             if (!isRequestActive) return;
             // if (!response.ok) throw new Error(`HTTP error! Status: ${JSON.stringify(response)}`);
-            if(response.status !== 200) {
+            if (response.status !== 200) {
                 try {
                     const res = await response.json();
                     setError("Error: " + response.status + " " + res.error);
@@ -83,12 +71,12 @@ const ParseButton = () => {
                     return;
                 }
             }
-            if(parseOption === 'Test') {
+            if (parseOption === 'Test') {
                 const res = await response.text();
                 setError("This is a Test to " + flaskUrl + "\n" + res.toString());
                 return;
             }
-            if(parseOption !== 'Test') {
+            if (parseOption !== 'Test') {
                 const res = await response.json();
                 // push res into highlights
                 const highlights = res.map((r) => {
@@ -115,14 +103,14 @@ const ParseButton = () => {
                 clearTimeout(timeoutId); // Clear timeout if the request completes on time
                 setLoading(false);
             }
-            
+
         }
     }
 
-  return (
-    
-    <Button Icon={<TelegramIcon />} onClick={handleParse}>{parseOption}</Button>
-  );
+    return (
+
+        <Button Icon={<TelegramIcon />} onClick={handleParse}>{parseOption}</Button>
+    );
 }
 
 export default ParseButton;

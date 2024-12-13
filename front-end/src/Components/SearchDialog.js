@@ -1,21 +1,12 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
     Dialog,
     DialogTitle,
     DialogContent,
     DialogActions,
     Button,
-    TextField,
-    List,
-    ListItem,
-    ListItemText,
-    Box,
-    Card,
-    CardContent,
-    Typography
-
+    TextField, Box, Typography
 } from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
 import { AppContext } from './AppContext';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -112,21 +103,21 @@ const SearchDialog = ({ open, onClose, onConfirm, selectedHighlight }) => {
                     }}
                     renderOption={(props, option) => (
                         <Box
-                          component="li"
-                          {...props}
-                          sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            padding: '4px 8px',
-                          }}
+                            component="li"
+                            {...props}
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                padding: '4px 8px',
+                            }}
                         >
-                          <Typography variant="body1">{option.name}</Typography>
-                          <Typography variant="body2" color="text.secondary" sx={{ marginLeft: 1 }}>
-                            ({option.id})
-                          </Typography>
+                            <Typography variant="body1">{option.name}</Typography>
+                            <Typography variant="body2" color="text.secondary" sx={{ marginLeft: 1 }}>
+                                ({option.id})
+                            </Typography>
                         </Box>
-                      )}
+                    )}
                     renderInput={(params) => (
                         <TextField
                             {...params}
@@ -144,34 +135,6 @@ const SearchDialog = ({ open, onClose, onConfirm, selectedHighlight }) => {
                         />
                     )}
                 />
-                {/* Information Card Section
-                <Box display="flex" alignItems="center">
-                </Box> */}
-
-                {/* <Box display="flex" alignItems="center"><TextField
-                    fullWidth
-                    label="Search"
-                    variant="outlined"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                </Box> */}
-                {/* <Box display="flex" alignItems="center" fullWidth>
-                    {suggestions && <List>
-                        {suggestions.map((item) => (
-                            <ListItem
-                                key={uuidv4()}
-                                button
-                                selected={selectedItem?.id === item.id}
-                                onClick={() => handleSelect(item)}
-                            >
-                                <ListItemText primary={item.id} secondary={item.name} />
-                            </ListItem>
-                        ))}
-                    </List>
-                    }
-                    {suggestions.length === 0 && <Typography>No suggestions found. Change the search query</Typography>}
-                </Box> */}
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>

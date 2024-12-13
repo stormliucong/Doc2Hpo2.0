@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from './AppContext';
 import { v4 as uuidv4 } from 'uuid';
-import { Box, Button, FormGroup, FormControlLabel, Switch, Typography, Grid2, ButtonGroup } from '@mui/material';
+import { Box, Button, FormGroup, FormControlLabel, Switch, ButtonGroup } from '@mui/material';
 import HighlightButton from './HighlightButton';
 import SearchDialog from './SearchDialog';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import SettingsIcon from '@mui/icons-material/Settings';
-import TelegramIcon from '@mui/icons-material/Telegram';
 import ParseSettings from './ParseSettings';
 import ParseButton from './ParseButton';
 
@@ -204,7 +202,7 @@ const HighlightsBox = () => {
             <Button variant="contained" style={{ backgroundColor: "#FF5722", color: "#FFFFFF", padding: "0 5px", margin: "0 2px", borderRadius: "2px", fontSize: "inherit", textTransform: "none", cursor: "pointer", }} size="small">High</Button> */}
             {/* Add a color legend for Priority and Normal Not clickable button*/}
 
-            
+
 
 
         </>

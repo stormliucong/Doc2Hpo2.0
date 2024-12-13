@@ -1,16 +1,13 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { AppContext } from './AppContext';
-import { IconButton } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 
 
 
 const FileUpload = () => {
-    const { setInputText, setError} = useContext(AppContext);
+    const { setInputText, setError } = useContext(AppContext);
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -22,7 +19,7 @@ const FileUpload = () => {
         left: 0,
         whiteSpace: 'nowrap',
         width: 1,
-      });
+    });
 
 
     const handleFileUpload = (event) => {
@@ -39,20 +36,20 @@ const FileUpload = () => {
         finally {
             event.target.value = null;
         }
-    
+
     }
     return (
-        
+
         <>
-        <Chip label="Upload a file" icon={<CloudUploadIcon /> } variant="outlined" onClick={() => {document.getElementById('fileInput').click()}} />
-        <VisuallyHiddenInput
-            id="fileInput"
-            type="file"
-            onChange={(e) => handleFileUpload(e)}
-            multiple
-        />
+            <Chip label="Upload a" icon={<CloudUploadIcon />} variant="outlined" onClick={() => { document.getElementById('fileInput').click() }} />
+            <VisuallyHiddenInput
+                id="fileInput"
+                type="file"
+                onChange={(e) => handleFileUpload(e)}
+                multiple
+            />
         </>
-       
+
     );
 }
 

@@ -1,16 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { DataGrid } from '@mui/x-data-grid';
 import { AppContext } from './AppContext';
 import PredictGeneButton from './PredictGeneButton';
 import { Box } from '@mui/material';
-import SpeedDial from '@mui/material/SpeedDial';
-import SpeedDialAction from '@mui/material/SpeedDialAction';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import SaveIcon from '@mui/icons-material/Save';
-import { Global } from '@emotion/react';
-import GlobalSpeedDial from './GlobalSpeedDial';
 
 
 const GeneTable = () => {
@@ -28,7 +21,7 @@ const GeneTable = () => {
 
     return (
         <>
-        <Box
+            <Box
                 sx={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -39,17 +32,17 @@ const GeneTable = () => {
                 }}
             >
                 <PredictGeneButton />
-                
+
             </Box>
 
-            
-            <DataGrid rows={genePredictionResults} columns={columns} pageSize={5} 
-            getRowId={(row) => uuidv4()}
+
+            <DataGrid rows={genePredictionResults} columns={columns} pageSize={5}
+                getRowId={(row) => uuidv4()}
                 rowsPerPageOptions={[5, 10, 20]}
                 disableSelectionOnClick
                 autoHeight />
-            
-           
+
+
         </>
     );
 };

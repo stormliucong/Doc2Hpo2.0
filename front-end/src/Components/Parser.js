@@ -10,7 +10,7 @@ const Parser = () => {
     const [gptDialogOpen, setGptDialogOpen] = useState(false);
     const [openaiKey, setOpenaiKey] = useState("");
     const [scispacyDialogOpen, setScispacyDialogOpen] = useState(false);
-    
+
 
 
     const testFlask = async () => {
@@ -215,7 +215,7 @@ const Parser = () => {
 
 
     return (
-        
+
         <>
             {/* Call Flask ACtree */}
             <Box mb={2}>

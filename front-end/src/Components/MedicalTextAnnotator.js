@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Box, Grid, Paper, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import AppProvider from "./AppContext";
-import FileUpload from "./FileUpload";
 import HighlightsBox from "./HighlightsBox";
 import HighlightTable from "./HighlightTable";
-import LoadDemoPatient from "./LoadDemoPatient";
 import TextInput from "./TextInput";
 import Warnings from "./Warnings";
 import { Grid2 } from '@mui/material';
 import Button from '@mui/material/Button';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import PredictGene from "./PredictGeneButton";
 import GeneTable from "./GeneTable";
-import { Global } from "@emotion/react";
 import GlobalSpeedDial from "./GlobalSpeedDial";
 
 
@@ -53,12 +49,12 @@ const MedicalTextAnnotator = () => {
         {/* Step Header */}
         <Typography variant="h5" gutterBottom>
           {`Step ${step}: ${step === 1
-              ? 'Input Text'
-              : step === 2
-                ? 'Annotate Text'
-                : step === 3
-                  ? 'Review Annotations'
-                  : 'Gene Prediction'
+            ? 'Input Text'
+            : step === 2
+              ? 'Annotate Text'
+              : step === 3
+                ? 'Review Annotations'
+                : 'Gene Prediction'
             }`}
         </Typography>
       </Grid2>

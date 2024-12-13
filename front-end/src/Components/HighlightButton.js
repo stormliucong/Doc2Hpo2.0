@@ -1,10 +1,8 @@
 import React, { useState, useRef } from "react";
 import { Button } from "@mui/material";
-import Chip from "@mui/material/Chip";
 import Tooltip from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 import { tooltipClasses } from "@mui/material/Tooltip";
-import { Typography } from "@mui/material";
 
 
 const HighlightButton = ({ highlight, highlightedText, onUpdateHighlight, onDeleteHighlight, onClickHighlight }) => {
@@ -16,15 +14,15 @@ const HighlightButton = ({ highlight, highlightedText, onUpdateHighlight, onDele
 
     const HtmlTooltip = styled(({ className, ...props }) => (
         <Tooltip {...props} classes={{ popper: className }} />
-      ))(({ theme }) => ({
+    ))(({ theme }) => ({
         [`& .${tooltipClasses.tooltip}`]: {
-          backgroundColor: '#f5f5f9',
-          color: 'rgba(0, 0, 0, 0.87)',
-          maxWidth: 220,
-          fontSize: theme.typography.pxToRem(12),
-          border: '1px solid #dadde9',
+            backgroundColor: '#f5f5f9',
+            color: 'rgba(0, 0, 0, 0.87)',
+            maxWidth: 220,
+            fontSize: theme.typography.pxToRem(12),
+            border: '1px solid #dadde9',
         },
-      }));
+    }));
 
     const handleMouseDown = () => {
         longPressTimeoutRef.current = setTimeout(() => {
@@ -72,47 +70,47 @@ const HighlightButton = ({ highlight, highlightedText, onUpdateHighlight, onDele
         onUpdateHighlight({ ...highlight, priority: highlight.priority === 'Normal' ? 'High' : 'Normal' });
 
     };
-    
+
     return (
         <HtmlTooltip
-        title={
-          <React.Fragment>
-            
-            {highlight.hpoAttributes.id && (
-                <>
-                <b>{highlight.hpoAttributes.name}</b> <br />
-                <em>{highlight.hpoAttributes.id}</em>  
-                </>
-            )}
+            title={
+                <React.Fragment>
 
-            {!highlight.hpoAttributes.id && (
-                <>
-                 <b>No HPO ID found</b> <br />
-                 <em>Long press to search.</em>
-                </>
-            )}
-          </React.Fragment>
-        }
-      >
-        <Button
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onClick={handleClick}
-            style={{
-                color: highlight.priority === 'Normal' ? highlightColors[0] : highlightColors[1],
-                padding: "auto",
-                margin: "auto",
-                fontSize: "inherit",
-                textTransform: "none",
-                cursor: "pointer",
-                display: 'inline-block', // Ensures button stays inline
-            }}
-            variant="text"
-            size="small"
+                    {highlight.hpoAttributes.id && (
+                        <>
+                            <b>{highlight.hpoAttributes.name}</b> <br />
+                            <em>{highlight.hpoAttributes.id}</em>
+                        </>
+                    )}
+
+                    {!highlight.hpoAttributes.id && (
+                        <>
+                            <b>No HPO ID found</b> <br />
+                            <em>Long press to search.</em>
+                        </>
+                    )}
+                </React.Fragment>
+            }
         >
-            {highlightedText}
-            
-        </Button>
+            <Button
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
+                onClick={handleClick}
+                style={{
+                    color: highlight.priority === 'Normal' ? highlightColors[0] : highlightColors[1],
+                    padding: "auto",
+                    margin: "auto",
+                    fontSize: "inherit",
+                    textTransform: "none",
+                    cursor: "pointer",
+                    display: 'inline-block', // Ensures button stays inline
+                }}
+                variant="text"
+                size="small"
+            >
+                {highlightedText}
+
+            </Button>
         </HtmlTooltip>
     );
 };

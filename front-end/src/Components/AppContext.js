@@ -38,7 +38,7 @@ const AppProvider = ({ children }) => {
 
 
   return (
-    <AppContext.Provider value={{resetState, fileText, setFileText, loading, setLoading, error, setError, highlights, setHighlights, highlightMode, setHighlightMode, selectedHighlight, setSelectedHighlight, gptDialogOpen, setGptDialogOpen, openaiKey, setOpenaiKey, scispacyDialogOpen, setScispacyDialogOpen, actreeDialogOpen, setActreeDialogOpen, inputText, setInputText, parseOption, setParseOption, flaskUrl, setFlaskUrl, genePredictionResults, setGenePredictionResults}}>
+    <AppContext.Provider value={{ resetState, fileText, setFileText, loading, setLoading, error, setError, highlights, setHighlights, highlightMode, setHighlightMode, selectedHighlight, setSelectedHighlight, gptDialogOpen, setGptDialogOpen, openaiKey, setOpenaiKey, scispacyDialogOpen, setScispacyDialogOpen, actreeDialogOpen, setActreeDialogOpen, inputText, setInputText, parseOption, setParseOption, flaskUrl, setFlaskUrl, genePredictionResults, setGenePredictionResults }}>
       {children}
     </AppContext.Provider>
   );

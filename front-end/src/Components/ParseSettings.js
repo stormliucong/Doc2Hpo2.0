@@ -21,7 +21,7 @@ function ParseSettings({ open, onClose }) {
   const [selectedOption, setSelectedOption] = useState('option1'); // Default option
   const [showCommonConfig, setShowCommonConfig] = useState(false); // Toggle for common configuration
 
-  const {parseOption, setParseOption, openaiKey, setOpenaiKey, flaskUrl, setFlaskUrl} = useContext(AppContext);
+  const { parseOption, setParseOption, openaiKey, setOpenaiKey, flaskUrl, setFlaskUrl } = useContext(AppContext);
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
@@ -54,9 +54,9 @@ function ParseSettings({ open, onClose }) {
         )}
 
         {selectedOption === 'AC Tree' && (
-            <Box>
-                <p>Discription of AcTree</p>
-            </Box>
+          <Box>
+            <p>Discription of AcTree</p>
+          </Box>
         )}
 
         {selectedOption === 'GPT' && (
