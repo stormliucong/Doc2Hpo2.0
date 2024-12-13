@@ -73,7 +73,15 @@ const PredictGeneButton = () => {
             if (!isRequestActive) return;
 
             clearTimeout(timeoutId); // Clear timeout if the request completes on time
-            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            if (!response.ok) {
+                try {
+                    const res = await response.json();
+                    setError("Error: " + response.status + " " + res.error);
+                }
+                catch (error) {
+                    setError("Error: " + response.status + " " + response.statusText);
+                }
+            }
             const res = await response.json();
             // push res into data
             setData(res);

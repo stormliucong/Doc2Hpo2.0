@@ -1,7 +1,7 @@
 from openai import OpenAI
 
 class GptSearch:
-    def __init__(self, model="gpt-3.5-turbo",openai_api_key=None):
+    def __init__(self, model="gpt-4o-mini",openai_api_key=None):
         if openai_api_key is None:
             user_input = input("Enter your OpenAI API key: ")
             if len(user_input) > 0:
@@ -28,16 +28,16 @@ class GptSearch:
 
         system_message = f'''
             Identify all Human Phenotype Ontology (HPO) terms in the following text.
-            Do not include negated terms or overlapping terms.
-            For each term, provide the start and end positions of the snippet in the text containing the term or its synonyms or descriptions showing the phenotype.
-            Do not overlap the start and end positions of the snippets.
-            Use the following json format for return: [(start, end, \"term\"), ...].
-            Return the response in one line, don't include "\\n".
+            1. For each term, provide the start and end positions of the snippet in the text containing the term or its synonyms or descriptions showing the phenotype.
+            2. Do not include negated terms or overlapping terms.
+            3. Do not overlap the start and end positions of the snippets.
+            4. Use the following json format for return: [(start, end, \"term\"), ...].
+            5. Return the response in one line, don't include "\\n".
             Example response: [(10, 22, "Abnormal gait",),(30, 43, "Short stature")]\n
         '''
         
         user_message = f'''
-            Text: \"{text}\"
+            {text}\n
         '''
                          
         # Step 1: Call OpenAI to analyze the text for phenotype terms
@@ -63,10 +63,9 @@ class GptSearch:
                 f.write(str(completion))
                 
             gpt_response = completion.choices[0].message.content
-            print(gpt_response)
+            return gpt_response
         except Exception as e:
-            raise ValueError(f"Failed to query OpenAI {self.model}.") from e            
-        return gpt_response
+            raise ValueError(f"Failed to query OpenAI {self.model}.\n Check your OpenAI Key. \n" + str(e))       
     
     def post_process_gpts(self, gpt_response):
         '''
@@ -79,10 +78,10 @@ class GptSearch:
             match_list = eval(gpt_response)  # Convert response text to Python list (use with caution)
             intervals = [(match[0], match[1]) for match in match_list]
             gpt_response_hpo_terms = [match[2] for match in match_list]
-            print(intervals)
+            return intervals, gpt_response_hpo_terms
         except Exception as e:
-            raise ValueError("Failed to parse OpenAI response.") from e
-        return intervals, gpt_response_hpo_terms
+            raise ValueError("Failed to parse OpenAI response.\n" + str(e)) 
+        
 
        
 # Example usage
@@ -100,7 +99,7 @@ if __name__ == "__main__":
         text = f.read()
     print(text)
     gpt = GptSearch()
-    gpt_response = gpt.search_hpo_terms(text, test=True)
+    gpt_response = gpt.search_hpo_terms(text, test=False)
     intervals, gpt_response_hpo_terms = gpt.post_process_gpts(gpt_response)
     matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, gpt_response_hpo_terms)
     print("Matched HPO:", matched_hpo)

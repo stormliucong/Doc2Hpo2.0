@@ -15,22 +15,26 @@ class ScispacySearch:
        
 
     def search(self, query):
-        intervals = []
-        linked_hpo_names = []
-        doc = self.nlp(query)
-        linker = self.nlp.get_pipe("scispacy_linker")
-        linker.threshold = 0.8
-        for entity in doc.ents:
-            all_ents = entity._.kb_ents
-            if len(entity._.kb_ents) > 0:
-                umls_ent = entity._.kb_ents[0]
-                intervals.append((entity.start_char, entity.end_char))
-                linked_hpo_names.append(linker.kb.cui_to_entity[umls_ent[0]].canonical_name)
+        '''
+        Search HPO terms in the text and return the intervals and linked HPO names
         
-        return intervals, linked_hpo_names
-                
+        '''
+        try:
+            intervals = []
+            linked_hpo_names = []
+            doc = self.nlp(query)
+            linker = self.nlp.get_pipe("scispacy_linker")
+            linker.threshold = 0.8
+            for entity in doc.ents:
+                all_ents = entity._.kb_ents
+                if len(entity._.kb_ents) > 0:
+                    umls_ent = entity._.kb_ents[0]
+                    intervals.append((entity.start_char, entity.end_char))
+                    linked_hpo_names.append(linker.kb.cui_to_entity[umls_ent[0]].canonical_name)
             
-             
+            return intervals, linked_hpo_names
+        except Exception as e:
+            raise ValueError("Failed to search HPO terms in the text from Scispacy." + str(e))
 
 # Example usage
 if __name__ == "__main__":

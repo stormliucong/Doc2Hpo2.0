@@ -30,22 +30,25 @@ class Phen2geneClient:
         :param additional_params: Additional parameters for the API query (dict).
         :return: Gene symbol or response from the API.
         """
-        # Build the API endpoint URL
-        endpoint = f"{self.base_url}"
+        try:
+            # Build the API endpoint URL
+            endpoint = f"{self.base_url}"
+            
+            # Construct the query parameters
+            params = {
+                "HPO_list": ';'.join(hpo_ids),
+            }
+            # Add additional parameters if provided
+            if additional_params:
+                params.update(additional_params)
+            
+            response = requests.get(endpoint, params=params)
+            # Raise an error for unsuccessful responses
+            genes = response.json()['results'] if response.json()['results'] != [] else None
+            return genes
+        except Exception as e:
+            raise ValueError("Failed to query the Phen2Gene API.") from e
         
-        # Construct the query parameters
-        params = {
-            "HPO_list": ';'.join(hpo_ids),
-        }
-        # Add additional parameters if provided
-        if additional_params:
-            params.update(additional_params)
-        
-        response = requests.get(endpoint, params=params)
-        # Raise an error for unsuccessful responses
-        genes = response.json()['results'] if response.json()['results'] != [] else None
-        return genes
-    
     def filter_results(self, genes, rank=5, score=0.5, status=None):
         """
         Filter the results based on a threshold.
@@ -54,11 +57,15 @@ class Phen2geneClient:
         :param threshold: The threshold value.
         :return: Filtered results.
         """
-        if status is None:
-            filtered_genes = [g for g in genes if int(g["Rank"]) <= rank and float(g["Score"]) >= score]
-        else:
-            filtered_genes = [g for g in genes if int(g["Rank"]) <= rank and float(g["Score"]) >= score and g["Status"] == status]
-        return filtered_genes
+        try:
+            if status is None:
+                filtered_genes = [g for g in genes if int(g["Rank"]) <= rank and float(g["Score"]) >= score]
+            else:
+                filtered_genes = [g for g in genes if int(g["Rank"]) <= rank and float(g["Score"]) >= score and g["Status"] == status]
+            return filtered_genes
+        except Exception as e:
+            raise ValueError("Failed to filter the results from the Phen2Gene API.") from e
+                
     
 # Example usage:
 if __name__ == "__main__":

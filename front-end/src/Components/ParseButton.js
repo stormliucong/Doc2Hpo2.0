@@ -71,10 +71,22 @@ const ParseButton = () => {
             }
             // If the request is inactive (timed out), stop processing
             if (!isRequestActive) return;
-            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            // if (!response.ok) throw new Error(`HTTP error! Status: ${JSON.stringify(response)}`);
+            if(response.status !== 200) {
+                try {
+                    const res = await response.json();
+                    setError("Error: " + response.status + " " + res.error);
+                    return;
+                }
+                catch (error) {
+                    setError("Error: " + response.status + " " + response.statusText);
+                    return;
+                }
+            }
             if(parseOption === 'Test') {
                 const res = await response.text();
                 setError("This is a Test to " + flaskUrl + "\n" + res.toString());
+                return;
             }
             if(parseOption !== 'Test') {
                 const res = await response.json();

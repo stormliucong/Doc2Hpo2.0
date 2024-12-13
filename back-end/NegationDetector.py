@@ -20,32 +20,35 @@ class NegationDetector:
         :param term_span: A tuple (start, end) indicating the start and end indices of the term in the string.
         :return: True if the term is negated, False otherwise.
         """
-        start, end = term_span
-        if start < 0 or end > len(text) or start >= end:
-            raise ValueError("Invalid term_span indices.")
+        try:
+            start, end = term_span
+            if start < 0 or end > len(text) or start >= end:
+                raise ValueError("Invalid term_span indices.")
 
-        # Extract the term and determine the sentence boundaries
-        term = text[start:end]
-        sentence_start, sentence_end = self._get_sentence_boundaries(text, start, end)
-        
-        # Extract the sentence containing the term
-        sentence = text[sentence_start:sentence_end].lower()
-        # Tokenize the text before and after the term
-        before_text = sentence[:start - sentence_start]
-        after_text = sentence[end - sentence_start:]
-        before_words = self._tokenize(before_text)
-        after_words = self._tokenize(after_text)
+            # Extract the term and determine the sentence boundaries
+            term = text[start:end]
+            sentence_start, sentence_end = self._get_sentence_boundaries(text, start, end)
+            
+            # Extract the sentence containing the term
+            sentence = text[sentence_start:sentence_end].lower()
+            # Tokenize the text before and after the term
+            before_text = sentence[:start - sentence_start]
+            after_text = sentence[end - sentence_start:]
+            before_words = self._tokenize(before_text)
+            after_words = self._tokenize(after_text)
 
-        # Limit search to the smaller of negation_window or sentence boundary
-        effective_window = self.negation_window
+            # Limit search to the smaller of negation_window or sentence boundary
+            effective_window = self.negation_window
 
-        if self._contains_negation(before_words[-effective_window:], direction="before"):
-            return True
+            if self._contains_negation(before_words[-effective_window:], direction="before"):
+                return True
 
-        if self._contains_negation(after_words[:effective_window], direction="after"):
-            return True
+            if self._contains_negation(after_words[:effective_window], direction="after"):
+                return True
 
-        return False
+            return False
+        except Exception as e:
+            raise ValueError("Failed to detect negation in the text.") from e
 
     def _get_sentence_boundaries(self, text, start, end):
         """

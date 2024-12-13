@@ -38,30 +38,14 @@ class HpoLookup():
         '''
         Add HPO attributes to the matched intervals
         '''
-        matched_hpo = []
-        if gpt_response_hpo_terms:
-            assert len(intervals) == len(gpt_response_hpo_terms), "Length of intervals and gpt_response_hpo_terms should be the same."
-        
-        for i in range(len(intervals)):
-            start, end = intervals[i]
-            query = text[start:end]
-            if query in hpo_dict:  
-                hpo_id = hpo_dict[query]
-                hpo_name = hpo_name_dict[hpo_id]
-            else:
-                hpo_id_name_format_list = HpoLookup.search_hpo_in_ncbi(query)
-                if len(hpo_id_name_format_list) > 1:
-                    hpo_id_name_format_list = HpoLookup.get_lowest_hpo(hpo_id_name_format_list, hpo_levels)
-                if len(hpo_id_name_format_list) > 0:
-                    hpo_id = hpo_id_name_format_list[0]["id"]
-                    hpo_name = hpo_id_name_format_list[0]["name"]   
-                else:
-                    hpo_id = None
-                    hpo_name = None
+        try:
+            matched_hpo = []
+            if gpt_response_hpo_terms:
+                assert len(intervals) == len(gpt_response_hpo_terms), "Length of intervals and gpt_response_hpo_terms should be the same."
             
-            if hpo_id is None:
-                # use GPT term as back up
-                query = gpt_response_hpo_terms[i]
+            for i in range(len(intervals)):
+                start, end = intervals[i]
+                query = text[start:end]
                 if query in hpo_dict:  
                     hpo_id = hpo_dict[query]
                     hpo_name = hpo_name_dict[hpo_id]
@@ -75,9 +59,31 @@ class HpoLookup():
                     else:
                         hpo_id = None
                         hpo_name = None
-            matched_hpo.append((start, end, query, {"id": hpo_id, "name": hpo_name}))
-        return matched_hpo
-    
+                
+                if hpo_id is None:
+                    # use GPT term as back up
+                    query = gpt_response_hpo_terms[i]
+                    if query in hpo_dict:  
+                        hpo_id = hpo_dict[query]
+                        hpo_name = hpo_name_dict[hpo_id]
+                    else:
+                        hpo_id_name_format_list = HpoLookup.search_hpo_in_ncbi(query)
+                        if len(hpo_id_name_format_list) > 1:
+                            hpo_id_name_format_list = HpoLookup.get_lowest_hpo(hpo_id_name_format_list, hpo_levels)
+                        if len(hpo_id_name_format_list) > 0:
+                            hpo_id = hpo_id_name_format_list[0]["id"]
+                            hpo_name = hpo_id_name_format_list[0]["name"]
+                            
+                        else:
+                            hpo_id = None
+                            hpo_name = None
+                    start = -1 # set start and end to -1 to indicate that the term cannot be found in the text
+                    end = -1  
+                matched_hpo.append((start, end, query, {"id": hpo_id, "name": hpo_name}))
+            return matched_hpo
+        except Exception as e:
+            raise ValueError("Failed to add HPO attributes to the matched intervals." + str(e))
+        
     @staticmethod
     def add_hpo_frequency(matched_hpo, oard_client):
         frequency_dict = oard_client.get_frequencies([hpo[3]["id"] for hpo in matched_hpo])

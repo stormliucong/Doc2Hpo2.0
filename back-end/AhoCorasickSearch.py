@@ -46,24 +46,25 @@ class AhoCorasick:
 
     def search(self, text):
         """Search for all terms in the given text."""
-        node = self.trie
-        results = []
-        for i, char in enumerate(text):
-            while node is not None and char not in node["children"]:
-                node = node["fail"]
-            if node is None:
-                node = self.trie
-                continue
-            node = node["children"][char]
+        try:
+            node = self.trie
+            results = []
+            for i, char in enumerate(text):
+                while node is not None and char not in node["children"]:
+                    node = node["fail"]
+                if node is None:
+                    node = self.trie
+                    continue
+                node = node["children"][char]
 
-            # Collect matches
-            for term in node["output"]:
-                start = i - len(term) + 1
-                end = i + 1
-                results.append((start, end))
-        return results   
-        
-        
+                # Collect matches
+                for term in node["output"]:
+                    start = i - len(term) + 1
+                    end = i + 1
+                    results.append((start, end))
+            return results   
+        except Exception as e:
+            raise ValueError("Failed to search for terms in the text using Acho-Corasick." + str(e))
         
 
 # Example Usage:
