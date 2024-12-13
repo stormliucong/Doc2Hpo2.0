@@ -31,6 +31,10 @@ const Features = () => (
     </Typography>
     <Typography variant="subtitle1" color="textSecondary">
       Explore the features of this app, including text annotation and more.
+      Tutorial is available at (about to come...)
+      An smart API document is available at (about to come...).
+      GitHub repository is available at (about to come...).
+      Docker image is available at (about to come...).
     </Typography>
   </Box>
 );
@@ -41,7 +45,7 @@ const Contact = () => (
       Contact Us
     </Typography>
     <Typography variant="subtitle1" color="textSecondary">
-      Reach out to us for more information about this app.
+      Reach out at GitHub or email (about to come...).
     </Typography>
   </Box>
 );
