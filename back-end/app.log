@@ -1,0 +1,56 @@
+2024-12-12 22:52:59,118 - INFO - __main__ - Initializing HPO Factory...
+2024-12-12 22:52:59,459 - INFO - __main__ - Initializing Aho-Corasick...
+2024-12-12 22:53:02,370 - INFO - __main__ - Initializing Scispacy...
+2024-12-12 22:53:02,860 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-12 22:53:03,169 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/tfidf_vectors_sparse.npz HTTP/11" 200 0
+2024-12-12 22:53:03,227 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-12 22:53:03,504 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/nmslib_index.bin HTTP/11" 200 0
+2024-12-12 22:53:03,505 - INFO - nmslib - Loading index from /Users/cl3720/.scispacy/datasets/066d3db776b9acaff67728a857a1d6625f4c86194a70804ffd5399fa738caa4e.ecc1ac28794235140b2bafbbf81ce0454219cd1e05056786dce65ab17fee53b2.nmslib_index.bin
+2024-12-12 22:53:03,505 - INFO - nmslib - Loading regular index.
+2024-12-12 22:53:03,534 - INFO - nmslib - Finished loading index
+2024-12-12 22:53:03,534 - INFO - nmslib - Set HNSW query-time parameters:
+2024-12-12 22:53:03,534 - INFO - nmslib - ef(Search)         =20
+2024-12-12 22:53:03,534 - INFO - nmslib - algoType           =2
+2024-12-12 22:53:03,535 - INFO - nmslib - Set HNSW query-time parameters:
+2024-12-12 22:53:03,535 - INFO - nmslib - ef(Search)         =200
+2024-12-12 22:53:03,535 - INFO - nmslib - algoType           =2
+2024-12-12 22:53:03,535 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-12 22:53:03,823 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/tfidf_vectorizer.joblib HTTP/11" 200 0
+2024-12-12 22:53:03,841 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-12 22:53:04,118 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/concept_aliases.json HTTP/11" 200 0
+2024-12-12 22:53:04,130 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-12 22:53:04,410 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/kbs/2023-04-23/umls_hpo_2022.jsonl HTTP/11" 200 0
+2024-12-12 22:53:04,490 - INFO - __main__ - Initializing OardClient...
+2024-12-12 22:53:04,490 - INFO - __main__ - Initializing Phen2geneClient...
+2024-12-12 22:53:04,492 - INFO - __main__ - Starting the Flask application...
+2024-12-12 22:53:04,515 - INFO - werkzeug - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-12-12 22:53:04,516 - INFO - werkzeug - [33mPress CTRL+C to quit[0m
+2024-12-12 22:53:04,516 - INFO - werkzeug -  * Restarting with stat
+2024-12-12 22:53:06,227 - INFO - __main__ - Initializing HPO Factory...
+2024-12-12 22:53:06,562 - INFO - __main__ - Initializing Aho-Corasick...
+2024-12-12 22:53:09,433 - INFO - __main__ - Initializing Scispacy...
+2024-12-12 22:53:09,882 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-12 22:53:10,201 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/tfidf_vectors_sparse.npz HTTP/11" 200 0
+2024-12-12 22:53:10,251 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-12 22:53:10,532 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/nmslib_index.bin HTTP/11" 200 0
+2024-12-12 22:53:10,532 - INFO - nmslib - Loading index from /Users/cl3720/.scispacy/datasets/066d3db776b9acaff67728a857a1d6625f4c86194a70804ffd5399fa738caa4e.ecc1ac28794235140b2bafbbf81ce0454219cd1e05056786dce65ab17fee53b2.nmslib_index.bin
+2024-12-12 22:53:10,533 - INFO - nmslib - Loading regular index.
+2024-12-12 22:53:10,560 - INFO - nmslib - Finished loading index
+2024-12-12 22:53:10,560 - INFO - nmslib - Set HNSW query-time parameters:
+2024-12-12 22:53:10,560 - INFO - nmslib - ef(Search)         =20
+2024-12-12 22:53:10,560 - INFO - nmslib - algoType           =2
+2024-12-12 22:53:10,560 - INFO - nmslib - Set HNSW query-time parameters:
+2024-12-12 22:53:10,561 - INFO - nmslib - ef(Search)         =200
+2024-12-12 22:53:10,561 - INFO - nmslib - algoType           =2
+2024-12-12 22:53:10,561 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-12 22:53:10,840 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/tfidf_vectorizer.joblib HTTP/11" 200 0
+2024-12-12 22:53:10,850 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-12 22:53:11,125 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/concept_aliases.json HTTP/11" 200 0
+2024-12-12 22:53:11,135 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-12 22:53:11,421 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/kbs/2023-04-23/umls_hpo_2022.jsonl HTTP/11" 200 0
+2024-12-12 22:53:11,514 - INFO - __main__ - Initializing OardClient...
+2024-12-12 22:53:11,514 - INFO - __main__ - Initializing Phen2geneClient...
+2024-12-12 22:53:11,516 - INFO - __main__ - Starting the Flask application...
+2024-12-12 22:53:11,536 - WARNING - werkzeug -  * Debugger is active!
+2024-12-12 22:53:11,544 - INFO - werkzeug -  * Debugger PIN: 128-170-321

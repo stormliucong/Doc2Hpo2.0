@@ -51,7 +51,7 @@ class OardClient:
             frequency = response.json()['results'][0]['concept_frequency'] if response.json()['results'] != [] else None
             return frequency
         except Exception as e:
-            raise ValueError("Failed to query the OARD API.") from e
+            raise ValueError("Failed to query the OARD API." + str(e)) from e
             
         
     
@@ -65,6 +65,10 @@ class OardClient:
         :return: Frequency value or response from the API.
         """
         try:
+            # Remove None from hpo_ids
+            hpo_ids = [hpo_id for hpo_id in hpo_ids if hpo_id is not None]
+            if hpo_ids == []:
+                return None
             # Build the API endpoint URL
             endpoint = f"{self.base_url}/vocabulary/findConceptByCode"
 
@@ -96,7 +100,7 @@ class OardClient:
             frequecy_dict = {frequency[i]['hpo_id']: frequency[i]['frequency'] for i in range(len(frequency))}
             return frequecy_dict
         except Exception as e:
-            raise ValueError("Failed to query the OARD API.") from e
+            raise ValueError("Failed to query the OARD API." + str(e)) from e
 
 # Example usage:
 if __name__ == "__main__":

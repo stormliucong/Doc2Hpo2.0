@@ -88,6 +88,8 @@ class HpoLookup():
     def add_hpo_frequency(matched_hpo, oard_client):
         frequency_dict = oard_client.get_frequencies([hpo[3]["id"] for hpo in matched_hpo])
         print(frequency_dict)
+        if frequency_dict is None:
+            return matched_hpo
         for hpo in matched_hpo:
             hpo[3]["frequency"] = frequency_dict[hpo[3]["id"]] if hpo[3]["id"] in frequency_dict else None
         return matched_hpo
