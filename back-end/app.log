@@ -54,3 +54,231 @@
 2024-12-12 22:53:11,516 - INFO - __main__ - Starting the Flask application...
 2024-12-12 22:53:11,536 - WARNING - werkzeug -  * Debugger is active!
 2024-12-12 22:53:11,544 - INFO - werkzeug -  * Debugger PIN: 128-170-321
+2024-12-13 21:56:01,163 - INFO - __main__ - Initializing HPO Factory...
+2024-12-13 21:56:52,354 - INFO - __main__ - Initializing HPO Factory...
+2024-12-13 21:56:52,698 - INFO - __main__ - Initializing Aho-Corasick...
+2024-12-13 21:56:55,610 - INFO - __main__ - Initializing Scispacy...
+2024-12-13 21:56:56,086 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 21:56:56,472 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/tfidf_vectors_sparse.npz HTTP/11" 200 0
+2024-12-13 21:56:56,531 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 21:56:56,838 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/nmslib_index.bin HTTP/11" 200 0
+2024-12-13 21:56:56,838 - INFO - nmslib - Loading index from /Users/cl3720/.scispacy/datasets/066d3db776b9acaff67728a857a1d6625f4c86194a70804ffd5399fa738caa4e.ecc1ac28794235140b2bafbbf81ce0454219cd1e05056786dce65ab17fee53b2.nmslib_index.bin
+2024-12-13 21:56:56,839 - INFO - nmslib - Loading regular index.
+2024-12-13 21:56:56,899 - INFO - nmslib - Finished loading index
+2024-12-13 21:56:56,899 - INFO - nmslib - Set HNSW query-time parameters:
+2024-12-13 21:56:56,899 - INFO - nmslib - ef(Search)         =20
+2024-12-13 21:56:56,899 - INFO - nmslib - algoType           =2
+2024-12-13 21:56:56,900 - INFO - nmslib - Set HNSW query-time parameters:
+2024-12-13 21:56:56,900 - INFO - nmslib - ef(Search)         =200
+2024-12-13 21:56:56,900 - INFO - nmslib - algoType           =2
+2024-12-13 21:56:56,902 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 21:56:57,236 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/tfidf_vectorizer.joblib HTTP/11" 200 0
+2024-12-13 21:56:57,257 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 21:56:57,577 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/concept_aliases.json HTTP/11" 200 0
+2024-12-13 21:56:57,588 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 21:56:57,950 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/kbs/2023-04-23/umls_hpo_2022.jsonl HTTP/11" 200 0
+2024-12-13 21:56:58,050 - INFO - __main__ - Initializing OardClient...
+2024-12-13 21:56:58,050 - INFO - __main__ - Initializing Phen2geneClient...
+2024-12-13 21:56:58,051 - INFO - __main__ - Starting the Flask application...
+2024-12-13 21:56:58,093 - INFO - werkzeug - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-12-13 21:56:58,093 - INFO - werkzeug - [33mPress CTRL+C to quit[0m
+2024-12-13 21:56:58,094 - INFO - werkzeug -  * Restarting with stat
+2024-12-13 21:56:59,904 - INFO - __main__ - Initializing HPO Factory...
+2024-12-13 21:57:00,256 - INFO - __main__ - Initializing Aho-Corasick...
+2024-12-13 21:57:03,204 - INFO - __main__ - Initializing Scispacy...
+2024-12-13 21:57:03,648 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 21:57:03,945 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/tfidf_vectors_sparse.npz HTTP/11" 200 0
+2024-12-13 21:57:03,991 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 21:57:04,287 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/nmslib_index.bin HTTP/11" 200 0
+2024-12-13 21:57:04,287 - INFO - nmslib - Loading index from /Users/cl3720/.scispacy/datasets/066d3db776b9acaff67728a857a1d6625f4c86194a70804ffd5399fa738caa4e.ecc1ac28794235140b2bafbbf81ce0454219cd1e05056786dce65ab17fee53b2.nmslib_index.bin
+2024-12-13 21:57:04,288 - INFO - nmslib - Loading regular index.
+2024-12-13 21:57:04,315 - INFO - nmslib - Finished loading index
+2024-12-13 21:57:04,315 - INFO - nmslib - Set HNSW query-time parameters:
+2024-12-13 21:57:04,315 - INFO - nmslib - ef(Search)         =20
+2024-12-13 21:57:04,315 - INFO - nmslib - algoType           =2
+2024-12-13 21:57:04,315 - INFO - nmslib - Set HNSW query-time parameters:
+2024-12-13 21:57:04,315 - INFO - nmslib - ef(Search)         =200
+2024-12-13 21:57:04,315 - INFO - nmslib - algoType           =2
+2024-12-13 21:57:04,316 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 21:57:04,611 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/tfidf_vectorizer.joblib HTTP/11" 200 0
+2024-12-13 21:57:04,623 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 21:57:04,933 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/concept_aliases.json HTTP/11" 200 0
+2024-12-13 21:57:04,938 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 21:57:05,225 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/kbs/2023-04-23/umls_hpo_2022.jsonl HTTP/11" 200 0
+2024-12-13 21:57:05,306 - INFO - __main__ - Initializing OardClient...
+2024-12-13 21:57:05,306 - INFO - __main__ - Initializing Phen2geneClient...
+2024-12-13 21:57:05,307 - INFO - __main__ - Starting the Flask application...
+2024-12-13 21:57:05,328 - WARNING - werkzeug -  * Debugger is active!
+2024-12-13 21:57:05,339 - INFO - werkzeug -  * Debugger PIN: 128-170-321
+2024-12-13 21:57:09,707 - INFO - werkzeug - 127.0.0.1 - - [13/Dec/2024 21:57:09] "OPTIONS /api/search/gpt HTTP/1.1" 200 -
+2024-12-13 21:57:09,710 - DEBUG - __main__ - Received request for /api/search/gpt
+2024-12-13 21:57:09,711 - INFO - __main__ - Processing GPT search with text: Age: 45 years
+Gender: Female
+Presentation: The patient reports persistent fatigue over the past six months, accompanied by muscle weakness in the upper arms and thighs. She also experiences morning stiffness lasting more than 30 minutes and difficulty climbing stairs or lifting objects. Skin changes include a purple rash around the eyes (heliotrope rash) and red, scaly patches on the knuckles (Gottron’s papules).
+Family History: Mother diagnosed with rheumatoid arthritis.
+Preliminary Diagnosis: Suspected dermatomyositis, pending muscle enzyme studies and skin biopsy. No muscular dystropy detected
+HPO_terms: fever, cough, Urinary urgency, Functional abnormality of male internal genitalia, Hypospadias, urinary urgency
+2024-12-13 21:57:09,757 - DEBUG - openai._base_client - Request options: {'method': 'post', 'url': '/chat/completions', 'headers': {'X-Stainless-Helper-Method': 'beta.chat.completions.parse'}, 'files': None, 'post_parser': <function Completions.parse.<locals>.parser at 0x16d9531a0>, 'json_data': {'messages': [{'role': 'system', 'content': "\n            Identify all Human Phenotype Ontology (HPO) terms in the following text.\n\n            1. For each identified phenotype, provide the start and end positions of the substring in the text indicating this phenotype.\n\n            2. Do not include negated phenotypes.\n\n            3. Do not include substrings overlapping with other substrings.\n\n            4. Return a list of JSON objects with the following keys: 'start', 'end', 'substring', 'hpo_name', 'hpo_id'.\n\n            --------------------------------------------------------------------------------------------\n\n        "}, {'role': 'user', 'content': '\n            Age: 45 years\nGender: Female\nPresentation: The patient reports persistent fatigue over the past six months, accompanied by muscle weakness in the upper arms and thighs. She also experiences morning stiffness lasting more than 30 minutes and difficulty climbing stairs or lifting objects. Skin changes include a purple rash around the eyes (heliotrope rash) and red, scaly patches on the knuckles (Gottron’s papules).\nFamily History: Mother diagnosed with rheumatoid arthritis.\nPreliminary Diagnosis: Suspected dermatomyositis, pending muscle enzyme studies and skin biopsy. No muscular dystropy detected\nHPO_terms: fever, cough, Urinary urgency, Functional abnormality of male internal genitalia, Hypospadias, urinary urgency\n\n        '}], 'model': 'gpt-4o-2024-08-06', 'max_completion_tokens': 1024, 'response_format': {'type': 'json_schema', 'json_schema': {'schema': {'$defs': {'Interval': {'properties': {'start': {'title': 'Start', 'type': 'integer'}, 'end': {'title': 'End', 'type': 'integer'}, 'substring': {'title': 'Substring', 'type': 'string'}, 'hpo_id': {'title': 'Hpo Id', 'type': 'string'}, 'hpo_name': {'title': 'Hpo Name', 'type': 'string'}}, 'required': ['start', 'end', 'substring', 'hpo_id', 'hpo_name'], 'title': 'Interval', 'type': 'object', 'additionalProperties': False}}, 'properties': {'results': {'items': {'$ref': '#/$defs/Interval'}, 'title': 'Results', 'type': 'array'}}, 'required': ['results'], 'title': 'Intervals', 'type': 'object', 'additionalProperties': False}, 'name': 'Intervals', 'strict': True}}, 'stream': False, 'temperature': 0.8}}
+2024-12-13 21:57:09,780 - DEBUG - openai._base_client - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2024-12-13 21:57:09,781 - DEBUG - httpcore.connection - connect_tcp.started host='api.openai.com' port=443 local_address=None timeout=5.0 socket_options=None
+2024-12-13 21:57:09,831 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x16dc289b0>
+2024-12-13 21:57:09,831 - DEBUG - httpcore.connection - start_tls.started ssl_context=<ssl.SSLContext object at 0x16d9b2250> server_hostname='api.openai.com' timeout=5.0
+2024-12-13 21:57:09,851 - DEBUG - httpcore.connection - start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x2b485d190>
+2024-12-13 21:57:09,852 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2024-12-13 21:57:09,852 - DEBUG - httpcore.http11 - send_request_headers.complete
+2024-12-13 21:57:09,852 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2024-12-13 21:57:09,852 - DEBUG - httpcore.http11 - send_request_body.complete
+2024-12-13 21:57:09,852 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2024-12-13 21:57:11,476 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 14 Dec 2024 02:57:11 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'access-control-expose-headers', b'X-Request-ID'), (b'openai-organization', b'columbia-university-614'), (b'openai-processing-ms', b'1450'), (b'openai-version', b'2020-10-01'), (b'x-ratelimit-limit-requests', b'10000'), (b'x-ratelimit-limit-tokens', b'30000000'), (b'x-ratelimit-remaining-requests', b'9999'), (b'x-ratelimit-remaining-tokens', b'29999646'), (b'x-ratelimit-reset-requests', b'6ms'), (b'x-ratelimit-reset-tokens', b'0s'), (b'x-request-id', b'req_f3c50f7370c021a8a764c474fb3252ab'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'CF-Cache-Status', b'DYNAMIC'), (b'Set-Cookie', b'__cf_bm=HlorH44JNWyZUFQ7rPXddYAkj.r2n2STn91fye3ElrI-1734145031-1.0.1.1-1h4DhG.OHVP4t6keaEt9i9iPuV0SHlnGrNwGghhr0bgO6o5C6eUfO1yqvvx6sDCmNPUkDtOTNysyU8vJuETCBw; path=/; expires=Sat, 14-Dec-24 03:27:11 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'X-Content-Type-Options', b'nosniff'), (b'Set-Cookie', b'_cfuvid=ujh9rzkw5yC3vmngncFArHoD2cOG6S4ZDdLC00QcgU0-1734145031439-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Server', b'cloudflare'), (b'CF-RAY', b'8f1aecc50d870c82-EWR'), (b'Content-Encoding', b'gzip'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2024-12-13 21:57:11,479 - INFO - httpx - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-12-13 21:57:11,480 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2024-12-13 21:57:11,480 - DEBUG - httpcore.http11 - receive_response_body.complete
+2024-12-13 21:57:11,480 - DEBUG - httpcore.http11 - response_closed.started
+2024-12-13 21:57:11,480 - DEBUG - httpcore.http11 - response_closed.complete
+2024-12-13 21:57:11,481 - DEBUG - openai._base_client - HTTP Response: POST https://api.openai.com/v1/chat/completions "200 OK" Headers([('date', 'Sat, 14 Dec 2024 02:57:11 GMT'), ('content-type', 'application/json'), ('transfer-encoding', 'chunked'), ('connection', 'keep-alive'), ('access-control-expose-headers', 'X-Request-ID'), ('openai-organization', 'columbia-university-614'), ('openai-processing-ms', '1450'), ('openai-version', '2020-10-01'), ('x-ratelimit-limit-requests', '10000'), ('x-ratelimit-limit-tokens', '30000000'), ('x-ratelimit-remaining-requests', '9999'), ('x-ratelimit-remaining-tokens', '29999646'), ('x-ratelimit-reset-requests', '6ms'), ('x-ratelimit-reset-tokens', '0s'), ('x-request-id', 'req_f3c50f7370c021a8a764c474fb3252ab'), ('strict-transport-security', 'max-age=31536000; includeSubDomains; preload'), ('cf-cache-status', 'DYNAMIC'), ('set-cookie', '__cf_bm=HlorH44JNWyZUFQ7rPXddYAkj.r2n2STn91fye3ElrI-1734145031-1.0.1.1-1h4DhG.OHVP4t6keaEt9i9iPuV0SHlnGrNwGghhr0bgO6o5C6eUfO1yqvvx6sDCmNPUkDtOTNysyU8vJuETCBw; path=/; expires=Sat, 14-Dec-24 03:27:11 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('x-content-type-options', 'nosniff'), ('set-cookie', '_cfuvid=ujh9rzkw5yC3vmngncFArHoD2cOG6S4ZDdLC00QcgU0-1734145031439-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('server', 'cloudflare'), ('cf-ray', '8f1aecc50d870c82-EWR'), ('content-encoding', 'gzip'), ('alt-svc', 'h3=":443"; ma=86400')])
+2024-12-13 21:57:11,481 - DEBUG - openai._base_client - request_id: req_f3c50f7370c021a8a764c474fb3252ab
+2024-12-13 21:57:11,501 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 21:57:11,583 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=ccompanied%20by%20mu HTTP/11" 200 14
+2024-12-13 21:57:11,584 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 21:57:11,679 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=d,%20scaly%20patches HTTP/11" 200 14
+2024-12-13 21:57:11,683 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 21:57:11,783 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=%E2%80%99s%20papules).%0AFa HTTP/11" 200 14
+2024-12-13 21:57:11,785 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): rare.cohd.io:443
+2024-12-13 21:57:12,397 - DEBUG - urllib3.connectionpool - https://rare.cohd.io:443 "GET /api//vocabulary/findConceptByCode?q=HP%3A0001324%3BHP%3A0040324%3BHP%3A0025508 HTTP/11" 200 668
+2024-12-13 21:57:12,400 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): rare.cohd.io:443
+2024-12-13 21:57:12,612 - DEBUG - urllib3.connectionpool - https://rare.cohd.io:443 "GET /api//frequencies/singleConceptFreq?dataset_id=2&concept_id=90040324%3B90025508%3B90001324 HTTP/11" 200 919
+2024-12-13 21:57:12,615 - INFO - __main__ - Successfully processed GPT search
+2024-12-13 21:57:12,616 - INFO - werkzeug - 127.0.0.1 - - [13/Dec/2024 21:57:12] "POST /api/search/gpt HTTP/1.1" 200 -
+2024-12-13 21:58:16,021 - INFO - werkzeug - 127.0.0.1 - - [13/Dec/2024 21:58:16] "OPTIONS /api/search/scispacy HTTP/1.1" 200 -
+2024-12-13 21:58:16,023 - DEBUG - __main__ - Received request for /api/search/scispacy
+2024-12-13 21:58:16,023 - INFO - __main__ - Processing Scispacy search with text: Age: 45 years
+Gender: Female
+Presentation: The patient reports persistent fatigue over the past six months, accompanied by muscle weakness in the upper arms and thighs. She also experiences morning stiffness lasting more than 30 minutes and difficulty climbing stairs or lifting objects. Skin changes include a purple rash around the eyes (heliotrope rash) and red, scaly patches on the knuckles (Gottron’s papules).
+Family History: Mother diagnosed with rheumatoid arthritis.
+Preliminary Diagnosis: Suspected dermatomyositis, pending muscle enzyme studies and skin biopsy. No muscular dystropy detected
+HPO_terms: fever, cough, Urinary urgency, Functional abnormality of male internal genitalia, Hypospadias, urinary urgency
+2024-12-13 21:58:16,109 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 21:58:16,183 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=persistent HTTP/11" 200 391
+2024-12-13 21:58:16,184 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 21:58:16,258 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=upper%20arms HTTP/11" 200 422
+2024-12-13 21:58:16,259 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 21:58:16,346 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=morning%20stiffness HTTP/11" 200 72
+2024-12-13 21:58:16,350 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 21:58:16,435 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=Skin%20changes HTTP/11" 200 75
+2024-12-13 21:58:16,437 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 21:58:16,519 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=eyes HTTP/11" 200 382
+2024-12-13 21:58:16,522 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 21:58:16,605 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=scaly HTTP/11" 200 232
+2024-12-13 21:58:16,609 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 21:58:16,690 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=Gottron%E2%80%99s%20papules HTTP/11" 200 14
+2024-12-13 21:58:16,694 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 21:58:16,779 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=Functional%20abnormality HTTP/11" 200 520
+2024-12-13 21:58:16,784 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): rare.cohd.io:443
+2024-12-13 21:58:17,081 - DEBUG - urllib3.connectionpool - https://rare.cohd.io:443 "GET /api//vocabulary/findConceptByCode?q=HP%3A0004898%3BHP%3A0012378%3BHP%3A0001324%3BHP%3A0006986%3BHP%3A0005197%3BHP%3A0003551%3BHP%3A0001000%3BHP%3A0001137%3BHP%3A0040324%3BHP%3A0040190%3BHP%3A0025508%3BHP%3A0001370%3BHP%3A0001945%3BHP%3A0012735%3BHP%3A0000012%3BHP%3A0000009%3BHP%3A0000047%3BHP%3A0000012 HTTP/11" 200 3559
+2024-12-13 21:58:17,082 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): rare.cohd.io:443
+2024-12-13 21:58:17,306 - DEBUG - urllib3.connectionpool - https://rare.cohd.io:443 "GET /api//frequencies/singleConceptFreq?dataset_id=2&concept_id=90001000%3B90006986%3B90012735%3B90004898%3B90040190%3B90005197%3B90040324%3B90000047%3B90000012%3B90025508%3B90000009%3B90001137%3B90001945%3B90001370%3B90012378%3B90003551%3B90001324 HTTP/11" 200 4852
+2024-12-13 21:58:17,307 - INFO - __main__ - Successfully processed Scispacy search
+2024-12-13 21:58:17,308 - INFO - werkzeug - 127.0.0.1 - - [13/Dec/2024 21:58:17] "POST /api/search/scispacy HTTP/1.1" 200 -
+2024-12-13 22:02:02,311 - INFO - werkzeug -  * Detected change in '/Users/cl3720/Desktop/Doc2Hpo2.0/back-end/HpoLookup.py', reloading
+2024-12-13 22:02:02,825 - DEBUG - httpcore.connection - close.started
+2024-12-13 22:02:02,826 - DEBUG - httpcore.connection - close.complete
+2024-12-13 22:02:12,052 - INFO - __main__ - Initializing HPO Factory...
+2024-12-13 22:02:12,400 - INFO - __main__ - Initializing Aho-Corasick...
+2024-12-13 22:02:15,274 - INFO - __main__ - Initializing Scispacy...
+2024-12-13 22:02:15,732 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 22:02:16,050 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/tfidf_vectors_sparse.npz HTTP/11" 200 0
+2024-12-13 22:02:16,106 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 22:02:16,393 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/nmslib_index.bin HTTP/11" 200 0
+2024-12-13 22:02:16,395 - INFO - nmslib - Loading index from /Users/cl3720/.scispacy/datasets/066d3db776b9acaff67728a857a1d6625f4c86194a70804ffd5399fa738caa4e.ecc1ac28794235140b2bafbbf81ce0454219cd1e05056786dce65ab17fee53b2.nmslib_index.bin
+2024-12-13 22:02:16,397 - INFO - nmslib - Loading regular index.
+2024-12-13 22:02:16,437 - INFO - nmslib - Finished loading index
+2024-12-13 22:02:16,437 - INFO - nmslib - Set HNSW query-time parameters:
+2024-12-13 22:02:16,437 - INFO - nmslib - ef(Search)         =20
+2024-12-13 22:02:16,437 - INFO - nmslib - algoType           =2
+2024-12-13 22:02:16,437 - INFO - nmslib - Set HNSW query-time parameters:
+2024-12-13 22:02:16,437 - INFO - nmslib - ef(Search)         =200
+2024-12-13 22:02:16,437 - INFO - nmslib - algoType           =2
+2024-12-13 22:02:16,438 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 22:02:16,747 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/tfidf_vectorizer.joblib HTTP/11" 200 0
+2024-12-13 22:02:16,767 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 22:02:17,066 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/concept_aliases.json HTTP/11" 200 0
+2024-12-13 22:02:17,077 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 22:02:17,373 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/kbs/2023-04-23/umls_hpo_2022.jsonl HTTP/11" 200 0
+2024-12-13 22:02:17,473 - INFO - __main__ - Initializing OardClient...
+2024-12-13 22:02:17,473 - INFO - __main__ - Initializing Phen2geneClient...
+2024-12-13 22:02:17,474 - INFO - __main__ - Starting the Flask application...
+2024-12-13 22:02:17,497 - INFO - werkzeug - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-12-13 22:02:17,498 - INFO - werkzeug - [33mPress CTRL+C to quit[0m
+2024-12-13 22:02:17,499 - INFO - werkzeug -  * Restarting with stat
+2024-12-13 22:02:19,203 - INFO - __main__ - Initializing HPO Factory...
+2024-12-13 22:02:19,547 - INFO - __main__ - Initializing Aho-Corasick...
+2024-12-13 22:02:22,510 - INFO - __main__ - Initializing Scispacy...
+2024-12-13 22:02:22,955 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 22:02:23,341 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/tfidf_vectors_sparse.npz HTTP/11" 200 0
+2024-12-13 22:02:23,404 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 22:02:23,701 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/nmslib_index.bin HTTP/11" 200 0
+2024-12-13 22:02:23,703 - INFO - nmslib - Loading index from /Users/cl3720/.scispacy/datasets/066d3db776b9acaff67728a857a1d6625f4c86194a70804ffd5399fa738caa4e.ecc1ac28794235140b2bafbbf81ce0454219cd1e05056786dce65ab17fee53b2.nmslib_index.bin
+2024-12-13 22:02:23,703 - INFO - nmslib - Loading regular index.
+2024-12-13 22:02:23,743 - INFO - nmslib - Finished loading index
+2024-12-13 22:02:23,743 - INFO - nmslib - Set HNSW query-time parameters:
+2024-12-13 22:02:23,743 - INFO - nmslib - ef(Search)         =20
+2024-12-13 22:02:23,743 - INFO - nmslib - algoType           =2
+2024-12-13 22:02:23,743 - INFO - nmslib - Set HNSW query-time parameters:
+2024-12-13 22:02:23,743 - INFO - nmslib - ef(Search)         =200
+2024-12-13 22:02:23,743 - INFO - nmslib - algoType           =2
+2024-12-13 22:02:23,744 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 22:02:24,033 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/tfidf_vectorizer.joblib HTTP/11" 200 0
+2024-12-13 22:02:24,045 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 22:02:24,339 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/linkers/2023-04-23/hpo/concept_aliases.json HTTP/11" 200 0
+2024-12-13 22:02:24,350 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443
+2024-12-13 22:02:24,640 - DEBUG - urllib3.connectionpool - https://ai2-s2-scispacy.s3-us-west-2.amazonaws.com:443 "HEAD /data/kbs/2023-04-23/umls_hpo_2022.jsonl HTTP/11" 200 0
+2024-12-13 22:02:24,738 - INFO - __main__ - Initializing OardClient...
+2024-12-13 22:02:24,738 - INFO - __main__ - Initializing Phen2geneClient...
+2024-12-13 22:02:24,739 - INFO - __main__ - Starting the Flask application...
+2024-12-13 22:02:24,763 - WARNING - werkzeug -  * Debugger is active!
+2024-12-13 22:02:24,773 - INFO - werkzeug -  * Debugger PIN: 128-170-321
+2024-12-13 22:02:45,032 - INFO - werkzeug - 127.0.0.1 - - [13/Dec/2024 22:02:45] "OPTIONS /api/search/gpt HTTP/1.1" 200 -
+2024-12-13 22:02:45,034 - DEBUG - __main__ - Received request for /api/search/gpt
+2024-12-13 22:02:45,035 - INFO - __main__ - Processing GPT search with text: Age: 45 years
+Gender: Female
+Presentation: The patient reports persistent fatigue over the past six months, accompanied by muscle weakness in the upper arms and thighs. She also experiences morning stiffness lasting more than 30 minutes and difficulty climbing stairs or lifting objects. Skin changes include a purple rash around the eyes (heliotrope rash) and red, scaly patches on the knuckles (Gottron’s papules).
+Family History: Mother diagnosed with rheumatoid arthritis.
+Preliminary Diagnosis: Suspected dermatomyositis, pending muscle enzyme studies and skin biopsy. No muscular dystropy detected
+HPO_terms: fever, cough, Urinary urgency, Functional abnormality of male internal genitalia, Hypospadias, urinary urgency
+2024-12-13 22:02:45,079 - DEBUG - openai._base_client - Request options: {'method': 'post', 'url': '/chat/completions', 'headers': {'X-Stainless-Helper-Method': 'beta.chat.completions.parse'}, 'files': None, 'post_parser': <function Completions.parse.<locals>.parser at 0x16bb9ef20>, 'json_data': {'messages': [{'role': 'system', 'content': "\n            Identify all Human Phenotype Ontology (HPO) terms in the following text.\n\n            1. For each identified phenotype, provide the start and end positions of the substring in the text indicating this phenotype.\n\n            2. Do not include negated phenotypes.\n\n            3. Do not include substrings overlapping with other substrings.\n\n            4. Return a list of JSON objects with the following keys: 'start', 'end', 'substring', 'hpo_name', 'hpo_id'.\n\n            --------------------------------------------------------------------------------------------\n\n        "}, {'role': 'user', 'content': '\n            Age: 45 years\nGender: Female\nPresentation: The patient reports persistent fatigue over the past six months, accompanied by muscle weakness in the upper arms and thighs. She also experiences morning stiffness lasting more than 30 minutes and difficulty climbing stairs or lifting objects. Skin changes include a purple rash around the eyes (heliotrope rash) and red, scaly patches on the knuckles (Gottron’s papules).\nFamily History: Mother diagnosed with rheumatoid arthritis.\nPreliminary Diagnosis: Suspected dermatomyositis, pending muscle enzyme studies and skin biopsy. No muscular dystropy detected\nHPO_terms: fever, cough, Urinary urgency, Functional abnormality of male internal genitalia, Hypospadias, urinary urgency\n\n        '}], 'model': 'gpt-4o-2024-08-06', 'max_completion_tokens': 1024, 'response_format': {'type': 'json_schema', 'json_schema': {'schema': {'$defs': {'Interval': {'properties': {'start': {'title': 'Start', 'type': 'integer'}, 'end': {'title': 'End', 'type': 'integer'}, 'substring': {'title': 'Substring', 'type': 'string'}, 'hpo_id': {'title': 'Hpo Id', 'type': 'string'}, 'hpo_name': {'title': 'Hpo Name', 'type': 'string'}}, 'required': ['start', 'end', 'substring', 'hpo_id', 'hpo_name'], 'title': 'Interval', 'type': 'object', 'additionalProperties': False}}, 'properties': {'results': {'items': {'$ref': '#/$defs/Interval'}, 'title': 'Results', 'type': 'array'}}, 'required': ['results'], 'title': 'Intervals', 'type': 'object', 'additionalProperties': False}, 'name': 'Intervals', 'strict': True}}, 'stream': False, 'temperature': 0.8}}
+2024-12-13 22:02:45,109 - DEBUG - openai._base_client - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2024-12-13 22:02:45,109 - DEBUG - httpcore.connection - connect_tcp.started host='api.openai.com' port=443 local_address=None timeout=5.0 socket_options=None
+2024-12-13 22:02:45,171 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x2b6a67f50>
+2024-12-13 22:02:45,171 - DEBUG - httpcore.connection - start_tls.started ssl_context=<ssl.SSLContext object at 0x16bb42250> server_hostname='api.openai.com' timeout=5.0
+2024-12-13 22:02:45,192 - DEBUG - httpcore.connection - start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x169dd3ef0>
+2024-12-13 22:02:45,192 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2024-12-13 22:02:45,193 - DEBUG - httpcore.http11 - send_request_headers.complete
+2024-12-13 22:02:45,193 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2024-12-13 22:02:45,193 - DEBUG - httpcore.http11 - send_request_body.complete
+2024-12-13 22:02:45,193 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2024-12-13 22:02:48,529 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 14 Dec 2024 03:02:48 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'access-control-expose-headers', b'X-Request-ID'), (b'openai-organization', b'columbia-university-614'), (b'openai-processing-ms', b'2075'), (b'openai-version', b'2020-10-01'), (b'x-ratelimit-limit-requests', b'10000'), (b'x-ratelimit-limit-tokens', b'30000000'), (b'x-ratelimit-remaining-requests', b'9999'), (b'x-ratelimit-remaining-tokens', b'29999646'), (b'x-ratelimit-reset-requests', b'6ms'), (b'x-ratelimit-reset-tokens', b'0s'), (b'x-request-id', b'req_24c786cffd0808a934885e6166ce63ee'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'CF-Cache-Status', b'DYNAMIC'), (b'Set-Cookie', b'__cf_bm=vyfgZ359z6qOTZHb0_.LDPewr1yTscBz1rnHM_X7cL8-1734145368-1.0.1.1-AH85jfIIEdYgfP2ua0iS65yLGA7yuYoOLIf0gQti4QQMObqfsyTLsXy8Q48AOIXwgz1hGK.riHkd2..mLxjHpA; path=/; expires=Sat, 14-Dec-24 03:32:48 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'X-Content-Type-Options', b'nosniff'), (b'Set-Cookie', b'_cfuvid=KSF8d9QRTSJXNC0r0EsYyLYSo2pIqtVu7ihbJ5zKTyY-1734145368463-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Server', b'cloudflare'), (b'CF-RAY', b'8f1af4f4ab194331-EWR'), (b'Content-Encoding', b'gzip'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2024-12-13 22:02:48,533 - INFO - httpx - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-12-13 22:02:48,533 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2024-12-13 22:02:48,534 - DEBUG - httpcore.http11 - receive_response_body.complete
+2024-12-13 22:02:48,534 - DEBUG - httpcore.http11 - response_closed.started
+2024-12-13 22:02:48,534 - DEBUG - httpcore.http11 - response_closed.complete
+2024-12-13 22:02:48,534 - DEBUG - openai._base_client - HTTP Response: POST https://api.openai.com/v1/chat/completions "200 OK" Headers([('date', 'Sat, 14 Dec 2024 03:02:48 GMT'), ('content-type', 'application/json'), ('transfer-encoding', 'chunked'), ('connection', 'keep-alive'), ('access-control-expose-headers', 'X-Request-ID'), ('openai-organization', 'columbia-university-614'), ('openai-processing-ms', '2075'), ('openai-version', '2020-10-01'), ('x-ratelimit-limit-requests', '10000'), ('x-ratelimit-limit-tokens', '30000000'), ('x-ratelimit-remaining-requests', '9999'), ('x-ratelimit-remaining-tokens', '29999646'), ('x-ratelimit-reset-requests', '6ms'), ('x-ratelimit-reset-tokens', '0s'), ('x-request-id', 'req_24c786cffd0808a934885e6166ce63ee'), ('strict-transport-security', 'max-age=31536000; includeSubDomains; preload'), ('cf-cache-status', 'DYNAMIC'), ('set-cookie', '__cf_bm=vyfgZ359z6qOTZHb0_.LDPewr1yTscBz1rnHM_X7cL8-1734145368-1.0.1.1-AH85jfIIEdYgfP2ua0iS65yLGA7yuYoOLIf0gQti4QQMObqfsyTLsXy8Q48AOIXwgz1hGK.riHkd2..mLxjHpA; path=/; expires=Sat, 14-Dec-24 03:32:48 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('x-content-type-options', 'nosniff'), ('set-cookie', '_cfuvid=KSF8d9QRTSJXNC0r0EsYyLYSo2pIqtVu7ihbJ5zKTyY-1734145368463-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('server', 'cloudflare'), ('cf-ray', '8f1af4f4ab194331-EWR'), ('content-encoding', 'gzip'), ('alt-svc', 'h3=":443"; ma=86400')])
+2024-12-13 22:02:48,534 - DEBUG - openai._base_client - request_id: req_24c786cffd0808a934885e6166ce63ee
+2024-12-13 22:02:48,556 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 22:02:48,706 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=%20in%20the%20upper%20a HTTP/11" 200 556
+2024-12-13 22:02:48,708 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 22:02:48,792 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=rning%20stiffness%20la HTTP/11" 200 14
+2024-12-13 22:02:48,793 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 22:02:48,868 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=Morning%20stiffness HTTP/11" 200 72
+2024-12-13 22:02:48,868 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 22:02:48,958 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=fting%20objects.%20S HTTP/11" 200 14
+2024-12-13 22:02:48,961 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): clinicaltables.nlm.nih.gov:443
+2024-12-13 22:02:49,042 - DEBUG - urllib3.connectionpool - https://clinicaltables.nlm.nih.gov:443 "GET /api/hpo/v3/search?terms=ash%20around%20the%20ey HTTP/11" 200 14
+2024-12-13 22:02:49,043 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): rare.cohd.io:443
+2024-12-13 22:02:49,322 - DEBUG - urllib3.connectionpool - https://rare.cohd.io:443 "GET /api//vocabulary/findConceptByCode?q=HP%3A0001468%3BHP%3A0005197%3BHP%3A0040324%3BHP%3A0025508 HTTP/11" 200 930
+2024-12-13 22:02:49,326 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): rare.cohd.io:443
+2024-12-13 22:02:49,533 - DEBUG - urllib3.connectionpool - https://rare.cohd.io:443 "GET /api//frequencies/singleConceptFreq?dataset_id=2&concept_id=90005197%3B90040324%3B90025508%3B90001468 HTTP/11" 200 948
+2024-12-13 22:02:49,535 - INFO - __main__ - Successfully processed GPT search
+2024-12-13 22:02:49,537 - INFO - werkzeug - 127.0.0.1 - - [13/Dec/2024 22:02:49] "POST /api/search/gpt HTTP/1.1" 200 -

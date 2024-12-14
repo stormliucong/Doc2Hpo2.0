@@ -34,7 +34,7 @@ hpo_F = HpoFactory()
 hpo_tree = hpo_F.build_hpo_tree()
 hpo_ancestors = hpo_F.get_hpo_ancestors(hpo_tree)
 hpo_levels = hpo_F.get_hpo_levels(hpo_tree)
-hpo_dict, hpo_name_dict = hpo_F.build_hpo_dict(hpo_ancestors)
+hpo_dict, hpo_name_dict, _ = hpo_F.build_hpo_dict(hpo_ancestors)
 hpo_dict = hpo_F.expand_hpo_dict(hpo_dict)
 
 # Initialize Aho-Corasick

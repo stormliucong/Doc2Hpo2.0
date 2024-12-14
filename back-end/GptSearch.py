@@ -1,7 +1,18 @@
 from openai import OpenAI
+from pydantic import BaseModel
+
+class Interval(BaseModel):
+    start: int
+    end: int
+    substring: str
+    hpo_id: str
+    hpo_name: str
+    
+class Intervals(BaseModel):
+    results: list[Interval]
 
 class GptSearch:
-    def __init__(self, model="gpt-4o-mini",openai_api_key=None):
+    def __init__(self, model="gpt-4o-2024-08-06",openai_api_key=None):
         if openai_api_key is None:
             user_input = input("Enter your OpenAI API key: ")
             if len(user_input) > 0:
@@ -25,15 +36,13 @@ class GptSearch:
         if test:
             return f'[(10, 22, "Abnormal gait",),(30, 43, "Short stature")]'
         
-
-        system_message = f'''
-            Identify all Human Phenotype Ontology (HPO) terms in the following text.
-            1. For each term, provide the start and end positions of the snippet in the text containing the term or its synonyms or descriptions showing the phenotype.
-            2. Do not include negated terms or overlapping terms.
-            3. Do not overlap the start and end positions of the snippets.
-            4. Use the following json format for return: [(start, end, \"term\"), ...].
-            5. Return the response in one line, don't include "\\n".
-            Example response: [(10, 22, "Abnormal gait",),(30, 43, "Short stature")]\n
+        system_message = '''
+            Identify all Human Phenotype Ontology (HPO) terms in the following text.\n
+            1. For each identified phenotype, provide the start and end positions of the substring in the text indicating this phenotype.\n
+            2. Do not include negated phenotypes.\n
+            3. Do not include substrings overlapping with other substrings.\n
+            4. Return a list of JSON objects with the following keys: 'start', 'end', 'substring', 'hpo_name', 'hpo_id'.\n
+            --------------------------------------------------------------------------------------------\n
         '''
         
         user_message = f'''
@@ -43,7 +52,7 @@ class GptSearch:
         # Step 1: Call OpenAI to analyze the text for phenotype terms
         try:
             client = OpenAI(api_key=self.openai_api_key)
-            completion = client.chat.completions.create(
+            completion = client.beta.chat.completions.parse(
                 model=self.model,
                 messages=[
                     {"role": "system", "content":  system_message},
@@ -51,7 +60,7 @@ class GptSearch:
                 ],
                 max_completion_tokens = 1024,
                 temperature = 0.8,
-                # response_format = { "type": "json_object" },
+                response_format=Intervals,
                 # top_p=1,
                 # frequency_penalty=0,
                 # presence_penalty=0
@@ -62,25 +71,27 @@ class GptSearch:
             with open('gpt_response.json', 'w') as f:
                 f.write(str(completion))
                 
-            gpt_response = completion.choices[0].message.content
+            gpt_response = completion.choices[0].message.parsed
             return gpt_response
         except Exception as e:
             raise ValueError(f"Failed to query OpenAI {self.model}.\n Check your OpenAI Key. \n" + str(e))       
     
-    def post_process_gpts(self, gpt_response):
+    def post_process_gpts(self, response):
         '''
         Post-process the GPT-4 output to extract the matched intervals
         '''
          # Step 2: Parse the response (assuming it returns a JSON-like or structured list)
         # Example response: [{"term": "Abnormal gait", "start": 10, "end": 22}, ...]
         try:
+            print(response)
+            results_dict = response.dict()["results"]
+            print(results_dict)
             # match_list = json.loads(gpt_response)
-            match_list = eval(gpt_response)  # Convert response text to Python list (use with caution)
-            intervals = [(match[0], match[1]) for match in match_list]
-            gpt_response_hpo_terms = [match[2] for match in match_list]
-            return intervals, gpt_response_hpo_terms
+            intervals = [(match["start"], match["end"]) for match in results_dict]
+            hpo_terms = [match["hpo_name"] for match in results_dict]
+            return intervals, hpo_terms
         except Exception as e:
-            raise ValueError("Failed to parse OpenAI response.\n" + str(e)) 
+            raise ValueError("Failed to parse GPT response.\n" + str(e)) 
         
 
        
@@ -93,7 +104,7 @@ if __name__ == "__main__":
     hpo_tree = hpo_F.build_hpo_tree()
     hpo_ancestors = hpo_F.get_hpo_ancestors(hpo_tree)
     hpo_levels = hpo_F.get_hpo_levels(hpo_tree)
-    hpo_dict, hpo_name_dict = hpo_F.build_hpo_dict(hpo_ancestors)
+    hpo_dict, hpo_name_dict, _ = hpo_F.build_hpo_dict(hpo_ancestors)
     hpo_dict = hpo_F.expand_hpo_dict(hpo_dict)
     with open('demo_patient_1.txt', 'r') as f:
         text = f.read()

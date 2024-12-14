@@ -2,6 +2,7 @@ from collections import deque, defaultdict
 import os
 import json
 import requests
+import time
 
 class HpoFactory:
     def __init__(self):
@@ -40,7 +41,20 @@ class HpoFactory:
         # loop over all nodes in the tree and calculate minimum distance to root "HP:0000118"
         for node in hpo_tree:
             hpo_levels[node] = self.__min_distance_to_target(hpo_tree, node, "HP:0000118")
+        
+        # sort the dictionary by value and remove -1
+        hpo_levels = {k: v for k, v in sorted(hpo_levels.items(), key=lambda item: item[1]) if v != -1}
+        
         return hpo_levels
+    
+    def get_hpo_synonyms_from_ai(self, hpo_terms, ai_api):
+        '''
+        Get HPO synonyms from AI
+        '''
+        # create api key here.
+        # https://aistudio.google.com/app/apikey
+        api_key = input("Enter your Gemini API key: ")
+        genai.configure(api_key=api_key)
     
     def __min_distance_to_target(self, graph, start, target):
         """
@@ -83,6 +97,7 @@ class HpoFactory:
     def build_hpo_dict(self, hpo_ancestors):
         hpo_dict = {}
         hpo_name_dict = {}
+        hpo_synonym_dict = {}
         current_id = None
         with open(self.hpo_file, 'r') as file:
             for line in file:
@@ -100,21 +115,27 @@ class HpoFactory:
                         hpo_dict[current_name] = current_id
                     if current_id not in hpo_dict:
                         hpo_name_dict[current_id] = current_name
+                        if current_id not in hpo_synonym_dict:
+                            hpo_synonym_dict[current_id] = []
+                        hpo_synonym_dict[current_id].append(current_name)
                         
                 elif line.startswith("synonym: ") and current_id:
                     synonym = line.split("synonym: ")[1].split(" EXACT")[0].strip('"')  # Extract synonym text
                     if synonym not in hpo_dict:
                         hpo_dict[synonym] = current_id
-
+                        hpo_synonym_dict[current_id].append(synonym)
                 # Reset current_id and current_name when reaching a new stanza
                 elif line == "[Term]" or line == "[Typedef]":
                     current_id = None
-        return hpo_dict, hpo_name_dict
+        return hpo_dict, hpo_name_dict, hpo_synonym_dict
+        
     
     def expand_hpo_dict(self, hpo_dict):
         '''
         for each key in hpo_dict, add a new key by remove capitalization. But don't lower acronyms.
         '''
+        
+        
         expanded_hpo_dict = {}
         for k, v in hpo_dict.items():
             expanded_hpo_dict[k] = v
@@ -127,8 +148,7 @@ class HpoFactory:
             new_key = ' '.join(tokens)
             if new_key != '':
                 expanded_hpo_dict[new_key] = v
-        return expanded_hpo_dict
-            
+        return expanded_hpo_dict        
             
 
 # Example usage
@@ -137,7 +157,7 @@ if __name__ == "__main__":
     hpo_tree = hpoF.build_hpo_tree()
     hpo_ancestors = hpoF.get_hpo_ancestors(hpo_tree)
     hpo_levels = hpoF.get_hpo_levels(hpo_tree)
-    hpo_dict, hpo_name_dict = hpoF.build_hpo_dict(hpo_ancestors)
+    hpo_dict, hpo_name_dict, hpo_synonym_dict = hpoF.build_hpo_dict(hpo_ancestors)
     hpo_dict = hpoF.expand_hpo_dict(hpo_dict)
     print(hpo_tree["HP:0000011"])
     print(hpo_ancestors["HP:0000011"])     
@@ -149,4 +169,6 @@ if __name__ == "__main__":
     assert 'orofacial cleft' in hpo_dict
     assert '' not in hpo_dict
     assert 'abnormal' not in hpo_dict
-
+    # ai = GeminiApi()
+    # hpo_expanded_dict = hpoF.expand_hpo_name_dict(hpo_synonym_dict, synonym_folder="hpo_synonyms", ai = ai)
+    # print(hpo_expanded_dict["HP:0000011"])

@@ -5,3 +5,5 @@ itsdangerous==2.2.0
 Jinja2==3.1.4
 MarkupSafe==3.0.2
 Werkzeug==3.1.3
+en_core_sci_sm @ https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_core_sci_sm-0.5.4.tar.gz#sha256=a54a114ee11dab7cf6db8cf69ef485145011537f45f3c16c71338c48fd6f070b
+spacy==3.2.1
