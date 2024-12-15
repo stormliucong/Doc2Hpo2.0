@@ -1,19 +1,24 @@
 import google.generativeai as genai
 import typing_extensions as typing
 import ast
+from pydantic import BaseModel
+
 
 import typing_extensions as typing
 
-class Interval(typing.TypedDict):
+class Interval(BaseModel):
     start: int
     end: int
     substring: str
     hpo_id: str
     hpo_name: str
+    
+class Intervals(BaseModel):
+    results: list[Interval]
 
 
 class GeminiSearch:
-    def __init__(self, api_key=None, model_id="gemini-1.5-flash"):
+    def __init__(self, api_key=None, model_id="gemini-2.0-flash-exp"):
         if api_key is None:
             api_key = input("Enter your Gemini API key: ")
             genai.configure(api_key=api_key)
@@ -29,7 +34,6 @@ class GeminiSearch:
         string_list = response.text
         list_string = ast.literal_eval(string_list)
         print(list_string)
-        assert isinstance(list_string, list) and all(isinstance(item, Interval) for item in list_string), "The response should be a list of strings."
         return list_string
     
     def search_hpo_terms(self,text, test=False):
@@ -53,7 +57,7 @@ class GeminiSearch:
             --------------------------------------------------------------------------------------------\n
         '''
         prompt += text
-        response = self.run_gemini_json(prompt, response_schema=list[Interval])
+        response = self.run_gemini_json(prompt, response_schema=Intervals)
         with open('gemini_response.json', 'w') as f:
             f.write(str(response))    
             return response
@@ -65,9 +69,21 @@ class GeminiSearch:
         # Step 2: Parse the response (assuming it returns a JSON-like or structured list)
         # Example response: [{"term": "Abnormal gait", "start": 10, "end": 22}, ...]
         try:
-            intervals = [(match['start'], match['end']) for match in response]
-            hpo_terms = [match['hpo_name'] for match in response]
-            return intervals, hpo_terms
+            intervals = []
+            for match in response:
+                if 'start' in match:
+                    start = int(match['start'])
+                    if 'end' in match:
+                        end = int(match['end'])
+                    elif "substring" in match:
+                        end = start + len(match['substring'])
+                    else:
+                        continue
+                else:
+                    continue
+                
+                intervals.append((start, end))
+            return intervals
         except Exception as e:
             raise ValueError("Failed to parse Gemini response.\n" + str(e)) 
        
@@ -89,6 +105,6 @@ if __name__ == "__main__":
     print(text)
     gemini = GeminiSearch()
     response = gemini.search_hpo_terms(text, test=False)
-    intervals, hpo_terms = gemini.post_process_gpts(response)
-    matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, hpo_terms)
+    intervals = gemini.post_process_gemini(response)
+    matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels)
     print("Matched HPO:", matched_hpo)

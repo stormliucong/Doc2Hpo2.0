@@ -7,9 +7,11 @@
 */__pycache__
 
 
+
 todo
 back-end/hp.json
 back-end/hp.obo
+back-end/hpo_chroma_db/
 */.api_key
 
 back-end/app.log
