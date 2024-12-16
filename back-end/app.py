@@ -8,8 +8,10 @@ from HpoFactory import HpoFactory
 from HpoLookup import HpoLookup
 from GptSearch import GptSearch
 from ScispacySearch import ScispacySearch
+from HpoDatabase import HpoDatabase
 from OardClient import OardClient
 from Phen2geneClient import Phen2geneClient
+
 
 app = Flask(__name__)
 
@@ -51,6 +53,16 @@ try:
     ss = ScispacySearch()
 except Exception as e:
     logger.exception("Error initializing Scispacy")
+    raise e
+
+# Initialize HpoDatabase
+logger.info("Initializing HpoDatabase...")
+try:
+    path = 'hpo_chroma_db'
+    obo_path = 'hp.obo'
+    hpo_db = HpoDatabase(path, obo_path)
+except Exception as e:
+    logger.exception("Error initializing HpoDatabase")
     raise e
 
 # Initialize OardClient
@@ -107,7 +119,7 @@ def search_actree():
         intervals = [m for m in intervals if not detector.is_negated(text, m)]
         selector = LongestNonOverlappingIntervals(intervals)
         intervals = selector.get_longest_intervals()
-        matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, None)
+        matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, hpo_db, None)
         matches = HpoLookup.add_hpo_frequency(matched_hpo, oard_client)
         logger.info("Successfully processed actree search")
         return jsonify(matches), 200
@@ -133,7 +145,7 @@ def search_gpt():
         longest_intervals = selector.get_longest_intervals()
         matching_indices = [i for i, a in enumerate(longest_intervals) if a in intervals]
         gpt_response_hpo_terms = [gpt_response_hpo_terms[i] for i in matching_indices]
-        matched_hpo = HpoLookup.add_hpo_attributes(text, longest_intervals, hpo_dict, hpo_name_dict, hpo_levels, gpt_response_hpo_terms)   
+        matched_hpo = HpoLookup.add_hpo_attributes(text, longest_intervals, hpo_dict, hpo_name_dict, hpo_levels, hpo_db, gpt_response_hpo_terms)   
         matches = HpoLookup.add_hpo_frequency(matched_hpo, oard_client)
         logger.info("Successfully processed GPT search")
         return jsonify(matches), 200
@@ -155,7 +167,7 @@ def search_scispacy():
         longest_intervals = selector.get_longest_intervals()
         matching_indices = [i for i, a in enumerate(longest_intervals) if a in intervals]
         linked_hpo_names = [linked_hpo_names[i] for i in matching_indices]
-        matched_hpo = HpoLookup.add_hpo_attributes(text, longest_intervals, hpo_dict, hpo_name_dict, hpo_levels, linked_hpo_names)
+        matched_hpo = HpoLookup.add_hpo_attributes(text, longest_intervals, hpo_dict, hpo_name_dict, hpo_levels, hpo_db, linked_hpo_names)
         matches = HpoLookup.add_hpo_frequency(matched_hpo, oard_client)
         logger.info("Successfully processed Scispacy search")
         return jsonify(matches), 200

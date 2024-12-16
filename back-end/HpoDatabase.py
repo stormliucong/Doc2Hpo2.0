@@ -73,13 +73,34 @@ class HpoDatabase:
             documents = [b['document'] for b in current_batch]
             metadatas = [b['metadata'] for b in current_batch]
             ids = [b['id'] for b in current_batch]
-            collection.add(
+            collection.upsert(
                 documents=documents,
                 metadatas=metadatas,
                 ids=ids
             )
             i += 100
             print(f"Indexed {i} documents.")
+            
+    def query_hpo(self, text):
+        
+        # get collection
+        collection = self.chromadb_client.get_collection(name='hpo_default')
+        
+        # query
+        results = collection.query(
+            query_texts=[text],
+            n_results=1,
+            
+        )
+        return results
+    
+    def parse_results(self, results, distance_threshold = 1.5):
+        if results['distances'][0][0] < distance_threshold:
+            hpo_id = results['ids'][0][0]
+            hpo_name = results['metadatas'][0][0]['term']
+            return hpo_id, hpo_name
+        else:
+            return None, None
             
 
 # Example usage
@@ -92,6 +113,12 @@ if __name__ == "__main__":
     # hpo_object_list = hpo_db.parse_obo(obo_path)
     # print(hpo_object_list[:5])
     hpo_db.index_hpo()
+    # hpo_term = "Difficult to feed"
+    # results = hpo_db.query_hpo(hpo_term)
+    # hpo_id, hpo_name = hpo_db.parse_results(results)
+    # print(hpo_id, hpo_name)
+    
+    
         
             
             
