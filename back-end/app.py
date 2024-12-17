@@ -119,7 +119,9 @@ def search_actree():
         intervals = [m for m in intervals if not detector.is_negated(text, m)]
         selector = LongestNonOverlappingIntervals(intervals)
         intervals = selector.get_longest_intervals()
+        logger.debug(f"Intervals: {intervals}")
         matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, hpo_db, None)
+        logger.debug(f"Matched HPO: {matched_hpo}")
         matches = HpoLookup.add_hpo_frequency(matched_hpo, oard_client)
         logger.info("Successfully processed actree search")
         return jsonify(matches), 200

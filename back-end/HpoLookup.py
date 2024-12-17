@@ -60,7 +60,7 @@ class HpoLookup():
                     hpo_id = hpo_dict[query]
                     hpo_name = hpo_name_dict[hpo_id]
                     matched_hpo.append((start, end, selected_text, {"id": hpo_id, "name": hpo_name}))
-                    return matched_hpo
+                    continue
                 
                 # Use ncbi api as the secondary search
                 hpo_id_name_format_list = HpoLookup.search_hpo_in_ncbi(query)
@@ -70,14 +70,15 @@ class HpoLookup():
                     hpo_id = hpo_id_name_format_list[0]["id"]
                     hpo_name = hpo_id_name_format_list[0]["name"]
                     matched_hpo.append((start, end, selected_text, {"id": hpo_id, "name": hpo_name}))
-                    return matched_hpo
+                    continue
+                    
 
                 # Use Chromdb as the third search
                 if hpo_db is not None:
                     results = hpo_db.query_hpo(query)
                     hpo_id, hpo_name = hpo_db.parse_results(results)
                     matched_hpo.append((start, end, selected_text, {"id": hpo_id, "name": hpo_name}))
-                    return matched_hpo
+                    continue
                 
                 # Use response_hpo_terms as the last search
                 
@@ -88,7 +89,7 @@ class HpoLookup():
                         hpo_id = hpo_dict[query]
                         hpo_name = hpo_name_dict[hpo_id]
                         matched_hpo.append((start, end, selected_text, {"id": hpo_id, "name": hpo_name}))
-                        return matched_hpo
+                        continue
                     
                     # Use ncbi api as the secondary search
                     hpo_id_name_format_list = HpoLookup.search_hpo_in_ncbi(query)
@@ -98,19 +99,22 @@ class HpoLookup():
                         hpo_id = hpo_id_name_format_list[0]["id"]
                         hpo_name = hpo_id_name_format_list[0]["name"]
                         matched_hpo.append((start, end, selected_text, {"id": hpo_id, "name": hpo_name}))
-                        return matched_hpo
+                        continue
 
                     # Use Chromdb as the third search
                     if hpo_db is not None:
                         results = hpo_db.query_hpo(query)
                         hpo_id, hpo_name = hpo_db.parse_results(results)
                         matched_hpo.append((start, end, selected_text, {"id": hpo_id, "name": hpo_name}))
-                        return matched_hpo
+                        continue
+            return matched_hpo
         except Exception as e:
             raise ValueError("Failed to add HPO attributes to the matched intervals." + str(e))
         
     @staticmethod
     def add_hpo_frequency(matched_hpo, oard_client):
+        if matched_hpo is None:
+            return None
         frequency_dict = oard_client.get_frequencies([hpo[3]["id"] for hpo in matched_hpo])
         print(frequency_dict)
         if frequency_dict is None:
