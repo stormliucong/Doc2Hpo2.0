@@ -15,3 +15,4 @@ back-end/hpo_chroma_db/
 */.api_key
 
 back-end/app.log
+back-end/nohup.out
