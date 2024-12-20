@@ -57,5 +57,7 @@ for hp_id in expanded_hpo_name_dict:
 print(f"Finished querying {i} HPO terms")
 
 # write the query results to a json file
-with open('rag_evaluation_query_results.json', 'w') as f:
+with open('./rag_evaluation_query_results.json', 'w') as f:
     json.dump(query_results, f)
+    
+print("Query results saved to rag_evaluation_query_results.json")

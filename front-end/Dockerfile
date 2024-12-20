@@ -11,19 +11,8 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 # Copy the rest of the app
-COPY . .
+# not copy instead use Volume to mount the code from the host machine
 
-# Build the app
-RUN npm run build
+# Start the React app
+CMD ["npm", "start"]
 
-# Use a lightweight web server for serving the built app
-FROM nginx:alpine
-
-# Copy the built files to the Nginx HTML folder
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Expose the port used by Nginx
-EXPOSE 80
-
-# Start the server
-CMD ["nginx", "-g", "daemon off;"]

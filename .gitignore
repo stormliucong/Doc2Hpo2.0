@@ -16,3 +16,4 @@ back-end/hpo_chroma_db/
 
 back-end/app.log
 back-end/nohup.out
+back-end/rag_evaluation_query_results.json

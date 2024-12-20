@@ -43,6 +43,7 @@ Before setting up the project, ensure you have the following:
    # Use virtual env if desired.
    pip install -r requirements.txt
    ```
+   - Note: it can be difficult to install `nmslib` which is required by `scispacy`
 3. **Add Required Files:**
    - Place your OpenAI API key in a file named `.api_key` in the `back-end` folder.
      ```bash
@@ -74,9 +75,18 @@ Before setting up the project, ensure you have the following:
 
 ---
 
-## Docker-Based Setup
+## Docker-Based Setup (Not recommended)
 
 ### Using Docker Compose
+
+0. **THERE ARE BUGS WITH ARM64 KERNEL
+   - This issue is due to dependency installation for Scispacy. Check [here](https://github.com/allenai/scispacy?tab=readme-ov-file#installation-note-nmslib)
+   - This only works for a x86_64 machine.
+   - As an alternative, try to build a X86_64 image for back-end
+   ```sh
+   cd backend
+   docker build -t doc2hpov2.0-backend --platform linux/x86_64 .
+   ```
 
 1. **Ensure Docker and Docker Compose are installed:**
    - [Install Docker](https://docs.docker.com/get-docker/)

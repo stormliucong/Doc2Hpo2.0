@@ -2,13 +2,12 @@ version: '3.8'
 
 services:
   back-end:
-    build:
-      context: ./back-end
-      dockerfile: Dockerfile
+    image: docker.io/stormliucong/doc2hpov2.0-backend:latest
     ports:
       - "5000:5000"
     volumes:
       - ./back-end:/app
+    command: ["python", "app.py"]
 
   front-end:
     build:
@@ -18,3 +17,4 @@ services:
       - "3000:3000"
     volumes:
       - ./front-end:/app
+    command: ["npm", "start"]
