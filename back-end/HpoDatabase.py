@@ -81,7 +81,7 @@ class HpoDatabase:
             i += 100
             print(f"Indexed {i} documents.")
             
-    def query_hpo(self, text):
+    def query_hpo(self, text, n_results=1):
         
         # get collection
         collection = self.chromadb_client.get_collection(name='hpo_default')
@@ -89,18 +89,31 @@ class HpoDatabase:
         # query
         results = collection.query(
             query_texts=[text],
-            n_results=1,
+            n_results=n_results,
             
         )
         return results
     
     def parse_results(self, results, distance_threshold = 1.5):
+        # if more than one results raise error
+        if len(results['distances'][0]) > 1:
+            raise ValueError("More than one results found.")
         if results['distances'][0][0] < distance_threshold:
             hpo_id = results['ids'][0][0]
             hpo_name = results['metadatas'][0][0]['term']
             return hpo_id, hpo_name
         else:
             return None, None
+    
+    def parse_results_n_results(self, results):
+        parsed_n_results = []
+        for top_k in range(len(results['distances'][0])):
+            hpo_id = results['ids'][0][top_k]
+            hpo_name = results['metadatas'][0][top_k]['term']
+            distance = results['distances'][0][top_k]
+            parsed_n_results.append({'hpo_id': hpo_id, 'hpo_name': hpo_name, 'top_k': top_k, 'distance': distance})
+        return parsed_n_results 
+           
             
 
 # Example usage
