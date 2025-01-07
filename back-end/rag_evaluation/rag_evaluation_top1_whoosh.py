@@ -41,7 +41,7 @@ for hp_id in expanded_hpo_name_dict:
     query_results[hp_id] = []
     for synonym in expanded_hpo_name_dict[hp_id]:
         # create a random indicator p (0,1) to decide whether to query the synonym
-        # p = random.random()
+        p = random.random()
         # if p > 0.01:
         #     # takes ~5 minutes to query 500 HPO terms
         #     # on average, it takes 0.6 seconds to query one HPO term

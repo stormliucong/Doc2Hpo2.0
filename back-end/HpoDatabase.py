@@ -18,6 +18,10 @@ import chromadb
 from whoosh import index
 from whoosh.fields import Schema, TEXT, ID
 from whoosh.qparser import QueryParser
+import time
+import threading
+from whoosh.collectors import TimeLimitCollector, TimeLimit
+
 
 
 
@@ -28,6 +32,35 @@ class HpoDatabase:
         self.chromadb_client = chromadb.PersistentClient(path=db_path)
         self.obo_path = obo_path
         self.whoosh_path = woosh_path
+        
+    def __run_with_timeout(self, func, timeout=5, *args, **kwargs):
+        """
+        Run a function and skip it if it takes longer than the timeout.
+        :param func: The function to run
+        :param timeout: Timeout duration in seconds
+        :return: Result of the function if completed in time, else None
+        """
+        result = [None]
+        exception = [None]
+        
+        def target():
+            try:
+                result[0] = func(*args, **kwargs)
+            except Exception as e:
+                exception[0] = e
+
+        thread = threading.Thread(target=target)
+        thread.start()
+        thread.join(timeout)
+        
+        if thread.is_alive():
+            print(f"Skipped execution after {timeout} seconds.")
+            thread.join()  # Clean up thread
+            return None
+        elif exception[0] is not None:
+            raise exception[0]
+        else:
+            return result[0]
         
     def parse_obo(self, obo_path):
         with open(obo_path, 'r') as f:
@@ -117,8 +150,6 @@ class HpoDatabase:
     def query_hpo(self, text, n_results=1, use_chromdb=True):
         
         if use_chromdb:
-            
-        
             # get collection
             collection = self.chromadb_client.get_collection(name='hpo_default')
             
@@ -130,24 +161,36 @@ class HpoDatabase:
             )
             return results
         else:
-            print("Use Woosh")
             ix = index.open_dir(self.whoosh_path)
             with ix.searcher() as searcher:
+                # Get a collector object
+                c1 = searcher.collector(limit=100, sortedby="term")
+                # c2 = searcher.collector(limit=None, sortedby="content")
+                # # Wrap it in a TimeLimitedCollector and set the time limit to 10 seconds
+                tlc1 = TimeLimitCollector(c1, timelimit=5.0)
+                # tlc2 = TimeLimitCollector(c1, timelimit=5.0)
+
                 # Search in the title field
                 term_query = QueryParser("term", ix.schema).parse(text)
                 term_results = searcher.search(term_query)
-                if not term_results.is_empty():
+                
+                if term_results is not None and not term_results.is_empty():
                     results = term_results
                 else:
                     content_query = QueryParser("content", ix.schema).parse(text)
                     results = searcher.search(content_query)
-                    if results.is_empty():
+                    
+                    if results is None or results.is_empty():
                         # query with 'OR' operator
                         terms = text.split()
                         query = " OR ".join(terms)
-                        query = QueryParser("term", ix.schema).parse(query)  
-                        results = searcher.search(query)
-                if results.is_empty():
+                        try:
+                            content_query = QueryParser("term", ix.schema).parse(query)  
+                            results = searcher.search_with_collector(content_query, tlc1)
+                        except TimeLimit:
+                            print("Time limit exceeded for content search.")
+                            results = None
+                if results is None or results.is_empty():
                     return (None, None)
                 else:
                     number_of_results = min(n_results, len(results.top_n))                    
@@ -197,6 +240,9 @@ class HpoDatabase:
                 distance = -results[top_k][2]
                 parsed_n_results.append({'hpo_id': hpo_id, 'hpo_name': hpo_name, 'top_k': top_k, 'distance': distance})
             return parsed_n_results
+        
+        
+    
            
             
 
@@ -211,7 +257,7 @@ if __name__ == "__main__":
     # hpo_object_list = hpo_db.parse_obo(obo_path)
     # print(hpo_object_list[:5])
     # hpo_db.index_hpo(use_chromdb=False)
-    hpo_term = "feeding dsad"
+    hpo_term = "Feeding difficulties"
     results = hpo_db.query_hpo(hpo_term, n_results=1, use_chromdb=False)
     hpo_id, hpo_name = hpo_db.parse_results(results, use_chromdb=False)
     print(hpo_id, hpo_name)
