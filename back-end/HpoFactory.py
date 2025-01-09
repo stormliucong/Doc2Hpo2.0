@@ -3,6 +3,8 @@ import os
 import json
 import requests
 import time
+from GeminiApi import GeminiApi
+from OpenaiApi import OpenaiApi
 
 class HpoFactory:
     def __init__(self, hpo_file = None):
@@ -130,6 +132,40 @@ class HpoFactory:
                 elif line == "[Term]" or line == "[Typedef]":
                     current_id = None
         return hpo_dict, hpo_name_dict, hpo_synonym_dict
+    
+    def expand_hpo_name_dict(self, hpo_synonym_dict, synonym_folder="hpo_synonyms", ai = None):
+        expanded_hpo_name_dict = {}
+        if os.path.exists(synonym_folder):
+            # load the synonyms from the folder
+            # each file in the folder is a json file with the following format {"HP:XXXX": ["synonym1", "synonym2", "synonym3"]}
+            for file in os.listdir(synonym_folder):
+                with open(os.path.join(synonym_folder, file), "r") as f:
+                    expanded_hpo_name_dict.update(json.load(f))
+                    
+        else:
+            os.makedirs(synonym_folder, exist_ok=True)       
+        
+        i = 0
+        if ai is not None:
+            for hpo_id in hpo_synonym_dict:
+                # if i >= 50:
+                #     exit()
+                if hpo_id in expanded_hpo_name_dict:
+                    # skip if already expanded
+                    continue
+                # 15 api call per minutes limit for gemini-1.5-flash-002
+                time.sleep(1)
+                synonyms = '/'.join(hpo_synonym_dict[hpo_id])
+                prompt = f"Generate 5 synonyms for the following term '{hpo_synonym_dict[hpo_id][0]}' not including '{synonyms}'. Return a json response."
+                try:
+                    synonym_list = ai.run_with_json(prompt)
+                    with open(os.path.join(synonym_folder, f"{hpo_id}.json"), "w") as f:
+                        json.dump({hpo_id: synonym_list}, f)
+                        i += 1
+                    expanded_hpo_name_dict[hpo_id] = synonym_list
+                except Exception as e:
+                    print(f"Failed to get synonyms for {synonyms}. {e}")
+        return expanded_hpo_name_dict
         
     
     def expand_hpo_dict(self, hpo_dict):
@@ -171,6 +207,7 @@ if __name__ == "__main__":
     assert 'orofacial cleft' in hpo_dict
     assert '' not in hpo_dict
     assert 'abnormal' not in hpo_dict
-    # ai = GeminiApi()
-    # hpo_expanded_dict = hpoF.expand_hpo_name_dict(hpo_synonym_dict, synonym_folder="hpo_synonyms", ai = ai)
-    # print(hpo_expanded_dict["HP:0000011"])
+    api_key = input("Enter your OpenAI API key: ")
+    ai = OpenaiApi(openai_api_key=api_key)
+    hpo_expanded_dict = hpoF.expand_hpo_name_dict(hpo_synonym_dict, synonym_folder="hpo_synonyms/gpt-4o-mini-2024-07-18", ai = ai)
+    print(hpo_expanded_dict["HP:0000011"])

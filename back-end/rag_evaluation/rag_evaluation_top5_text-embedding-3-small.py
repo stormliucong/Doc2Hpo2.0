@@ -44,8 +44,6 @@ for hp_id in expanded_hpo_name_dict:
     if i % 100 == 0:
         print(f"Processed {i} HPO terms")       
     
-    if i > 110:
-        break
     if hp_id not in query_results:   
         query_results[hp_id] = []
     for synonym in expanded_hpo_name_dict[hp_id]:
@@ -53,7 +51,6 @@ for hp_id in expanded_hpo_name_dict:
         is_queried = False
         for synonym_query in query_results[hp_id]:
             if synonym_query["synonym"] == synonym:
-                print(f"Skip querying {synonym} for {hp_id}")
                 is_queried = True
                 break
         # p = random.random()
@@ -67,7 +64,6 @@ for hp_id in expanded_hpo_name_dict:
         if is_queried:
             continue
         try:
-            print(f"Querying {synonym} for {hp_id}")
             results = hpo_db.query_hpo(synonym, n_results=5)
             parsed_results = hpo_db.parse_results_n_results(results)
             query_results[hp_id].append({"synonym": synonym, "parsed_results": parsed_results})
