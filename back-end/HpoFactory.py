@@ -5,12 +5,14 @@ import requests
 import time
 
 class HpoFactory:
-    def __init__(self):
+    def __init__(self, hpo_file = None):
         # check if hpo.json exists
-        if not os.path.exists("hp.obo"):
-            # if not, build hpo.json
+        if hpo_file:
+            self.hpo_file = hpo_file
+        elif os.path.exists("hp.obo"):
+            self.hpo_file = "hp.obo"
+        else:
             raise FileNotFoundError("hp.obo not found. please download it from https://hpo.jax.org/data/ontology and put it under root flask folder.")
-        self.hpo_file = "hp.obo"
     
     def build_hpo_tree(self):
         hpo_tree = defaultdict(list)

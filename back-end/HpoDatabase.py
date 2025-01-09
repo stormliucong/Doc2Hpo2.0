@@ -21,46 +21,33 @@ from whoosh.qparser import QueryParser
 import time
 import threading
 from whoosh.collectors import TimeLimitCollector, TimeLimit
-
-
+import chromadb.utils.embedding_functions as embedding_functions
 
 
 # Define the HPO database class
 class HpoDatabase:
-    def __init__(self, db_path, obo_path, woosh_path=None):
-        
-        self.chromadb_client = chromadb.PersistentClient(path=db_path)
+    def __init__(self, obo_path, db_path=None, woosh_path=None, embedding_model=None):
         self.obo_path = obo_path
         self.whoosh_path = woosh_path
-        
-    def __run_with_timeout(self, func, timeout=5, *args, **kwargs):
-        """
-        Run a function and skip it if it takes longer than the timeout.
-        :param func: The function to run
-        :param timeout: Timeout duration in seconds
-        :return: Result of the function if completed in time, else None
-        """
-        result = [None]
-        exception = [None]
-        
-        def target():
-            try:
-                result[0] = func(*args, **kwargs)
-            except Exception as e:
-                exception[0] = e
-
-        thread = threading.Thread(target=target)
-        thread.start()
-        thread.join(timeout)
-        
-        if thread.is_alive():
-            print(f"Skipped execution after {timeout} seconds.")
-            thread.join()  # Clean up thread
-            return None
-        elif exception[0] is not None:
-            raise exception[0]
+        if woosh_path is None:
+            self.use_chromdb = True
+            self.chromadb_client = chromadb.PersistentClient(path=db_path)
+            if embedding_model is None:
+                self.ef = None
+                self.embedding_model = None
+            elif embedding_model == 'text-embedding-3-small':
+                openai_api_key = input("Enter your OpenAI API key: ")
+                self.ef = embedding_functions.OpenAIEmbeddingFunction(
+                                api_key=openai_api_key,
+                                model_name="text-embedding-3-small"
+                            )
+                self.embedding_model = embedding_model
+            else:
+                raise ValueError("Invalid embedding model.")
+        elif db_path is None:
+            self.use_chromdb = False    
         else:
-            return result[0]
+            raise ValueError("Invalid arguments.")
         
     def parse_obo(self, obo_path):
         with open(obo_path, 'r') as f:
@@ -98,13 +85,15 @@ class HpoDatabase:
                 defition = line.split('"')[1]
         return hpo_object_list
     
-    def index_hpo(self, use_chromdb=True):
+    def index_hpo(self):
         hpo_object_list = self.parse_obo(self.obo_path)
         
-        if use_chromdb:
-        
-            # create collection
-            collection = self.chromadb_client.get_or_create_collection(name='hpo_default')
+        if self.use_chromdb:
+            if self.embedding_model is None:
+                # create collection
+                collection = self.chromadb_client.get_or_create_collection(name='hpo_default')
+            else:
+                collection = self.chromadb_client.get_or_create_collection(name=f'hpo_{self.embedding_model}', embedding_function=self.ef)
 
             # do batch insert for every 100 documents
             i = 0
@@ -147,17 +136,18 @@ class HpoDatabase:
                 print(f"Indexed {i} documents.")
                 
             
-    def query_hpo(self, text, n_results=1, use_chromdb=True):
+    def query_hpo(self, text, n_results=1):
         
-        if use_chromdb:
-            # get collection
-            collection = self.chromadb_client.get_collection(name='hpo_default')
-            
+        if self.use_chromdb:
+            if self.embedding_model is None:
+                # get collection
+                collection = self.chromadb_client.get_collection(name='hpo_default')
+            else:
+                collection = self.chromadb_client.get_collection(name=f'hpo_{self.embedding_model}', embedding_function=self.ef)
             # query
             results = collection.query(
                 query_texts=[text],
-                n_results=n_results,
-                
+                n_results=n_results, 
             )
             return results
         else:
@@ -203,9 +193,9 @@ class HpoDatabase:
                     return result_list
                     
 
-    def parse_results(self, results, distance_threshold = 1.5, use_chromdb=True):
+    def parse_results(self, results, distance_threshold = 1.5):
         # if more than one results raise error
-        if use_chromdb:
+        if self.use_chromdb:
             if len(results['distances'][0]) > 1:
                 raise ValueError("More than one results found.")
             if results['distances'][0][0] < distance_threshold:
@@ -221,8 +211,8 @@ class HpoDatabase:
                 return results[0][0], results[0][1]
             
     
-    def parse_results_n_results(self, results, use_chromdb=True):
-        if use_chromdb:
+    def parse_results_n_results(self, results):
+        if self.use_chromdb:
             parsed_n_results = []
             for top_k in range(len(results['distances'][0])):
                 hpo_id = results['ids'][0][top_k]
@@ -252,19 +242,29 @@ if __name__ == "__main__":
     obo_path = 'hp.obo'
     whoosh_path = 'hpo_whoosh_db'
     
-    hpo_db = HpoDatabase(db_path, obo_path,whoosh_path)
+    hpo_db = HpoDatabase(obo_path=obo_path, db_path=db_path, woosh_path=None, embedding_model='text-embedding-3-small')
     # chroma run --path ./hpo_chroma_db
     # hpo_object_list = hpo_db.parse_obo(obo_path)
     # print(hpo_object_list[:5])
-    # hpo_db.index_hpo(use_chromdb=False)
-    hpo_term = "Feeding difficulties"
-    results = hpo_db.query_hpo(hpo_term, n_results=1, use_chromdb=False)
-    hpo_id, hpo_name = hpo_db.parse_results(results, use_chromdb=False)
-    print(hpo_id, hpo_name)
+    # hpo_db.index_hpo(use_chromdb=True, embedding_model='text-embedding-3-small')
+    # hpo_term = "Feeding difficulties"
+    # results = hpo_db.query_hpo(hpo_term, n_results=1)
+    # hpo_id, hpo_name = hpo_db.parse_results(results)
+    # print(hpo_id, hpo_name)
     
-    results = hpo_db.query_hpo(hpo_term, n_results=100, use_chromdb=False)
-    parsed_n_results = hpo_db.parse_results_n_results(results, use_chromdb=False)
+    # hpo_term = "Fed difficulties"
+    # results = hpo_db.query_hpo(hpo_term, n_results=1)
+    # hpo_id, hpo_name = hpo_db.parse_results(results)
+    # print(hpo_id, hpo_name)
+    
+    hpo_term = "muscle difficulties"
+    results = hpo_db.query_hpo(hpo_term, n_results=5)
+    parsed_n_results = hpo_db.parse_results_n_results(results)
     print(parsed_n_results)
+    
+    # results = hpo_db.query_hpo(hpo_term, n_results=100, use_chromdb=False)
+    # parsed_n_results = hpo_db.parse_results_n_results(results, use_chromdb=False)
+    # print(parsed_n_results)
     
     
         

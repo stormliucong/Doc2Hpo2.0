@@ -26,3 +26,5 @@ back-end/rag_evaluation/nohup.out
 back-end/rag_evaluation/rag_evaluation_query_results_top1_whoosh.json
 .vscode/launch.json
 hpo_chroma_db/chroma.sqlite3
+back-end/rag_evaluation/rag_evaluation_query_results_top5_text-embedding-3-small.json
+back-end/chroma.log
