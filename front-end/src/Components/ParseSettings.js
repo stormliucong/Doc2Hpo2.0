@@ -21,7 +21,7 @@ function ParseSettings({ open, onClose }) {
   const [selectedOption, setSelectedOption] = useState('option1'); // Default option
   const [showCommonConfig, setShowCommonConfig] = useState(false); // Toggle for common configuration
 
-  const { parseOption, setParseOption, openaiKey, setOpenaiKey, flaskUrl, setFlaskUrl } = useContext(AppContext);
+  const { parseOption, setParseOption, openaiKey, setOpenaiKey, geminiKey, setGeminiKey, flaskUrl, setFlaskUrl } = useContext(AppContext);
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
@@ -43,6 +43,7 @@ function ParseSettings({ open, onClose }) {
             <MenuItem value="AC Tree">AC Tree</MenuItem>
             <MenuItem value="SciSpacy">Scispacy</MenuItem>
             <MenuItem value="GPT">GPT</MenuItem>
+            <MenuItem value="Gemini">Gemini</MenuItem>
           </Select>
         </FormControl>
 
@@ -66,6 +67,18 @@ function ParseSettings({ open, onClose }) {
               label="Input Open AI Key here:"
               value={openaiKey}
               onChange={(e) => setOpenaiKey(e.target.value)}
+              sx={{ marginBottom: 2 }}
+            />
+          </Box>
+        )}
+
+        {selectedOption === 'Gemini' && (
+          <Box>
+            <TextField 
+              fullWidth
+              label="Input Gemini Key here:"
+              value={geminiKey}
+              onChange={(e) => setGeminiKey(e.target.value)}
               sx={{ marginBottom: 2 }}
             />
           </Box>

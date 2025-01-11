@@ -23,6 +23,9 @@ class GeminiSearch:
             api_key = input("Enter your Gemini API key: ")
             genai.configure(api_key=api_key)
             self.model = genai.GenerativeModel(model_id)
+        else:
+            genai.configure(api_key=api_key)
+            self.model = genai.GenerativeModel(model_id)
             
             
     def run_gemini(self, prompt):
@@ -70,6 +73,11 @@ class GeminiSearch:
         # Example response: [{"term": "Abnormal gait", "start": 10, "end": 22}, ...]
         try:
             intervals = []
+            hpo_terms = []
+            
+            
+            response = response['results']
+            
             for match in response:
                 if 'start' in match:
                     start = int(match['start'])
@@ -80,10 +88,19 @@ class GeminiSearch:
                     else:
                         continue
                 else:
-                    continue
+                    continue 
                 
+                if 'hpo_name' in match:
+                    hpo_name = match['hpo_name']
+                elif 'substring' in match:
+                    hpo_name = match['substring']
+                else:
+                    continue
+
                 intervals.append((start, end))
-            return intervals
+                hpo_terms.append(hpo_name)
+                
+            return intervals, hpo_terms
         except Exception as e:
             raise ValueError("Failed to parse Gemini response.\n" + str(e)) 
        

@@ -13,6 +13,7 @@ const AppProvider = ({ children }) => {
   const [selectedHighlight, setSelectedHighlight] = useState(null);
   const [gptDialogOpen, setGptDialogOpen] = useState(false);
   const [openaiKey, setOpenaiKey] = useState("");
+  const [geminiKey, setGeminiKey] = useState("");
   const [flaskUrl, setFlaskUrl] = useState("http://localhost:5000");
   const [scispacyDialogOpen, setScispacyDialogOpen] = useState(false);
   const [actreeDialogOpen, setActreeDialogOpen] = useState(false);
@@ -38,7 +39,7 @@ const AppProvider = ({ children }) => {
 
 
   return (
-    <AppContext.Provider value={{ resetState, fileText, setFileText, loading, setLoading, error, setError, highlights, setHighlights, highlightMode, setHighlightMode, selectedHighlight, setSelectedHighlight, gptDialogOpen, setGptDialogOpen, openaiKey, setOpenaiKey, scispacyDialogOpen, setScispacyDialogOpen, actreeDialogOpen, setActreeDialogOpen, inputText, setInputText, parseOption, setParseOption, flaskUrl, setFlaskUrl, genePredictionResults, setGenePredictionResults }}>
+    <AppContext.Provider value={{ resetState, fileText, setFileText, loading, setLoading, error, setError, highlights, setHighlights, highlightMode, setHighlightMode, selectedHighlight, setSelectedHighlight, gptDialogOpen, setGptDialogOpen, openaiKey, setOpenaiKey, geminiKey, setGeminiKey, scispacyDialogOpen, setScispacyDialogOpen, actreeDialogOpen, setActreeDialogOpen, inputText, setInputText, parseOption, setParseOption, flaskUrl, setFlaskUrl, genePredictionResults, setGenePredictionResults }}>
       {children}
     </AppContext.Provider>
   );

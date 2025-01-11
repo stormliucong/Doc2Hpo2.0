@@ -50,13 +50,23 @@ class HpoLookup():
         try:
             matched_hpo = []
             
+            if response_hpo_terms is not None:
+                assert len(intervals) == len(response_hpo_terms), "Length of intervals and gpt_response_hpo_terms should be the same."
+                use_hpo_term = True
+            else:
+                use_hpo_term = False
+                
             for i in range(len(intervals)):
                 start, end = intervals[i]
                 selected_text = text[start:end]
-                query = text[start:end]
                 
+                if use_hpo_term:
+                    query = response_hpo_terms[i]
+                else:
+                    query = text[start:end]
+                    
                 # Use dictionary as the primary search
-                if query in hpo_dict:  
+                if query in hpo_dict:
                     hpo_id = hpo_dict[query]
                     hpo_name = hpo_name_dict[hpo_id]
                     matched_hpo.append((start, end, selected_text, {"id": hpo_id, "name": hpo_name}))
@@ -71,42 +81,17 @@ class HpoLookup():
                     hpo_name = hpo_id_name_format_list[0]["name"]
                     matched_hpo.append((start, end, selected_text, {"id": hpo_id, "name": hpo_name}))
                     continue
-                    
-
-                # Use Chromdb as the third search
+                
+                # Use Chromdb or Whoosh as the third search
                 if hpo_db is not None:
                     results = hpo_db.query_hpo(query)
                     hpo_id, hpo_name = hpo_db.parse_results(results)
-                    matched_hpo.append((start, end, selected_text, {"id": hpo_id, "name": hpo_name}))
-                    continue
+                    if hpo_id is not None:
+                        matched_hpo.append((start, end, selected_text, {"id": hpo_id, "name": hpo_name}))
+                        continue
                 
-                # Use response_hpo_terms as the last search
-                
-                if response_hpo_terms:
-                    assert len(intervals) == len(response_hpo_terms), "Length of intervals and gpt_response_hpo_terms should be the same."
-                    # Use dictionary as the primary search
-                    if query in hpo_dict:  
-                        hpo_id = hpo_dict[query]
-                        hpo_name = hpo_name_dict[hpo_id]
-                        matched_hpo.append((start, end, selected_text, {"id": hpo_id, "name": hpo_name}))
-                        continue
-                    
-                    # Use ncbi api as the secondary search
-                    hpo_id_name_format_list = HpoLookup.search_hpo_in_ncbi(query)
-                    if len(hpo_id_name_format_list) > 1:
-                        hpo_id_name_format_list = HpoLookup.get_lowest_hpo(hpo_id_name_format_list, hpo_levels)
-                    if len(hpo_id_name_format_list) > 0:
-                        hpo_id = hpo_id_name_format_list[0]["id"]
-                        hpo_name = hpo_id_name_format_list[0]["name"]
-                        matched_hpo.append((start, end, selected_text, {"id": hpo_id, "name": hpo_name}))
-                        continue
-
-                    # Use Chromdb as the third search
-                    if hpo_db is not None:
-                        results = hpo_db.query_hpo(query)
-                        hpo_id, hpo_name = hpo_db.parse_results(results)
-                        matched_hpo.append((start, end, selected_text, {"id": hpo_id, "name": hpo_name}))
-                        continue
+                # If no match is found, add a placeholder
+                matched_hpo.append((start, end, selected_text, {"id": None, "name": None}))
             return matched_hpo
         except Exception as e:
             raise ValueError("Failed to add HPO attributes to the matched intervals." + str(e))

@@ -7,6 +7,7 @@ from LongestSeqSearch import LongestNonOverlappingIntervals
 from HpoFactory import HpoFactory
 from HpoLookup import HpoLookup
 from GptSearch import GptSearch
+from GeminiSearch import GeminiSearch
 from ScispacySearch import ScispacySearch
 from HpoDatabase import HpoDatabase
 from OardClient import OardClient
@@ -32,7 +33,7 @@ logger = logging.getLogger(__name__)  # Create a logger for this module
 
 # Initialize HPO Factory
 logger.info("Initializing HPO Factory...")
-hpo_F = HpoFactory()
+hpo_F = HpoFactory(hpo_file='hp.obo')
 hpo_tree = hpo_F.build_hpo_tree()
 hpo_ancestors = hpo_F.get_hpo_ancestors(hpo_tree)
 hpo_levels = hpo_F.get_hpo_levels(hpo_tree)
@@ -60,7 +61,7 @@ logger.info("Initializing HpoDatabase...")
 try:
     path = 'hpo_chroma_db'
     obo_path = 'hp.obo'
-    hpo_db = HpoDatabase(path, obo_path)
+    hpo_db = HpoDatabase(obo_path=obo_path, db_path=path)
 except Exception as e:
     logger.exception("Error initializing HpoDatabase")
     raise e
@@ -114,7 +115,7 @@ def search_actree():
         request_data = request.get_json()
         text = request_data.get("text")
         logger.info(f"Processing text for actree: {text}")
-        intervals = ac.search(text)
+        intervals, _ = ac.search(text)
         detector = NegationDetector(negation_window=10, sentence_delimiters=None)
         intervals = [m for m in intervals if not detector.is_negated(text, m)]
         selector = LongestNonOverlappingIntervals(intervals)
@@ -139,17 +140,43 @@ def search_gpt():
         test = request_data.get("test")
         logger.info(f"Processing GPT search with text: {text}")
         gpt = GptSearch(openai_api_key=api_key)
-        gpt_response = gpt.search_hpo_terms(text, test=test)
-        intervals, gpt_response_hpo_terms = gpt.post_process_gpts(gpt_response)
+        response = gpt.search_hpo_terms(text, test=test)
+        intervals, hpo_terms = gpt.post_process_gpts(response)
         detector = NegationDetector(negation_window=10, sentence_delimiters=None)
         intervals = [m for m in intervals if not detector.is_negated(text, m)]
         selector = LongestNonOverlappingIntervals(intervals)
         longest_intervals = selector.get_longest_intervals()
         matching_indices = [i for i, a in enumerate(longest_intervals) if a in intervals]
-        gpt_response_hpo_terms = [gpt_response_hpo_terms[i] for i in matching_indices]
-        matched_hpo = HpoLookup.add_hpo_attributes(text, longest_intervals, hpo_dict, hpo_name_dict, hpo_levels, hpo_db, gpt_response_hpo_terms)   
+        hpo_terms = [hpo_terms[i] for i in matching_indices]
+        matched_hpo = HpoLookup.add_hpo_attributes(text, longest_intervals, hpo_dict, hpo_name_dict, hpo_levels, hpo_db, hpo_terms)   
         matches = HpoLookup.add_hpo_frequency(matched_hpo, oard_client)
         logger.info("Successfully processed GPT search")
+        return jsonify(matches), 200
+    except Exception as e:
+        logger.exception("Error in /api/search/gpt")
+        raise e
+    
+@app.route('/api/search/gemini', methods=['POST'])
+def search_gemini():
+    logger.debug("Received request for /api/search/gemini")
+    try:
+        request_data = request.get_json()
+        text = request_data.get("text")
+        api_key = request_data.get("geminiKey")
+        test = request_data.get("test")
+        logger.info(f"Processing Gemini search with text: {text}")
+        gemini = GeminiSearch(api_key=api_key)
+        response = gemini.search_hpo_terms(text, test=False)
+        intervals, hpo_terms  = gemini.post_process_gemini(response)
+        detector = NegationDetector(negation_window=10, sentence_delimiters=None)
+        intervals = [m for m in intervals if not detector.is_negated(text, m)]
+        selector = LongestNonOverlappingIntervals(intervals)
+        longest_intervals = selector.get_longest_intervals()
+        matching_indices = [i for i, a in enumerate(longest_intervals) if a in intervals]
+        hpo_terms = [hpo_terms[i] for i in matching_indices]
+        matched_hpo = HpoLookup.add_hpo_attributes(text, longest_intervals, hpo_dict, hpo_name_dict, hpo_levels, hpo_db, hpo_terms)   
+        matches = HpoLookup.add_hpo_frequency(matched_hpo, oard_client)
+        logger.info("Successfully processed Gemini search")
         return jsonify(matches), 200
     except Exception as e:
         logger.exception("Error in /api/search/gpt")

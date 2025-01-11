@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const ParseButton = () => {
 
-    const { parseOption, fileText, openaiKey, flaskUrl, setLoading, setError, setHighlights } = useContext(AppContext);
+    const { parseOption, fileText, openaiKey, geminiKey, flaskUrl, setLoading, setError, setHighlights } = useContext(AppContext);
 
     const handleParse = async () => {
         setLoading(true);
@@ -57,6 +57,17 @@ const ParseButton = () => {
                     body: JSON.stringify({ text: fileText, openaiKey: openaiKey, test: false })
                 });
             }
+
+            if (parseOption === 'Gemini') {
+                response = await fetch(flaskUrl + "/api/search/gemini", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: fileText, geminiKey: geminiKey })
+                });
+            }
+
             // If the request is inactive (timed out), stop processing
             if (!isRequestActive) return;
             // if (!response.ok) throw new Error(`HTTP error! Status: ${JSON.stringify(response)}`);

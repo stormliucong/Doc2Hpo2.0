@@ -41,7 +41,7 @@ const FileUpload = () => {
     return (
 
         <>
-            <Chip label="Upload a" icon={<CloudUploadIcon />} variant="outlined" onClick={() => { document.getElementById('fileInput').click() }} />
+            <Chip label="Upload a file" icon={<CloudUploadIcon />} variant="outlined" onClick={() => { document.getElementById('fileInput').click() }} />
             <VisuallyHiddenInput
                 id="fileInput"
                 type="file"
