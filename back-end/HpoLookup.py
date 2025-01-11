@@ -43,7 +43,7 @@ class HpoLookup():
         return lowest_hpo
     
     @staticmethod
-    def add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, hpo_db=None, response_hpo_terms=None, ):
+    def add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, hpo_db=None, response_hpo_terms=None):
         '''
         Add HPO attributes to the matched intervals
         '''

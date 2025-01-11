@@ -26,8 +26,11 @@ back-end/rag_evaluation/rag_evaluation_query_results_top5_default.json
 back-end/rag_evaluation/nohup.out
 back-end/rag_evaluation/rag_evaluation_query_results_top1_whoosh.json
 back-end/annotation_evaluation/simulated_pt_description/
+back-end/annotation_evaluation/simulated_pt_coordinate/
 .vscode/launch.json
 hpo_chroma_db/chroma.sqlite3
 back-end/rag_evaluation/rag_evaluation_query_results_top5_text-embedding-3-small.json
 back-end/chroma.log
 back-end/annotation_evaluation/mygpt_worksheet.csv
+back-end/rag_evaluation/rag_evaluation_query_results_top5_text-embedding-3-large.json
+back-end/annotation_evaluation/snippet.csv

@@ -83,9 +83,7 @@ class GptSearch:
          # Step 2: Parse the response (assuming it returns a JSON-like or structured list)
         # Example response: [{"term": "Abnormal gait", "start": 10, "end": 22}, ...]
         try:
-            print(response)
             results_dict = response.dict()["results"]
-            print(results_dict)
             # match_list = json.loads(gpt_response)
             intervals = [(match["start"], match["end"]) for match in results_dict]
             hpo_terms = [match["hpo_name"] for match in results_dict]
@@ -112,5 +110,6 @@ if __name__ == "__main__":
     gpt = GptSearch()
     gpt_response = gpt.search_hpo_terms(text, test=False)
     intervals, gpt_response_hpo_terms = gpt.post_process_gpts(gpt_response)
-    matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, gpt_response_hpo_terms)
-    print("Matched HPO:", matched_hpo)
+    print("Intervals:", intervals, "HPO Terms:", gpt_response_hpo_terms)
+    # matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, response_hpo_terms=gpt_response_hpo_terms)
+    # print("Matched HPO:", matched_hpo)

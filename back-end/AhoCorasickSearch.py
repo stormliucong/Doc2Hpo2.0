@@ -48,7 +48,8 @@ class AhoCorasick:
         """Search for all terms in the given text."""
         try:
             node = self.trie
-            results = []
+            intervals = []
+            hpo_terms = []
             for i, char in enumerate(text):
                 while node is not None and char not in node["children"]:
                     node = node["fail"]
@@ -61,8 +62,10 @@ class AhoCorasick:
                 for term in node["output"]:
                     start = i - len(term) + 1
                     end = i + 1
-                    results.append((start, end))
-            return results   
+                    intervals.append((start, end))
+                    hpo_terms.append(term)
+                    
+            return intervals, hpo_terms   
         except Exception as e:
             raise ValueError("Failed to search for terms in the text using Acho-Corasick." + str(e))
         
@@ -76,13 +79,13 @@ if __name__ == "__main__":
     hpo_tree = hpo_F.build_hpo_tree()
     hpo_ancestors = hpo_F.get_hpo_ancestors(hpo_tree)
     hpo_levels = hpo_F.get_hpo_levels(hpo_tree)
-    hpo_dict, hpo_name_dict = hpo_F.build_hpo_dict(hpo_ancestors)
+    hpo_dict, hpo_name_dict, _ = hpo_F.build_hpo_dict(hpo_ancestors)
     hpo_dict = hpo_F.expand_hpo_dict(hpo_dict)
     with open('demo_patient_1.txt', 'r') as f:
         text = f.read()
     print(text)
     ac = AhoCorasick(hpo_dict) 
-    intervals = ac.search(text)
-    print("Matches:", intervals)
-    matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels)
-    print("Matched HPO:", matched_hpo)
+    intervals, hpo_terms = ac.search(text)
+    print(f"Intervals: {intervals}, HPO Terms: {hpo_terms}")
+    # matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels)
+    # print("Matched HPO:", matched_hpo)

@@ -42,6 +42,13 @@ class HpoDatabase:
                                 model_name="text-embedding-3-small"
                             )
                 self.embedding_model = embedding_model
+            elif embedding_model == 'text-embedding-3-large':
+                openai_api_key = input("Enter your OpenAI API key: ")
+                self.ef = embedding_functions.OpenAIEmbeddingFunction(
+                                api_key=openai_api_key,
+                                model_name="text-embedding-3-large"
+                            )
+                self.embedding_model = embedding_model
             else:
                 raise ValueError("Invalid embedding model.")
         elif db_path is None:
@@ -242,11 +249,11 @@ if __name__ == "__main__":
     obo_path = 'hp.obo'
     whoosh_path = 'hpo_whoosh_db'
     
-    hpo_db = HpoDatabase(obo_path=obo_path, db_path=db_path, woosh_path=None, embedding_model='text-embedding-3-small')
+    hpo_db = HpoDatabase(obo_path=obo_path, db_path=db_path, woosh_path=None, embedding_model='text-embedding-3-large')
     # chroma run --path ./hpo_chroma_db
     # hpo_object_list = hpo_db.parse_obo(obo_path)
     # print(hpo_object_list[:5])
-    # hpo_db.index_hpo(use_chromdb=True, embedding_model='text-embedding-3-small')
+    # hpo_db.index_hpo()
     # hpo_term = "Feeding difficulties"
     # results = hpo_db.query_hpo(hpo_term, n_results=1)
     # hpo_id, hpo_name = hpo_db.parse_results(results)
