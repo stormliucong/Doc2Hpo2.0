@@ -94,6 +94,7 @@ for hp_id in unique_hp_list:
     if os.path.exists(f'nonir_gpt_response/{hp_id}.json'):
         print(f'{hp_id} already exists')
         continue
+    print(f'Processing {hp_id}')
     term = comparison_sampled_df[comparison_sampled_df['query_hpo_id'] == hp_id]['query_synonym'].values[0]
     document1 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==0)]["document"].values[0]
     document2 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==1)]["document"].values[0]
@@ -144,5 +145,51 @@ for hp_id in unique_hp_list:
             json.dump(output_json, f)
     except Exception as e:
         print(e)
+        
+# generate prompt for human evaluation
+if not os.path.exists('./nonir_human_evaluation'):
+    os.makedirs('./nonir_human_evaluation')
+# loop over unique unique_hp_list
+row = []
+for hp_id in unique_hp_list:
+    print(f'Processing {hp_id}')
+    term = comparison_sampled_df[comparison_sampled_df['query_hpo_id'] == hp_id]['query_synonym'].values[0]
+    document1 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==0)]["document"].values[0]
+    document2 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==1)]["document"].values[0]
+    document3 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==2)]["document"].values[0]
+    document4 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==3)]["document"].values[0]
+    document5 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==4)]["document"].values[0]
+
+    user_message = '''
+            term: {term}\n 
+            =====================\n
+            1. {document1}\n
+            2. {document2}\n
+            3. {document3}\n
+            4. {document4}\n
+            5. {document5}\n
+            '''.format(
+                term=term,
+                document1=document1,
+                document2=document2,
+                document3=document3,
+                document4=document4,
+                document5=document5
+            )
+    with open(f'nonir_human_evaluation/{hp_id}.txt', 'w') as f:
+        f.write(user_message)
+    row.append({"query_hpo_id": hp_id, "query_synonym": term})
+
+# write to a csv file
+human_evaluation_worksheet_df = pd.DataFrame(row)
+human_evaluation_worksheet_df['rank_1'] = ''
+human_evaluation_worksheet_df['rank_2'] = ''
+human_evaluation_worksheet_df['rank_3'] = ''
+human_evaluation_worksheet_df['rank_4'] = ''
+human_evaluation_worksheet_df['rank_5'] = ''
+human_evaluation_worksheet_df.to_csv('nonir_human_evaluation_worksheet.csv', index=False)
+
+
+    
 
 

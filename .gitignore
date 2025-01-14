@@ -19,6 +19,7 @@ back-end/hpo_synonyms/
 back-end/app.log
 back-end/nohup.out
 back-end/rag_evaluation/nonir_gpt_response
+back-end/rag_evaluation/nonir_human_evaluation
 back-end/rag_evaluation_query_results.json
 back-end/rag_evaluation/rag_evaluation_query_results.json
 back-end/rag_evaluation/hpo_chroma_db/chroma.sqlite3
