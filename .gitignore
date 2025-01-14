@@ -18,6 +18,7 @@ back-end/hpo_synonyms/
 
 back-end/app.log
 back-end/nohup.out
+back-end/rag_evaluation/nonir_gpt_response
 back-end/rag_evaluation_query_results.json
 back-end/rag_evaluation/rag_evaluation_query_results.json
 back-end/rag_evaluation/hpo_chroma_db/chroma.sqlite3
@@ -34,3 +35,4 @@ back-end/chroma.log
 back-end/annotation_evaluation/mygpt_worksheet.csv
 back-end/rag_evaluation/rag_evaluation_query_results_top5_text-embedding-3-large.json
 back-end/annotation_evaluation/snippet.csv
+back-end/rag_evaluation/nonir_comparison_df.csv
