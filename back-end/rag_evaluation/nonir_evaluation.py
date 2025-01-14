@@ -25,8 +25,9 @@ hpo_object_list = hpo_db.parse_obo(obo_path)
 hpo_object_df = pd.DataFrame(hpo_object_list)
 
 # Load rag_evaluation
-# top 5 match
-result_json = './rag_evaluation_query_results_top5_text-embedding-3-large.json'
+# top x match
+x = 25
+result_json = f'./rag_evaluation_query_results_top{x}_text-embedding-3-large.json'
 # load the query results from the json file
 with open(result_json, 'r') as f:
     query_results = json.load(f)
@@ -38,7 +39,7 @@ open_ai_model = 'gpt-4o-2024-08-06'
 # convert query_results into pandas dataframe
 # Flatten the dictionary
 # if not exist file 
-if not os.path.exists('nonir_comparison_df.csv'):
+if not os.path.exists(f'nonir_comparison_df_top{x}.csv'):
         
     rows = []
     for key, value in query_results.items():
@@ -58,8 +59,9 @@ if not os.path.exists('nonir_comparison_df.csv'):
                 })
 
     comparison_df = pd.DataFrame(rows)
+    comparison_df.to_csv(f'nonir_comparison_df_top{x}.csv', index=False)
 else:
-    comparison_df = pd.read_csv('nonir_comparison_df.csv')
+    comparison_df = pd.read_csv(f'nonir_comparison_df_top{x}.csv')
     
 # subset hit correct with top 5
 matched_df = comparison_df[comparison_df['hit_hpo_id'] == comparison_df['query_hpo_id']]
@@ -82,42 +84,27 @@ unique_hp_list = comparison_sampled_df['query_hpo_id'].unique()
 
 # openai client
 client = OpenAI(api_key=openai_api_key)
-system_message = "Single Choice: Select the best-matching HPO term for the given term based on their definitions. Respond with 1, 2, 3, 4, or 5."
+x_string = ', '.join([str(i+1) for i in range(x-1)]) + ' or ' + str(x)
+system_message = "Single Choice: Select the best-matching HPO term for the given term based on their definitions. Respond with {x_string}."
 
 # if not exist folder create a folder
-if not os.path.exists('nonir_gpt_response'):
-    os.makedirs('nonir_gpt_response')
+if not os.path.exists(f'nonir_gpt_response_top{x}'):
+    os.makedirs(f'nonir_gpt_response_top{x}')
 
 # loop over unique unique_hp_list
 for hp_id in unique_hp_list:
     # check if the file exists
-    if os.path.exists(f'nonir_gpt_response/{hp_id}.json'):
+    if os.path.exists(f'nonir_gpt_response_top{x}/{hp_id}.json'):
         print(f'{hp_id} already exists')
         continue
     print(f'Processing {hp_id}')
     term = comparison_sampled_df[comparison_sampled_df['query_hpo_id'] == hp_id]['query_synonym'].values[0]
-    document1 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==0)]["document"].values[0]
-    document2 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==1)]["document"].values[0]
-    document3 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==2)]["document"].values[0]
-    document4 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==3)]["document"].values[0]
-    document5 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==4)]["document"].values[0]
+    document_list = [comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] == i)]["document"].values[0] for i in range(x)]
 
     user_message = '''
             term: {term}\n 
             =====================\n
-            1. {document1}\n
-            2. {document2}\n
-            3. {document3}\n
-            4. {document4}\n
-            5. {document5}\n
-            '''.format(
-                term=term,
-                document1=document1,
-                document2=document2,
-                document3=document3,
-                document4=document4,
-                document5=document5
-            )
+            ''' + '\n'.join([f'{i+1}. {document}' for i, document in enumerate(document_list)]) + '\n'
     try:
         completion = client.beta.chat.completions.parse(
             model=open_ai_model,
@@ -141,7 +128,7 @@ for hp_id in unique_hp_list:
         output_json['gpt_response'] = results_choice
         output_json['gpt_hit_hpo_id'] = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==(results_choice - 1))]["hit_hpo_id"].values[0]
         # write results to a json file
-        with open(f'nonir_gpt_response/{hp_id}.json', 'w') as f:
+        with open(f'nonir_gpt_response_top{x}/{hp_id}.json', 'w') as f:
             json.dump(output_json, f)
     except Exception as e:
         print(e)
@@ -154,40 +141,20 @@ row = []
 for hp_id in unique_hp_list:
     print(f'Processing {hp_id}')
     term = comparison_sampled_df[comparison_sampled_df['query_hpo_id'] == hp_id]['query_synonym'].values[0]
-    document1 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==0)]["document"].values[0]
-    document2 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==1)]["document"].values[0]
-    document3 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==2)]["document"].values[0]
-    document4 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==3)]["document"].values[0]
-    document5 = comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] ==4)]["document"].values[0]
-
+    document_list = [comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] == i)]["document"].values[0] for i in range(x)]
     user_message = '''
             term: {term}\n 
             =====================\n
-            1. {document1}\n
-            2. {document2}\n
-            3. {document3}\n
-            4. {document4}\n
-            5. {document5}\n
-            '''.format(
-                term=term,
-                document1=document1,
-                document2=document2,
-                document3=document3,
-                document4=document4,
-                document5=document5
-            )
-    with open(f'nonir_human_evaluation/{hp_id}.txt', 'w') as f:
-        f.write(user_message)
-    row.append({"query_hpo_id": hp_id, "query_synonym": term})
+            ''' + '\n'.join([f'{i+1}. {document}' for i, document in enumerate(document_list)]) + '\n' 
+    # with open(f'nonir_human_evaluation/{hp_id}.txt', 'w') as f:
+    #     f.write(user_message)
+    row.append({"query_hpo_id": hp_id, "query_synonym": term, "question": user_message})
 
 # write to a csv file
 human_evaluation_worksheet_df = pd.DataFrame(row)
-human_evaluation_worksheet_df['rank_1'] = ''
-human_evaluation_worksheet_df['rank_2'] = ''
-human_evaluation_worksheet_df['rank_3'] = ''
-human_evaluation_worksheet_df['rank_4'] = ''
-human_evaluation_worksheet_df['rank_5'] = ''
-human_evaluation_worksheet_df.to_csv('nonir_human_evaluation_worksheet.csv', index=False)
+for i in range(x):
+    human_evaluation_worksheet_df[f'rank_{i+1}'] = ''
+human_evaluation_worksheet_df.to_csv(f'nonir_human_evaluation_worksheet_top{x}.csv', index=False)
 
 
     

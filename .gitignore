@@ -18,7 +18,7 @@ back-end/hpo_synonyms/
 
 back-end/app.log
 back-end/nohup.out
-back-end/rag_evaluation/nonir_gpt_response
+back-end/rag_evaluation/nonir_gpt_response_*
 back-end/rag_evaluation/nonir_human_evaluation
 back-end/rag_evaluation_query_results.json
 back-end/rag_evaluation/rag_evaluation_query_results.json
@@ -37,3 +37,13 @@ back-end/annotation_evaluation/mygpt_worksheet.csv
 back-end/rag_evaluation/rag_evaluation_query_results_top5_text-embedding-3-large.json
 back-end/annotation_evaluation/snippet.csv
 back-end/rag_evaluation/nonir_comparison_df.csv
+.DS_Store
+back-end/.DS_Store
+back-end/rag_evaluation/.DS_Store
+back-end/.DS_Store
+.DS_Store
+back-end/rag_evaluation/rag_evaluation_query_results_top25_text-embedding-3-large.json
+back-end/rag_evaluation/nonir_human_evaluation_worksheet.xlsx
+back-end/rag_evaluation/nonir_human_evaluation_worksheet.csv
+back-end/rag_evaluation/nonir_comparison_df_top5.csv
+back-end/rag_evaluation/nonir_human_evaluation_worksheet_top25.csv
