@@ -47,3 +47,6 @@ back-end/rag_evaluation/nonir_human_evaluation_worksheet.xlsx
 back-end/rag_evaluation/nonir_human_evaluation_worksheet.csv
 back-end/rag_evaluation/nonir_comparison_df_top5.csv
 back-end/rag_evaluation/nonir_human_evaluation_worksheet_top25.csv
+back-end/rag_evaluation/nonir_comparison_df_top25.csv
+back-end/gpt_response.json
+back-end/gpt_response.json

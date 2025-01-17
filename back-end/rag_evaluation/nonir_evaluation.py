@@ -138,7 +138,7 @@ if not os.path.exists('./nonir_human_evaluation'):
     os.makedirs('./nonir_human_evaluation')
 # loop over unique unique_hp_list
 row = []
-for hp_id in unique_hp_list:
+for hp_id in unique_hp_list[0:5]:
     print(f'Processing {hp_id}')
     term = comparison_sampled_df[comparison_sampled_df['query_hpo_id'] == hp_id]['query_synonym'].values[0]
     document_list = [comparison_sampled_df[(comparison_sampled_df['query_hpo_id'] == hp_id) & (comparison_sampled_df['top_k'] == i)]["document"].values[0] for i in range(x)]

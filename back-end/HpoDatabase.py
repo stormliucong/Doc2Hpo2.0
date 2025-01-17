@@ -156,6 +156,14 @@ class HpoDatabase:
                 query_texts=[text],
                 n_results=n_results, 
             )
+            # a potential chromdb bug here. 
+            # different results will be returned in different runs
+            # due to Approximate Nearest Neighbors (ANN) search algorithm that Chroma uses. 
+            # ANN algorithms are designed to prioritize speed over absolute accuracy, 
+            # which means they may not always return the exact nearest neighbors, 
+            # especially when the distances between the vectors are very close.
+            # so n_results = 5 might be different from n_results = 25
+            # https://github.com/chroma-core/chroma/issues/860
             return results
         else:
             ix = index.open_dir(self.whoosh_path)
@@ -264,8 +272,9 @@ if __name__ == "__main__":
     # hpo_id, hpo_name = hpo_db.parse_results(results)
     # print(hpo_id, hpo_name)
     
-    hpo_term = "muscle difficulties"
-    results = hpo_db.query_hpo(hpo_term, n_results=5)
+    # hpo_term = "muscle difficulties"
+    synonm = ["muscle weakness", "muscle pain", "muscle fatigue"]
+    results = hpo_db.query_hpo(synonm, n_results=5)
     parsed_n_results = hpo_db.parse_results_n_results(results)
     print(parsed_n_results)
     

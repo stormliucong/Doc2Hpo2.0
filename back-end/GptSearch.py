@@ -1,5 +1,6 @@
 from openai import OpenAI
 from pydantic import BaseModel
+import json
 
 class Interval(BaseModel):
     start: int
@@ -10,6 +11,9 @@ class Interval(BaseModel):
     
 class Intervals(BaseModel):
     results: list[Interval]
+    
+class Findings(BaseModel):
+    findings: list[str]
 
 class GptSearch:
     def __init__(self, model="gpt-4o-2024-08-06",openai_api_key=None):
@@ -23,7 +27,87 @@ class GptSearch:
             self.openai_api_key = openai_api_key
         
         self.model = model
+        
+    def search_clinical_findings(self,text, test=False):
+        
+        system_message = '''
+        Carefully review every sentence of the clinical passage to identify terms related to 
+        genetic inheritance patterns, anatomical anomalies, clinical symptoms, diagnostic findings, 
+        test results, and specific conditions or syndromes. Completely ignore negative findings, normal 
+        findings (i.e. 'normal' or 'no'), procedures and family history. Include appropriate context 
+        based only on the passage. Return the extracted terms in a JSON object 
+        with a single key 'findings', which contains the list of extracted terms spelled correctly. 
+        Ensure the output is concise without any additional notes, commentary, or meta explanations.
+        '''
+        user_message = f'''
+            {text}\n
+        '''
+        # Step 1: Call OpenAI to analyze the text for phenotype terms
+        try:
+            client = OpenAI(api_key=self.openai_api_key)
+            completion = client.beta.chat.completions.parse(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content":  system_message},
+                    {"role": "user", "content": user_message}
+                ],
+                max_completion_tokens = 1024,
+                temperature = 0.8,
+                response_format=Findings,
+                # top_p=1,
+                # frequency_penalty=0,
+                # presence_penalty=0
+            )
+            
+            # Extract the terms and positions from the OpenAI response
+            # output completion to a file
+            with open('gpt_response.json', 'w') as f:
+                f.write(str(completion))
+                
+            gpt_response = completion.choices[0].message.parsed
+            findings = gpt_response.dict().get("findings", [])
+            return findings
+        except Exception as e:
+            raise ValueError(f"Failed to query OpenAI {self.model}.\n Check your OpenAI Key. \n" + str(e))       
 
+    def post_process_findings(self, text, findings):
+        '''
+        find the most likely matched phrase based on string.
+        '''
+        results = []
+        # split the text into sentences
+        sentences = text.split(".")
+        matched_findings = []
+        max_matching_tokens = 0
+        max_common_tokens = ''
+        for finding in findings:
+            for sentence in sentences:
+                # check the finding tokens and sentence token match rate
+                sentence_tokens = sentence.lower().split(" ")
+                finding_tokens = finding.lower().split(" ")
+                common_tokens = set(sentence_tokens).intersection(set(finding_tokens))
+                if len(common_tokens) > max_matching_tokens:
+                    max_matching_tokens = len(common_tokens)
+                    # calculate the start and end position of the matched phrase
+                    max_common_tokens = common_tokens
+                    best_match_sentence = sentence  # Store the sentence with the most matching words
+            matched_findings.append(best_match_sentence)
+
+            for bms in matched_findings:
+                sentence_start = text.find(bms)
+                token_start = bms.lower().find(" ".join(common_tokens).lower())
+                text_start = sentence_start + token_start
+                text_end = text_start + len(" ".join(common_tokens))
+                results.append({"start": text_start, "end": text_end, "substring": text[text_start:text_end], "phrase": finding})
+            
+            if len(results) > 0:
+                # convert results to interval list and phrase list
+                intervals = [(match["start"], match["end"]) for match in results]
+                terms = [match["phrase"] for match in results]
+            else:
+                return None, None
+        return intervals, terms            
+    
     def search_hpo_terms(self,text, test=False):
         """
         Search HPO-based phenotype terms in a given text using OpenAI API.
@@ -113,3 +197,8 @@ if __name__ == "__main__":
     print("Intervals:", intervals, "HPO Terms:", gpt_response_hpo_terms)
     # matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, response_hpo_terms=gpt_response_hpo_terms)
     # print("Matched HPO:", matched_hpo)
+    findings = gpt.search_clinical_findings(text, test=False)
+    intervals, terms = gpt.post_process_findings(text, findings)
+    print("Intervals:", intervals, "Terms:", terms)
+    matched_hpo = HpoLookup.add_hpo_attributes(text, intervals, hpo_dict, hpo_name_dict, hpo_levels, response_hpo_terms=terms)
+    print("Matched HPO:", matched_hpo)
